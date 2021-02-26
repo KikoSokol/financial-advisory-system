@@ -19,7 +19,7 @@ public class ClientCompany extends Client
 
     private String bussinesObject;
 
-    private List<ObjectId> managers;
+    private List<ObjectId> managers = new LinkedList<>();
 
 
     public boolean addManger(ObjectId manager)

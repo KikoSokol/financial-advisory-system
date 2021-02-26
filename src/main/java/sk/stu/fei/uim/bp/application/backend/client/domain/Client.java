@@ -18,7 +18,6 @@ import java.util.List;
 public abstract class Client
 {
     @MongoId
-    @Setter(AccessLevel.PRIVATE)
     private ObjectId clientId;
 
     private Address address;
@@ -27,7 +26,7 @@ public abstract class Client
 
     private String note;
 
-    private List<ObjectId> contracts;
+    private List<ObjectId> contracts = new LinkedList<>();
 
 
     public boolean addContract(ObjectId contract)
