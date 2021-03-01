@@ -20,4 +20,6 @@ public interface FileRepository
     GridFSFile getInformationAboutFile(ObjectId fileId);
 
     InputStream getFile(ObjectId fileId) throws IOException;
+
+    void deleteFile(ObjectId fileIdToDelete);
 }

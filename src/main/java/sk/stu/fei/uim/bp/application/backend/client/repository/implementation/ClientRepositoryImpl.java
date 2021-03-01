@@ -18,6 +18,7 @@ import sk.stu.fei.uim.bp.application.backend.client.repository.ClientCompanyRepo
 import sk.stu.fei.uim.bp.application.backend.client.repository.ClientRepository;
 import sk.stu.fei.uim.bp.application.backend.client.repository.PhysicalPersonRepository;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -157,6 +158,58 @@ public class ClientRepositoryImpl implements ClientRepository, ClientCompanyRepo
 
         return updateManagersOfClientCompany(clientCompany,update);
     }
+
+    @Override
+    public List<Client> getClientByNameOrBySurnameOrByEmailOrByPersonalNumberOrByIcoOrByBusinessName(String search)
+    {
+        Criteria byName = new Criteria("firstName").regex(search,"i");
+        Criteria bySurname = new Criteria("surname").regex(search,"i");
+        Criteria byEmail = new Criteria("email").regex(search,"i");
+        Criteria byPersonalNumber = new Criteria("personalNumber").regex(search,"i");
+        Criteria byIco = new Criteria("ico").regex(search,"i");
+        Criteria byBusinessName = new Criteria("businessName").regex(search,"i");
+
+        Criteria criteria = new Criteria().orOperator(byName,bySurname,byEmail,byPersonalNumber,byIco,byBusinessName);
+
+        Query query = new Query(criteria);
+
+        return this.mongoOperations.find(query,Client.class);
+    }
+
+    @Override
+    public List<PhysicalPerson> getPhysicalPersonByNameOrBySurnameOrByEmailOrByPersonalNumber(String search)
+    {
+        Criteria byName = new Criteria("firstName").regex(search,"i");
+        Criteria bySurname = new Criteria("surname").regex(search,"i");
+        Criteria byEmail = new Criteria("email").regex(search,"i");
+        Criteria byPersonalNumber = new Criteria("personalNumber").regex(search,"i");
+
+        Criteria criteria = new Criteria().orOperator(byName,bySurname,byEmail,byPersonalNumber);
+
+        Query query = new Query(criteria);
+
+        List<Client> listOfClient =  this.mongoOperations.find(query,Client.class);
+
+        return getListOfPhysicalPersonBySearch(listOfClient);
+
+
+    }
+
+    private List<PhysicalPerson> getListOfPhysicalPersonBySearch(List<Client> list)
+    {
+        List<PhysicalPerson> listOfPhysicalPerson = new LinkedList<>();
+
+        for(Client client:list)
+        {
+            if(client instanceof PhysicalPerson)
+            {
+                listOfPhysicalPerson.add((PhysicalPerson) client);
+            }
+        }
+        return listOfPhysicalPerson;
+    }
+
+
 
     private ClientCompany updateManagersOfClientCompany(ClientCompany clientCompany, Update update)
     {

@@ -77,4 +77,15 @@ public class FileRepositoryImpl implements FileRepository
 
         return newFileName.concat(oldFileName.substring(dotPossition));
     }
+
+    @Override
+    public void deleteFile(ObjectId fileIdToDelete)
+    {
+        Criteria criteria = new Criteria("_id");
+        criteria.is(fileIdToDelete);
+
+        Query query = new Query(criteria);
+
+        this.gridFsOperations.delete(query);
+    }
 }

@@ -23,6 +23,8 @@ public interface ClientRepository
 
     Client removeContractFromClient(Client client, ObjectId contractToRemove);
 
+    List<Client> getClientByNameOrBySurnameOrByEmailOrByPersonalNumberOrByIcoOrByBusinessName(String search);
+
 
 
 
