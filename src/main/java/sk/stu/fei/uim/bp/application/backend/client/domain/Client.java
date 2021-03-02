@@ -1,10 +1,9 @@
 package sk.stu.fei.uim.bp.application.backend.client.domain;
 
-import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.bson.types.ObjectId;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 import sk.stu.fei.uim.bp.application.backend.address.Address;
@@ -20,8 +19,10 @@ public abstract class Client
     @MongoId
     private ObjectId clientId;
 
+    @NotNull
     private Address address;
 
+    @NotNull
     private ObjectId agent;
 
     private String note;
