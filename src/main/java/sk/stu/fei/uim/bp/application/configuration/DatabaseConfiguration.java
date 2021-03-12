@@ -18,13 +18,8 @@ import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 public class DatabaseConfiguration
 {
 
-    private final MappingMongoConverter mappingMongoConverter;
-
     @Autowired
-    public DatabaseConfiguration(MappingMongoConverter mappingMongoConverter)
-    {
-        this.mappingMongoConverter = mappingMongoConverter;
-    }
+    private MappingMongoConverter mappingMongoConverter;
 
     @Bean
     public MongoClient mongoClient()
