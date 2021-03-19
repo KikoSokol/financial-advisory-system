@@ -19,6 +19,4 @@ public interface PhysicalPersonService {
     PhysicalPerson updatePhysicalPerson(@NotNull PhysicalPerson updatePhysicalPerson,
                                         @NotNull FileWrapper frontSideOfIdentityCard,
                                         @NotNull FileWrapper backSideOfIdentityCard );
-
-    List<PhysicalPerson> getPhysicalPersonByNameOrBySurnameOrByEmailOrByPersonalNumber(String search);
 }

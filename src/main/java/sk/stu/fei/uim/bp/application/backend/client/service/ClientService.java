@@ -4,6 +4,7 @@ import org.bson.types.ObjectId;
 import sk.stu.fei.uim.bp.application.backend.client.domain.Client;
 import sk.stu.fei.uim.bp.application.backend.client.domain.IdentifyCardCopyFiles;
 import sk.stu.fei.uim.bp.application.backend.client.domain.IdentifyCardCopyReference;
+import sk.stu.fei.uim.bp.application.backend.client.domain.PhysicalPerson;
 
 import java.io.InputStream;
 import java.util.List;
@@ -17,6 +18,8 @@ public interface ClientService
     Optional<Client> getClientById(ObjectId clientId);
 
     List<Client> getClientByNameOrBySurnameOrByEmailOrByPersonalNumberOrByIcoOrByBusinessName(String search);
+
+    List<PhysicalPerson> getPhysicalPersonByNameOrBySurnameOrByEmailOrByPersonalNumber(String search);
 
     IdentifyCardCopyFiles getIdentifyCardOfPerson(IdentifyCardCopyReference identifyCardCopyReference);
 
