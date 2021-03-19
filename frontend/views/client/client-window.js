@@ -12,10 +12,10 @@ class ClientWindow extends PolymerElement {
 <style include="shared-styles">
                 :host {
                     display: block;
-                    height: 100%;
+                    /*height: 100%;*/
                 }
             </style>
-<vaadin-horizontal-layout style="flex-wrap: wrap; justify-content: space-between; align-content: center;">
+<vaadin-horizontal-layout style="justify-content: space-between;">
  <div>
   <vaadin-horizontal-layout theme="spacing" style="flex-wrap: wrap;">
    <vaadin-tabs style="flex-shrink: 0; flex-grow: 0; align-self: center;" orientation="horizontal" selected="0">

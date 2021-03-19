@@ -3,11 +3,10 @@ package sk.stu.fei.uim.bp.application.backend.client.domain;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 import sk.stu.fei.uim.bp.application.backend.address.Address;
-
+import javax.validation.constraints.NotNull;
 import java.util.LinkedList;
 import java.util.List;
 

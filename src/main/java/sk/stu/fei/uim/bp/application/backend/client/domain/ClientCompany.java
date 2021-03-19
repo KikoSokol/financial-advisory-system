@@ -2,8 +2,6 @@ package sk.stu.fei.uim.bp.application.backend.client.domain;
 
 import lombok.Data;
 import org.bson.types.ObjectId;
-import org.intellij.lang.annotations.RegExp;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;

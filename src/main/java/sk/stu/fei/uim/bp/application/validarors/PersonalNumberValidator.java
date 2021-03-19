@@ -54,14 +54,52 @@ public class PersonalNumberValidator implements ConstraintValidator<PersonalNumb
         return true;
     }
 
-    private boolean isMonthCorrect(String partsWithMonth)
+    public static boolean isValid(String value)
+    {
+        value = value.trim();
+        String[] parts = value.split("/");
+
+        if(parts.length != 2)
+            return false;
+
+        if(parts[0].length() != 6)
+            return false;
+
+        if(parts[1].length() != 4)
+            return false;
+
+        String firstPart = parts[0];
+        String secondParts = parts[1];
+        String withoutSlash = firstPart.concat(secondParts);
+
+        long checkNumber;
+        try {
+            checkNumber = Long.parseLong(withoutSlash);
+        }catch (NumberFormatException numberFormatException)
+        {
+            return false;
+        }
+
+        if(checkNumber % 11 != 0)
+            return false;
+
+        if(!isMonthCorrect(firstPart))
+            return false;
+
+        if(!isCorrectDate(firstPart))
+            return false;
+
+        return true;
+    }
+
+    private static boolean isMonthCorrect(String partsWithMonth)
     {
         int month = getPart(partsWithMonth,2);
 
         return (month >= 1 && month <= 12) || (month >= 51 && month <= 62);
     }
 
-    private boolean isCorrectDate(String firstPart)
+    private static boolean isCorrectDate(String firstPart)
     {
         int day = getPart(firstPart,3);
         int month = getPart(firstPart,2);
@@ -83,7 +121,7 @@ public class PersonalNumberValidator implements ConstraintValidator<PersonalNumb
 
     }
 
-    private int getPart(String s,int witchPart)
+    private static int getPart(String s,int witchPart)
     {
         String text = "";
         if(witchPart == 1)

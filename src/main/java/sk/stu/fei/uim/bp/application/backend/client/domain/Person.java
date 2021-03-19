@@ -2,8 +2,8 @@ package sk.stu.fei.uim.bp.application.backend.client.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import sk.stu.fei.uim.bp.application.validarors.anotations.PersonalNumber;
-
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Past;
@@ -15,12 +15,12 @@ import java.time.LocalDate;
 public abstract class Person extends Client
 {
     @NotBlank(message = "Meno je povinné pole")
-    @Pattern(regexp = "^[a-zA-ZáäčéíóôúýčšžÁÄČÉÍÓÔÚÝČŠŽ ]+$", message = "Meno musí obsahovať iba platné znaky")
+    @Pattern(regexp = "[^0-9]{1,}", message = "Meno musí obsahovať iba platné znaky")
     private String firstName;
 
 
     @NotBlank(message = "Priezvisko je ovinné pole")
-    @Pattern(regexp = "^[a-zA-ZáäčéíóôúýčšžÁÄČÉÍÓÔÚÝČŠŽ ]+$", message = "Priezvisko musí obsahovať iba platné znaky")
+    @Pattern(regexp = "[^0-9]{1,}", message = "Priezvisko musí obsahovať iba platné znaky")
     private String surname;
 
 
@@ -58,10 +58,12 @@ public abstract class Person extends Client
     private String citizenship;
 
 
+    @NotNull
     private LocalDate dateOfValidityOfIdentityCard;
 
 
     @Past
+    @NotNull
     private LocalDate releaseDateOfIdentityCard;
 
 

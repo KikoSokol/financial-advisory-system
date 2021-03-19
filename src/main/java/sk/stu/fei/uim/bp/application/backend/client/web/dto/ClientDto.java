@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import sk.stu.fei.uim.bp.application.backend.address.Address;
 import sk.stu.fei.uim.bp.application.backend.client.domain.Client;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
@@ -16,21 +15,21 @@ public abstract class ClientDto
     private String street;
 
     @NotBlank(message = "Číslo domu je povinné pole")
-    @Pattern(regexp = "[0-9]*[/]?[0-9]{1,}")
+    @Pattern(regexp = "[0-9]*[/]?[0-9]{1,}",message = "Číslo domu muí byť v správnom tvare")
     private String numberOfHouse;
 
 
     @NotBlank(message = "PSČ je povinné pole")
-    @Pattern(regexp = "[0-9]{3}[\\s]?[0-9]{2}")
+    @Pattern(regexp = "[0-9]{3}[\\s]?[0-9]{2}",message = "PSČ musí byť v správnom tvare")
     private String postalCode;
 
 
     @NotBlank(message = "Mesto je povinné pole")
-    @Pattern(regexp = "^[a-zA-ZáäčéíóôúýčšžÁÄČÉÍÓÔÚÝČŠŽ ]+$", message = "Mesto musí obsahovať iba platné znaky")
+    @Pattern(regexp = "[^0-9]{1,}", message = "Mesto musí obsahovať iba platné znaky")
     private String city;
 
     @NotBlank(message = "Krajina je povinné pole")
-    @Pattern(regexp = "^[a-zA-ZáäčéíóôúýčšžÁÄČÉÍÓÔÚÝČŠŽ ]+$", message = "Krajina musí obsahovať iba platné znaky")
+    @Pattern(regexp = "[^0-9]{1,}", message = "Krajina musí obsahovať iba platné znaky")
     private String state;
 
     private String note;

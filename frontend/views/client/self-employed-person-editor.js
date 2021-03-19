@@ -26,12 +26,12 @@ class SelfEmployedPersonEditor extends PolymerElement {
   <vaadin-text-field error-message="Please enter a value" required invalid="" label="Priezvisko" id="surname"></vaadin-text-field>
   <vaadin-email-field id="email" required label="Email" invalid></vaadin-email-field>
   <vaadin-text-field error-message="Please enter a value" required invalid="" label="Telefón" id="phone"></vaadin-text-field>
-  <vaadin-date-picker label="Dátum narodenia" placeholder="Výber dátum" id="dateOfBirdth"></vaadin-date-picker>
+  <vaadin-date-picker label="Dátum narodenia" placeholder="Výber dátum" id="dateOfBirth"></vaadin-date-picker>
  </vaadin-form-layout>
  <vaadin-form-layout>
   <span colspan="2">Údaje OP</span>
   <vaadin-text-field error-message="Please enter a value" required invalid="" label="Rodné číslo" id="personalNumber" colspan="2"></vaadin-text-field>
-  <vaadin-text-field error-message="Please enter a value" required invalid="" label="Číslo OP" id="indentityCardNumber"></vaadin-text-field>
+  <vaadin-text-field error-message="Please enter a value" required invalid="" label="Číslo OP" id="identityCardNumber"></vaadin-text-field>
   <vaadin-text-field error-message="Please enter a value" required invalid="" label="Štátne občiansto" id="citizenship"></vaadin-text-field>
   <vaadin-date-picker label="Dátum platnosti OP" placeholder="Výber dátum" id="dateOfValidityOfIdentityCard"></vaadin-date-picker>
   <vaadin-date-picker label="Dátum vydania OP" placeholder="Vyber dátum" id="releaseDateOfIdentityCard"></vaadin-date-picker>

@@ -2,13 +2,11 @@ package sk.stu.fei.uim.bp.application.backend.client.web.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import sk.stu.fei.uim.bp.application.backend.client.domain.IdentifyCardCopyReference;
 import sk.stu.fei.uim.bp.application.backend.client.domain.Person;
+import sk.stu.fei.uim.bp.application.backend.file.FileWrapper;
 import sk.stu.fei.uim.bp.application.validarors.anotations.PersonalNumber;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @Data
@@ -16,12 +14,12 @@ import java.time.LocalDate;
 public abstract class PersonDto extends ClientDto
 {
     @NotBlank(message = "Meno je povinné pole")
-    @Pattern(regexp = "^[a-zA-ZáäčéíóôúýčšžÁÄČÉÍÓÔÚÝČŠŽ ]+$", message = "Meno musí obsahovať iba platné znaky")
+    @Pattern(regexp = "[^0-9]{1,}", message = "Meno musí obsahovať iba platné znaky")
     private String firstName;
 
 
-    @NotBlank(message = "Priezvisko je ovinné pole")
-    @Pattern(regexp = "^[a-zA-ZáäčéíóôúýčšžÁÄČÉÍÓÔÚÝČŠŽ ]+$", message = "Priezvisko musí obsahovať iba platné znaky")
+    @NotBlank(message = "Priezvisko je povinné pole")
+    @Pattern(regexp = "[^0-9]{1,}", message = "Priezvisko musí obsahovať iba platné znaky")
     private String surname;
 
 
@@ -58,13 +56,18 @@ public abstract class PersonDto extends ClientDto
     @Pattern(regexp = "[A-Z]{2,3}",message = "Štátne občianstvo musí mať 2 alebo 3 veľké alfabetické znaky")
     private String citizenship;
 
-
+    @Future
     private LocalDate dateOfValidityOfIdentityCard;
 
 
     @Past
     private LocalDate releaseDateOfIdentityCard;
 
+    private FileWrapper frontSideOfPersonCard;
+
+    private FileWrapper backSideOfPersonCard;
+
+    private IdentifyCardCopyReference identifyCardCopyReference;
 
     protected PersonDto(Person person)
     {
@@ -80,6 +83,7 @@ public abstract class PersonDto extends ClientDto
         setCitizenship(person.getCitizenship());
         setDateOfValidityOfIdentityCard(person.getDateOfValidityOfIdentityCard());
         setReleaseDateOfIdentityCard(person.getReleaseDateOfIdentityCard());
+        setIdentifyCardCopyReference(person.getIdentifyCardCopy());
     }
 
 

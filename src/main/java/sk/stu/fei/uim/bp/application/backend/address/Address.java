@@ -23,11 +23,11 @@ public class Address
 
 
     @NotBlank(message = "Mesto je povinné pole")
-    @Pattern(regexp = "^[a-zA-ZáäčéíóôúýčšžÁÄČÉÍÓÔÚÝČŠŽ ]+$", message = "Mesto musí obsahovať iba platné znaky")
+    @Pattern(regexp = "[^0-9]{1,}", message = "Mesto musí obsahovať iba platné znaky")
     private String city;
 
     @NotBlank(message = "Krajina je povinné pole")
-    @Pattern(regexp = "^[a-zA-ZáäčéíóôúýčšžÁÄČÉÍÓÔÚÝČŠŽ ]+$", message = "Krajina musí obsahovať iba platné znaky")
+    @Pattern(regexp = "[^0-9]{1,}", message = "Krajina musí obsahovať iba platné znaky")
     private String state;
 
 
