@@ -1,4 +1,4 @@
-package sk.stu.fei.uim.bp.application.backend.client.web;
+package sk.stu.fei.uim.bp.application.backend.client.web.components;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;

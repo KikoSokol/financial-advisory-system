@@ -17,7 +17,11 @@ import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import sk.stu.fei.uim.bp.application.MainView;
 import sk.stu.fei.uim.bp.application.backend.client.service.implementation.ClientServiceImpl;
+import sk.stu.fei.uim.bp.application.backend.client.web.components.ClientWindow;
 import sk.stu.fei.uim.bp.application.backend.client.web.controlers.ClientController;
+import sk.stu.fei.uim.bp.application.backend.client.web.editors.CompanyEditor;
+import sk.stu.fei.uim.bp.application.backend.client.web.editors.PhysicalPersonEditor;
+import sk.stu.fei.uim.bp.application.backend.client.web.editors.SelfEmployedPersonEditor;
 import sk.stu.fei.uim.bp.application.backend.client.web.table.TableClientItem;
 
 

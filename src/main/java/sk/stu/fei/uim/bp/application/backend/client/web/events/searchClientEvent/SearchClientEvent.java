@@ -2,7 +2,7 @@ package sk.stu.fei.uim.bp.application.backend.client.web.events.searchClientEven
 
 import com.vaadin.flow.component.ComponentEvent;
 import sk.stu.fei.uim.bp.application.backend.client.domain.Client;
-import sk.stu.fei.uim.bp.application.backend.client.web.SearchClientView;
+import sk.stu.fei.uim.bp.application.backend.client.web.components.SearchClientView;
 
 public abstract class SearchClientEvent extends ComponentEvent<SearchClientView>
 {

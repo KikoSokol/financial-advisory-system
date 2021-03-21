@@ -1,7 +1,7 @@
 package sk.stu.fei.uim.bp.application.backend.client.web.events.selfEmployedPersonEvents;
 
 import com.vaadin.flow.component.ComponentEvent;
-import sk.stu.fei.uim.bp.application.backend.client.web.SelfEmployedPersonEditor;
+import sk.stu.fei.uim.bp.application.backend.client.web.editors.SelfEmployedPersonEditor;
 import sk.stu.fei.uim.bp.application.backend.client.web.dto.SelfEmployedPersonDto;
 
 public abstract class SelfEmployedPersonFormEvent extends ComponentEvent<SelfEmployedPersonEditor>

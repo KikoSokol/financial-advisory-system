@@ -1,4 +1,4 @@
-package sk.stu.fei.uim.bp.application.backend.client.web;
+package sk.stu.fei.uim.bp.application.backend.client.web.editors;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -8,16 +8,16 @@ import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.binder.BeanValidationBinder;
-import com.vaadin.flow.data.binder.ValidationException;
+import com.vaadin.flow.data.binder.*;
 import com.vaadin.flow.data.validator.EmailValidator;
 import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
-import sk.stu.fei.uim.bp.application.backend.client.web.dto.SelfEmployedPersonDto;
-import sk.stu.fei.uim.bp.application.backend.client.web.events.selfEmployedPersonEvents.SelfEmployedPersonSaveEvent;
+import sk.stu.fei.uim.bp.application.backend.client.web.components.PersonalCardComponent;
+import sk.stu.fei.uim.bp.application.backend.client.web.dto.PhysicalPersonDto;
+import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEvents.PhysicalPersonSaveEvent;
 import sk.stu.fei.uim.bp.application.backend.file.FileWrapper;
 import sk.stu.fei.uim.bp.application.validarors.PersonalNumberValidator;
 import sk.stu.fei.uim.bp.application.validarors.messages.ClientValidatorsMessages;
@@ -25,14 +25,14 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 /**
- * A Designer generated component for the self-employed-person-editor template.
+ * A Designer generated component for the physical-person-editor template.
  *
  * Designer will add and remove fields with @Id mappings but
  * does not overwrite or otherwise change this file.
  */
-@Tag("self-employed-person-editor")
-@JsModule("./views/client/self-employed-person-editor.js")
-public class SelfEmployedPersonEditor extends PolymerTemplate<SelfEmployedPersonEditor.SelfEmployedPersonEditorModel> {
+@Tag("physical-person-editor")
+@JsModule("./views/client/physical-person-editor.js")
+public class PhysicalPersonEditor extends PolymerTemplate<PhysicalPersonEditor.PhysicalPersonEditorModel> {
 
     @Id("firstName")
     private TextField firstName;
@@ -40,11 +40,11 @@ public class SelfEmployedPersonEditor extends PolymerTemplate<SelfEmployedPerson
     @Id("surname")
     private TextField surname;
 
-    @Id("email")
-    private EmailField email;
-
     @Id("phone")
     private TextField phone;
+
+    @Id("email")
+    private EmailField email;
 
     @Id("dateOfBirth")
     private DatePicker dateOfBirth;
@@ -82,15 +82,6 @@ public class SelfEmployedPersonEditor extends PolymerTemplate<SelfEmployedPerson
     @Id("identityCardCopy")
     private PersonalCardComponent identityCardCopy;
 
-    @Id("ico")
-    private TextField ico;
-
-    @Id("businessName")
-    private TextField businessName;
-
-    @Id("businessObject")
-    private TextField businessObject;
-
     @Id("iban")
     private TextField iban;
 
@@ -103,117 +94,112 @@ public class SelfEmployedPersonEditor extends PolymerTemplate<SelfEmployedPerson
     @Id("save")
     private Button save;
 
-    private SelfEmployedPersonDto selfEmployedPersonDto;
-    private final BeanValidationBinder<SelfEmployedPersonDto> binder = new BeanValidationBinder<>(SelfEmployedPersonDto.class);
+    private PhysicalPersonDto physicalPersonDto;
+    private final BeanValidationBinder<PhysicalPersonDto> binder = new BeanValidationBinder<>(PhysicalPersonDto.class);
 
-    public SelfEmployedPersonEditor()
+
+    public PhysicalPersonEditor()
     {
         LocalDate now = LocalDate.now();
 
-        save.addClickListener(event -> validateAndSave());
+        save.addClickListener(click -> validateAndSave());
+
 
         binder.forField(firstName)
                 .withValidator(name -> name.length() > 0, ClientValidatorsMessages.FIRST_NAME_MESSAGE_NOT_BLANK)
                 .withValidator(name -> name.matches("[^0-9]{1,}"),ClientValidatorsMessages.FIRST_NAME_MESSAGE_FORMAT)
-                .bind(SelfEmployedPersonDto::getFirstName,SelfEmployedPersonDto::setFirstName);
+                .bind(PhysicalPersonDto::getFirstName,PhysicalPersonDto::setFirstName);
 
         binder.forField(surname)
                 .withValidator(surname -> surname.length() > 0, ClientValidatorsMessages.SURNAME_MESSAGE_NOT_BLANK)
                 .withValidator(surname -> surname.matches("[^0-9]{1,}"),ClientValidatorsMessages.SURNAME_MESSAGE_FORMAT)
-                .bind(SelfEmployedPersonDto::getSurname,SelfEmployedPersonDto::setSurname);
+                .bind(PhysicalPersonDto::getSurname,PhysicalPersonDto::setSurname);
 
         binder.forField(email)
                 .withValidator(el -> el.length() > 0,ClientValidatorsMessages.EMAIL_MESSAGE_NOT_BLANK)
                 .withValidator(new EmailValidator(ClientValidatorsMessages.EMAIL_MESSAGE_FORMAT))
                 .withValidator(el -> el.matches("^([\\w\\.\\-_]+)?\\w+@[\\w-_]+(\\.\\w+){1,}$"),ClientValidatorsMessages.EMAIL_MESSAGE_FORMAT)
-                .bind(SelfEmployedPersonDto::getEmail,SelfEmployedPersonDto::setEmail);
+                .bind(PhysicalPersonDto::getEmail,PhysicalPersonDto::setEmail);
 
         binder.forField(phone)
                 .withValidator(p -> p.length() > 0, ClientValidatorsMessages.PHONE_MESSAGE_NOT_BLANK)
                 .withValidator(p -> p.matches("^\\s*(?:\\+?(\\d{1,3}))?([-. (]*(\\d{3})[-. )]*)?((\\d{3})[-. ]*(\\d{2,4})(?:[-.x ]*(\\d+))?)\\s*$"),ClientValidatorsMessages.PHONE_MESSAGE_FORMAT)
-                .bind(SelfEmployedPersonDto::getPhone,SelfEmployedPersonDto::setPhone);
+                .bind(PhysicalPersonDto::getPhone,PhysicalPersonDto::setPhone);
 
 
         binder.forField(dateOfBirth)
                 .withValidator(date -> date == null || date.isBefore(now),ClientValidatorsMessages.DATE_OF_BIRTH_MESSAGE)
-                .bind(SelfEmployedPersonDto::getDateOfBirdth,SelfEmployedPersonDto::setDateOfBirdth);
+                .bind(PhysicalPersonDto::getDateOfBirdth,PhysicalPersonDto::setDateOfBirdth);
 
         binder.forField(personalNumber)
                 .withValidator(number -> number.length() > 0,ClientValidatorsMessages.PERSONAL_NUMBER_MESSAGE_NOT_BLANK)
                 .withValidator(PersonalNumberValidator::isValid,ClientValidatorsMessages.PERSONAL_NUMBER_MESSAGE_FORMAT)
-                .bind(SelfEmployedPersonDto::getPersonalNumber,SelfEmployedPersonDto::setPersonalNumber);
+                .bind(PhysicalPersonDto::getPersonalNumber,PhysicalPersonDto::setPersonalNumber);
 
         binder.forField(identityCardNumber)
                 .withValidator(identityNumber -> identityNumber.length() > 0,ClientValidatorsMessages.IDENTITY_CARD_NUMBER_MESSAGE_NOT_NULL)
                 .withValidator(identityNumber -> identityNumber.matches("[A-Z0-9]{8}"),ClientValidatorsMessages.IDENTITY_CARD_NUMBER_MESSAGE_FORMAT)
-                .bind(SelfEmployedPersonDto::getIdentityCardNumber,SelfEmployedPersonDto::setIdentityCardNumber);
+                .bind(PhysicalPersonDto::getIdentityCardNumber,PhysicalPersonDto::setIdentityCardNumber);
 
         binder.forField(citizenship)
                 .withValidator(ship -> ship.length() > 0,ClientValidatorsMessages.CITIZENSHIP_MESSAGE_NOT_NULL)
                 .withValidator(ship -> ship.matches("[A-Z]{2,3}"),ClientValidatorsMessages.CITIZENSHIP_MESSAGE_FORMAT)
-                .bind(SelfEmployedPersonDto::getCitizenship,SelfEmployedPersonDto::setCitizenship);
+                .bind(PhysicalPersonDto::getCitizenship,PhysicalPersonDto::setCitizenship);
 
         binder.forField(releaseDateOfIdentityCard)
                 .withValidator(date -> date == null ? false : date.isBefore(now),ClientValidatorsMessages.RELEASE_DATE_OF_IDENTITY_CARD_MESSAGE_PAST)
-                .bind(SelfEmployedPersonDto::getReleaseDateOfIdentityCard,SelfEmployedPersonDto::setReleaseDateOfIdentityCard);
+                .bind(PhysicalPersonDto::getReleaseDateOfIdentityCard,PhysicalPersonDto::setReleaseDateOfIdentityCard);
 
         binder.forField(dateOfValidityOfIdentityCard)
                 .withValidator(date -> date == null ? false : date.isAfter(now),ClientValidatorsMessages.DATE_OF_VALIDITY_OF_IDENTITY_CARD_MESSAGE_FUTURE)
-                .bind(SelfEmployedPersonDto::getDateOfValidityOfIdentityCard, SelfEmployedPersonDto::setDateOfValidityOfIdentityCard);
+                .bind(PhysicalPersonDto::getDateOfValidityOfIdentityCard, PhysicalPersonDto::setDateOfValidityOfIdentityCard);
 
         binder.forField(street)
                 .withValidator(st -> st.length() > 0,ClientValidatorsMessages.STREET_MESSAGE_NOT_BLANK)
-                .bind(SelfEmployedPersonDto::getStreet,SelfEmployedPersonDto::setStreet);
+                .bind(PhysicalPersonDto::getStreet,PhysicalPersonDto::setStreet);
 
         binder.forField(numberOfHouse)
-                .withValidator(number -> number.length() > 0, ClientValidatorsMessages.NUMBER_OF_HOUSE_MESSAGE_NOT_BLANK)
+                .withValidator(number -> number.length() > 0,ClientValidatorsMessages.NUMBER_OF_HOUSE_MESSAGE_NOT_BLANK)
                 .withValidator(number -> number.matches("[0-9]*[/]?[0-9]{1,}"),ClientValidatorsMessages.NUMBER_OF_HOUSE_MESSAGE_FORMAT)
-                .bind(SelfEmployedPersonDto::getNumberOfHouse,SelfEmployedPersonDto::setNumberOfHouse);
+                .bind(PhysicalPersonDto::getNumberOfHouse,PhysicalPersonDto::setNumberOfHouse);
 
         binder.forField(postalCode)
                 .withValidator(code -> code.length() > 0, ClientValidatorsMessages.POSTAL_CODE_MESSAGE_NOT_BLANK)
                 .withValidator(code -> code.matches("[0-9]{3}[\\s]?[0-9]{2}"),ClientValidatorsMessages.POSTAL_CODE_MESSAGE_FORMAT)
-                .bind(SelfEmployedPersonDto::getPostalCode,SelfEmployedPersonDto::setPostalCode);
+                .bind(PhysicalPersonDto::getPostalCode,PhysicalPersonDto::setPostalCode);
 
         binder.forField(city)
                 .withValidator(c -> c.length() > 0, ClientValidatorsMessages.CITY_MESSAGE_NOT_BLANK)
                 .withValidator(c -> c.matches("[^0-9]{1,}"),ClientValidatorsMessages.CITY_MESSAGE_FORMAT)
-                .bind(SelfEmployedPersonDto::getCity,SelfEmployedPersonDto::setCity);
+                .bind(PhysicalPersonDto::getCity,PhysicalPersonDto::setCity);
 
         binder.forField(state)
                 .withValidator(s -> s.length() > 0, ClientValidatorsMessages.STATE_MESSAGE_NOT_BLANK)
                 .withValidator(s -> s.matches("[^0-9]{1,}"),ClientValidatorsMessages.STATE_MESSAGE_FORMAT)
-                .bind(SelfEmployedPersonDto::getState,SelfEmployedPersonDto::setState);
+                .bind(PhysicalPersonDto::getState,PhysicalPersonDto::setState);
 
         binder.forField(iban)
                 .withValidator(ib -> ib.length() > 0,ClientValidatorsMessages.IBAN_MESSAGE_NOT_EMPTY)
                 .withValidator(ib -> ib.matches("^[A-Z]{2}[0-9]{2}[\\s]?[0-9]{4}[\\s]?[0-9]{4}[\\s]?[0-9]{4}[\\s]?[0-9]{4}[\\s]?[0-9]{4}[\\s]?"),ClientValidatorsMessages.IBAN_MESSAGE_FORMAT)
-                .bind(SelfEmployedPersonDto::getIban,SelfEmployedPersonDto::setIban);
+                .bind(PhysicalPersonDto::getIban,PhysicalPersonDto::setIban);
 
         binder.forField(note)
-                .bind(SelfEmployedPersonDto::getNote,SelfEmployedPersonDto::setNote);
+                .bind(PhysicalPersonDto::getNote,PhysicalPersonDto::setNote);
 
-        binder.forField(ico)
-                .withValidator(ic -> ic.length() > 0,ClientValidatorsMessages.ICO_MESSAGE_NOT_BLANK)
-                .withValidator(ic -> ic.matches("[0-9]{8}"),ClientValidatorsMessages.ICO_MESSAGE_FORMAT)
-                .bind(SelfEmployedPersonDto::getIco,SelfEmployedPersonDto::setIco);
 
-        binder.forField(businessName)
-                .withValidator(name -> name.length() > 0, ClientValidatorsMessages.BUSINESS_NAME_MESSAGE_NOT_BLANK)
-                .bind(SelfEmployedPersonDto::getBusinessName,SelfEmployedPersonDto::setBusinessName);
 
-        binder.forField(businessObject)
-                .withValidator(object -> object.length() > 0,ClientValidatorsMessages.BUSINESS_OBJECT_MESSAGE_NOT_BLANK)
-                .bind(SelfEmployedPersonDto::getBusinessObject,SelfEmployedPersonDto::setBusinessObject);
+
+
 
     }
 
-    public void setSelfEmployedPersonDto(SelfEmployedPersonDto selfEmployedPersonDto)
+    public void setPhysicalPersonDto(PhysicalPersonDto physicalPersonDto)
     {
-        this.selfEmployedPersonDto = selfEmployedPersonDto;
-        this.identityCardCopy.setFiles(selfEmployedPersonDto.getIdentifyCardCopyReference());
-        this.binder.readBean(selfEmployedPersonDto);
+        this.physicalPersonDto = physicalPersonDto;
+        this.identityCardCopy.setFiles(physicalPersonDto.getIdentifyCardCopyReference());
+        this.binder.readBean(physicalPersonDto);
     }
+
 
     private void validateAndSave()
     {
@@ -233,10 +219,10 @@ public class SelfEmployedPersonEditor extends PolymerTemplate<SelfEmployedPerson
         }
 
         try {
-            binder.writeBean(this.selfEmployedPersonDto);
+            binder.writeBean(this.physicalPersonDto);
             isAllCorrect = true;
         }
-        catch(ValidationException exception)
+        catch (ValidationException exception)
         {
             isAllCorrect = false;
             System.out.println("Zadane údaje nie sú validné");
@@ -244,11 +230,12 @@ public class SelfEmployedPersonEditor extends PolymerTemplate<SelfEmployedPerson
 
         if(isAllCorrect)
         {
-            fireEvent(new SelfEmployedPersonSaveEvent(this,this.selfEmployedPersonDto));
+            fireEvent(new PhysicalPersonSaveEvent(this,this.physicalPersonDto));
             System.out.println("parada");
         }
         else
         {
+            //TODO:dorob info o chybach
             System.out.println("Neocakavana chyba");
         }
 
@@ -256,7 +243,6 @@ public class SelfEmployedPersonEditor extends PolymerTemplate<SelfEmployedPerson
 
 
     }
-
 
     private boolean checkCopyCard()
     {
@@ -272,23 +258,17 @@ public class SelfEmployedPersonEditor extends PolymerTemplate<SelfEmployedPerson
         Optional<FileWrapper> backSide = this.identityCardCopy.getBackSideFile();
 
         if(frontSide.isPresent())
-            this.selfEmployedPersonDto.setFrontSideOfPersonCard(frontSide.get());
+            this.physicalPersonDto.setFrontSideOfPersonCard(frontSide.get());
         else
-            this.selfEmployedPersonDto.setFrontSideOfPersonCard(null);
+            this.physicalPersonDto.setFrontSideOfPersonCard(null);
 
         if(backSide.isPresent())
-            this.selfEmployedPersonDto.setBackSideOfPersonCard(backSide.get());
+            this.physicalPersonDto.setBackSideOfPersonCard(backSide.get());
         else
-            this.selfEmployedPersonDto.setBackSideOfPersonCard(null);
+            this.physicalPersonDto.setBackSideOfPersonCard(null);
     }
 
-    public void clear()
-    {
-        this.selfEmployedPersonDto = null;
-        this.binder.setBean(null);
-        this.binder.readBean(null);
-        this.identityCardCopy.clear();
-    }
+
 
 
     public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType, ComponentEventListener<T> listener)
@@ -297,13 +277,23 @@ public class SelfEmployedPersonEditor extends PolymerTemplate<SelfEmployedPerson
     }
 
 
+    public void clear()
+    {
+        this.physicalPersonDto = null;
+        this.binder.setBean(null);
+        this.binder.readBean(null);
+        this.identityCardCopy.clear();
+    }
+
+
+
 
 
 
     /**
-     * This model binds properties between SelfEmployedPersonEditor and self-employed-person-editor
+     * This model binds properties between PhysicalPersonEditor and physical-person-editor
      */
-    public interface SelfEmployedPersonEditorModel extends TemplateModel {
+    public interface PhysicalPersonEditorModel extends TemplateModel {
         // Add setters and getters for template properties here.
     }
 }

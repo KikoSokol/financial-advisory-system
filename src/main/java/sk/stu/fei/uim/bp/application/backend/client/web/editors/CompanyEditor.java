@@ -1,10 +1,9 @@
-package sk.stu.fei.uim.bp.application.backend.client.web;
+package sk.stu.fei.uim.bp.application.backend.client.web.editors;
 
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -17,14 +16,13 @@ import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import org.bson.types.ObjectId;
-import org.springframework.aop.scope.ScopedProxyUtils;
 import sk.stu.fei.uim.bp.application.backend.client.domain.Client;
-import sk.stu.fei.uim.bp.application.backend.client.domain.Person;
 import sk.stu.fei.uim.bp.application.backend.client.domain.PhysicalPerson;
 import sk.stu.fei.uim.bp.application.backend.client.service.ClientService;
 import sk.stu.fei.uim.bp.application.backend.client.service.implementation.ClientServiceImpl;
+import sk.stu.fei.uim.bp.application.backend.client.web.components.PhysicalPersonCard;
+import sk.stu.fei.uim.bp.application.backend.client.web.components.SearchClientView;
 import sk.stu.fei.uim.bp.application.backend.client.web.dto.ClientCompanyDto;
-import sk.stu.fei.uim.bp.application.backend.client.web.dto.SelfEmployedPersonDto;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanySaveEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.searchClientEvent.SearchGetChoosedClientEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.table.TableClientItem;

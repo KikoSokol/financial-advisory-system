@@ -1,4 +1,4 @@
-package sk.stu.fei.uim.bp.application.backend.client.web;
+package sk.stu.fei.uim.bp.application.backend.client.web.components;
 
 import com.vaadin.flow.component.html.H4;
 import com.vaadin.flow.component.html.Label;
@@ -7,8 +7,6 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
-import sk.stu.fei.uim.bp.application.backend.client.domain.Client;
-import sk.stu.fei.uim.bp.application.backend.client.domain.PhysicalPerson;
 import sk.stu.fei.uim.bp.application.backend.client.web.table.TableClientItem;
 
 /**
