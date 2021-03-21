@@ -9,6 +9,7 @@ import sk.stu.fei.uim.bp.application.backend.address.Address;
 import javax.validation.constraints.NotNull;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -54,4 +55,16 @@ public abstract class Client
                 "}";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Client)) return false;
+        Client client = (Client) o;
+        return getClientId().equals(client.getClientId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getClientId());
+    }
 }

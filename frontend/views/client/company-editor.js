@@ -2,10 +2,11 @@ import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 import '@vaadin/vaadin-form-layout/src/vaadin-form-layout.js';
 import '@vaadin/vaadin-ordered-layout/src/vaadin-horizontal-layout.js';
 import '@vaadin/vaadin-button/src/vaadin-button.js';
-import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@vaadin/vaadin-grid/src/vaadin-grid.js';
 import './search-client-view.js';
+import '@vaadin/vaadin-text-field/src/vaadin-text-area.js';
+import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
 
 class CompanyEditor extends PolymerElement {
 
@@ -20,11 +21,12 @@ class CompanyEditor extends PolymerElement {
 <vaadin-form-layout>
  <vaadin-form-layout>
   <span colspan="2">Hlavné údaje</span>
-  <vaadin-text-field error-message="Please enter a value" required invalid="" label="Obchodné meno" id="businessName" colspan="2"></vaadin-text-field>
+  <vaadin-text-field error-message="Please enter a value" required invalid="" label="Obchodné meno" id="businessName" colspan="1"></vaadin-text-field>
   <vaadin-text-field error-message="Please enter a value" required invalid="" label="IČO" id="ico"></vaadin-text-field>
   <vaadin-text-field error-message="Please enter a value" required invalid="" label="DIČ" id="dic"></vaadin-text-field>
   <vaadin-text-field error-message="Please enter a value" required invalid="" label="DIČ DPH" id="dicDph"></vaadin-text-field>
   <vaadin-text-field error-message="Please enter a value" required invalid="" label="Hlavný predmet činnosti" id="businessObject"></vaadin-text-field>
+  <vaadin-text-area label="Poznámka" id="note"></vaadin-text-area>
  </vaadin-form-layout>
  <vaadin-form-layout>
   <span colspan="2">Adresa</span>

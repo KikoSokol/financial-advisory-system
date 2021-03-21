@@ -175,7 +175,7 @@ public class PhysicalPersonEditor extends PolymerTemplate<PhysicalPersonEditor.P
         binder.forField(state)
                 .withValidator(s -> s.length() > 0, ClientValidatorsMessages.STATE_MESSAGE_NOT_BLANK)
                 .withValidator(s -> s.matches("[^0-9]{1,}"),ClientValidatorsMessages.STATE_MESSAGE_FORMAT)
-                .bind(PhysicalPersonDto::getCity,PhysicalPersonDto::setCity);
+                .bind(PhysicalPersonDto::getState,PhysicalPersonDto::setState);
 
         binder.forField(iban)
                 .withValidator(ib -> ib.length() > 0,ClientValidatorsMessages.IBAN_MESSAGE_NOT_EMPTY)

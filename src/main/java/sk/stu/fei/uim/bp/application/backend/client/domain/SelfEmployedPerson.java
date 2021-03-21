@@ -1,11 +1,12 @@
 package sk.stu.fei.uim.bp.application.backend.client.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class SelfEmployedPerson extends Person
 {

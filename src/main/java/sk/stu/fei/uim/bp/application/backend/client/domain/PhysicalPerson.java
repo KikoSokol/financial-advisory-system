@@ -1,11 +1,13 @@
 package sk.stu.fei.uim.bp.application.backend.client.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.bson.types.ObjectId;
 
 import java.util.LinkedList;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class PhysicalPerson extends Person
 {

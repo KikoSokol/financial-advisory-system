@@ -48,7 +48,7 @@ public class TestDtoObject
         System.out.println(d);
 
         d.setBusinessName("Velka Firma");
-        d.setBusinesObject("Sport");
+        d.setBusinessObject("Sport");
 
         ClientCompany o = d.toClientCompany(c);
 

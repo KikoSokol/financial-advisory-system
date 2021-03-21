@@ -36,12 +36,16 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
 
     @Id("addPhysicalPersonButton")
     private Button addPhysicalPersonButton;
+
     @Id("addSelfEmployedPersonButton")
     private Button addSelfEmployedPersonButton;
-    @Id("addCompanyButton")
-    private Button addCompanyButton;
+
+    @Id("addClientCompanyButton")
+    private Button addClientCompanyButton;
+
     @Id("clientTable")
     private Grid<TableClientItem> clientTable;
+
     private final HeaderRow headerRow;
 
     private Dialog mainWindow;
@@ -59,6 +63,7 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
     private final ClientController controller;
 
 
+
     @Autowired
     public ClientMainView(ClientServiceImpl clientService)
     {
@@ -69,6 +74,7 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
         initClientWindow();
         initPhysicalPersonEditor();
         initSelfEmployedPersonEditor();
+        initCompanyEditor(clientService);
 
         this.mainWindow.add(this.clientWindow);
 
@@ -88,6 +94,8 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
         this.addPhysicalPersonButton.addClickListener(event -> this.controller.addNewPhysicalPerson());
 
         this.addSelfEmployedPersonButton.addClickListener(event -> this.controller.addNewSelfEmployedPerson());
+
+        this.addClientCompanyButton.addClickListener(event -> this.controller.addNewClientCompany());
     }
 
     public void resetMainWindow()
@@ -130,6 +138,11 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
         this.selfEmployedPersonEditor = new SelfEmployedPersonEditor();
     }
 
+    private void initCompanyEditor(ClientServiceImpl clientService)
+    {
+        this.companyEditor = new CompanyEditor(clientService);
+    }
+
     public PhysicalPersonEditor getPhysicalPersonEditor() {
         return physicalPersonEditor;
     }
@@ -137,6 +150,10 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
     public SelfEmployedPersonEditor getSelfEmployedPersonEditor()
     {
         return this.selfEmployedPersonEditor;
+    }
+
+    public CompanyEditor getCompanyEditor(){
+        return this.companyEditor;
     }
 
     private void initSearchingRow()

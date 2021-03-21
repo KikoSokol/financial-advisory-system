@@ -23,7 +23,7 @@ class ClientMainView extends PolymerElement {
   <vaadin-button theme="primary" id="addSelfEmployedPersonButton" style="flex-grow: 0; flex-shrink: 0;">
     Živnostik 
   </vaadin-button>
-  <vaadin-button theme="primary" id="addCompanyButton" style="flex-grow: 0; flex-shrink: 0;">
+  <vaadin-button theme="primary" id="addClientCompanyButton" style="flex-grow: 0; flex-shrink: 0;">
     Spoločnosť 
   </vaadin-button>
  </vaadin-horizontal-layout>

@@ -183,7 +183,7 @@ public class SelfEmployedPersonEditor extends PolymerTemplate<SelfEmployedPerson
         binder.forField(state)
                 .withValidator(s -> s.length() > 0, ClientValidatorsMessages.STATE_MESSAGE_NOT_BLANK)
                 .withValidator(s -> s.matches("[^0-9]{1,}"),ClientValidatorsMessages.STATE_MESSAGE_FORMAT)
-                .bind(SelfEmployedPersonDto::getCity,SelfEmployedPersonDto::setCity);
+                .bind(SelfEmployedPersonDto::getState,SelfEmployedPersonDto::setState);
 
         binder.forField(iban)
                 .withValidator(ib -> ib.length() > 0,ClientValidatorsMessages.IBAN_MESSAGE_NOT_EMPTY)
@@ -192,9 +192,6 @@ public class SelfEmployedPersonEditor extends PolymerTemplate<SelfEmployedPerson
 
         binder.forField(note)
                 .bind(SelfEmployedPersonDto::getNote,SelfEmployedPersonDto::setNote);
-
-
-
 
         binder.forField(ico)
                 .withValidator(ic -> ic.length() > 0,ClientValidatorsMessages.ICO_MESSAGE_NOT_BLANK)

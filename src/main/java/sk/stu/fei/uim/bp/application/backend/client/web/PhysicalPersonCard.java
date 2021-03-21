@@ -7,6 +7,9 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import sk.stu.fei.uim.bp.application.backend.client.domain.Client;
+import sk.stu.fei.uim.bp.application.backend.client.domain.PhysicalPerson;
+import sk.stu.fei.uim.bp.application.backend.client.web.table.TableClientItem;
 
 /**
  * A Designer generated component for the physical-person-card template.
@@ -25,11 +28,20 @@ public class PhysicalPersonCard extends PolymerTemplate<PhysicalPersonCard.Physi
     @Id("phone")
     private Label phone;
 
-    /**
-     * Creates a new PhysicalPersonCard.
-     */
-    public PhysicalPersonCard() {
-        // You can initialise any data required for the connected UI components here.
+    private final TableClientItem tableClientItem;
+
+
+    public PhysicalPersonCard(TableClientItem tableClientItem)
+    {
+        this.tableClientItem = tableClientItem;
+        setPhysicalPerson();
+    }
+
+    public void setPhysicalPerson()
+    {
+        fullName.setText(tableClientItem.getName() + " " + tableClientItem.getSurname());
+        email.setText(tableClientItem.getEmail());
+        phone.setText(tableClientItem.getPhone());
     }
 
     /**

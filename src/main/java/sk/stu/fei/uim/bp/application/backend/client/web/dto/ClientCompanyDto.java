@@ -32,7 +32,7 @@ public class ClientCompanyDto extends ClientDto
     private String businessName;
 
     @NotBlank(message = "Hlavný predmet podnikania je povinné pole")
-    private String businesObject;
+    private String businessObject;
 
     @NotEmpty(message = "Spoločnosť musí mať minimálne 1 konateľa")
     private List<ObjectId> managers = new LinkedList<>();
@@ -45,7 +45,7 @@ public class ClientCompanyDto extends ClientDto
         setDic(company.getDic());
         setDicDph(company.getDicDph());
         setBusinessName(company.getBusinessName());
-        setBusinesObject(company.getBussinesObject());
+        setBusinessObject(company.getBussinesObject());
         setManagers(company.getManagers());
     }
 
@@ -57,7 +57,7 @@ public class ClientCompanyDto extends ClientDto
         company.setDic(getDic());
         company.setDicDph(getDicDph());
         company.setBusinessName(getBusinessName());
-        company.setBussinesObject(getBusinesObject());
+        company.setBussinesObject(getBusinessObject());
         company.setManagers(getManagers());
 
         return company;
@@ -71,7 +71,7 @@ public class ClientCompanyDto extends ClientDto
                 ", dic='" + dic + '\'' +
                 ", dicDph='" + dicDph + '\'' +
                 ", businessName='" + businessName + '\'' +
-                ", businesObject='" + businesObject + '\'' +
+                ", businesObject='" + businessObject + '\'' +
                 ", managers=" + managers +
                 '}';
     }

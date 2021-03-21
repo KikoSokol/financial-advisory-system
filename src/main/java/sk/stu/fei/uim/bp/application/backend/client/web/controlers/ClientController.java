@@ -3,13 +3,16 @@ package sk.stu.fei.uim.bp.application.backend.client.web.controlers;
 import com.vaadin.flow.data.provider.ListDataProvider;
 import org.bson.types.ObjectId;
 import sk.stu.fei.uim.bp.application.backend.client.domain.Client;
+import sk.stu.fei.uim.bp.application.backend.client.domain.ClientCompany;
 import sk.stu.fei.uim.bp.application.backend.client.domain.PhysicalPerson;
 import sk.stu.fei.uim.bp.application.backend.client.domain.SelfEmployedPerson;
 import sk.stu.fei.uim.bp.application.backend.client.service.ClientService;
 import sk.stu.fei.uim.bp.application.backend.client.service.implementation.ClientServiceImpl;
 import sk.stu.fei.uim.bp.application.backend.client.web.ClientMainView;
+import sk.stu.fei.uim.bp.application.backend.client.web.CompanyEditor;
 import sk.stu.fei.uim.bp.application.backend.client.web.PhysicalPersonEditor;
 import sk.stu.fei.uim.bp.application.backend.client.web.SelfEmployedPersonEditor;
+import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanySaveEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEvents.PhysicalPersonSaveEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.selfEmployedPersonEvents.SelfEmployedPersonSaveEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.table.TableClientItem;
@@ -25,6 +28,7 @@ public class ClientController
 
     private PhysicalPersonController physicalPersonController;
     private SelfEmployedPersonController selfEmployedPersonController;
+    private ClientCompanyController clientCompanyController;
 
 
     private ClientMainView clientMainView;
@@ -34,9 +38,11 @@ public class ClientController
         this.clientService = clientService;
         this.physicalPersonController = new PhysicalPersonController(clientService);
         this.selfEmployedPersonController = new SelfEmployedPersonController(clientService);
-
+        this.clientCompanyController = new ClientCompanyController(clientService);
 
         this.clientDataProvider = new ListDataProvider<>(getDataForTable());
+
+
 
     }
 
@@ -84,6 +90,13 @@ public class ClientController
         this.clientMainView.showMainWindow(editor);
     }
 
+    public void addNewClientCompany()
+    {
+        CompanyEditor editor = this.clientMainView.getCompanyEditor();
+        editor.setClientCompanyDto(this.clientCompanyController.addNewClientCompany(this.currentAgentId));
+        this.clientMainView.showMainWindow(editor);
+    }
+
 
     private void setActionForEditors()
     {
@@ -93,6 +106,9 @@ public class ClientController
 
         SelfEmployedPersonEditor selfEmployedPersonEditor = this.clientMainView.getSelfEmployedPersonEditor();
         selfEmployedPersonEditor.addListener(SelfEmployedPersonSaveEvent.class,this::saveNewSelfEmployedPerson);
+
+        CompanyEditor companyEditor = this.clientMainView.getCompanyEditor();
+        companyEditor.addListener(ClientCompanySaveEvent.class,this::saveNewClientCompany);
 
 
 
@@ -126,6 +142,19 @@ public class ClientController
         {
             System.out.println("Nepodarilo sa pridať Živnostnika (ClientController)");
             exception.printStackTrace();
+        }
+    }
+
+    private void saveNewClientCompany(ClientCompanySaveEvent event)
+    {
+        try {
+            ClientCompany clientCompany = this.clientCompanyController.doSaveNewClientCompany(event.getClientCompanyDto());
+            System.out.println(clientCompany);
+            this.clientMainView.getCompanyEditor().clear();
+            this.clientMainView.closeMainWindow();
+            this.clientCompanyController.clear();
+        } catch (Exception exception) {
+            System.out.println("Nepodarilo sa pridať spoločnosť (ClientController)");
         }
     }
 
