@@ -14,11 +14,12 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import sk.stu.fei.uim.bp.application.MainView;
 import sk.stu.fei.uim.bp.application.backend.client.service.implementation.ClientServiceImpl;
 import sk.stu.fei.uim.bp.application.backend.client.web.components.ClientWindow;
-import sk.stu.fei.uim.bp.application.backend.client.web.controlers.ClientController;
+import sk.stu.fei.uim.bp.application.backend.client.web.controlers.*;
 import sk.stu.fei.uim.bp.application.backend.client.web.editors.CompanyEditor;
 import sk.stu.fei.uim.bp.application.backend.client.web.editors.PhysicalPersonEditor;
 import sk.stu.fei.uim.bp.application.backend.client.web.editors.SelfEmployedPersonEditor;
@@ -63,8 +64,13 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
     private SelfEmployedPersonEditor selfEmployedPersonEditor;
 
 
+    private final ObjectId currentAgentId = new ObjectId("601b6300dbf3207494372a20");
 
     private final ClientController controller;
+
+    private final PhysicalPersonController physicalPersonController;
+    private final SelfEmployedPersonController selfEmployedPersonController;
+    private final ClientCompanyController clientCompanyController;
 
 
 
@@ -79,6 +85,11 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
         initPhysicalPersonEditor();
         initSelfEmployedPersonEditor();
         initCompanyEditor(clientService);
+
+
+        this.physicalPersonController = new PhysicalPersonController(this,this.currentAgentId,clientService);
+        this.selfEmployedPersonController = new SelfEmployedPersonController(this,this.currentAgentId,clientService);
+        this.clientCompanyController = new ClientCompanyController(this,this.currentAgentId,clientService);
 
         this.mainWindow.add(this.clientWindow);
 
@@ -95,11 +106,11 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
 
     private void setActionOnAddButton()
     {
-        this.addPhysicalPersonButton.addClickListener(event -> this.controller.addNewPhysicalPerson());
+        this.addPhysicalPersonButton.addClickListener(event -> this.physicalPersonController.addNewPhysicalPerson());
 
-        this.addSelfEmployedPersonButton.addClickListener(event -> this.controller.addNewSelfEmployedPerson());
+        this.addSelfEmployedPersonButton.addClickListener(event -> this.selfEmployedPersonController.addNewSelfEmployedPerson());
 
-        this.addClientCompanyButton.addClickListener(event -> this.controller.addNewClientCompany());
+        this.addClientCompanyButton.addClickListener(event -> this.clientCompanyController.addNewClientCompany());
     }
 
     public void resetMainWindow()

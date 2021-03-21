@@ -1,14 +1,18 @@
 package sk.stu.fei.uim.bp.application.backend.client.web.controlers;
 
+
 import org.bson.types.ObjectId;
 import sk.stu.fei.uim.bp.application.backend.address.Address;
 import sk.stu.fei.uim.bp.application.backend.client.domain.SelfEmployedPerson;
 import sk.stu.fei.uim.bp.application.backend.client.service.SelfEmployedPersonService;
 import sk.stu.fei.uim.bp.application.backend.client.service.implementation.ClientServiceImpl;
+import sk.stu.fei.uim.bp.application.backend.client.web.ClientMainView;
 import sk.stu.fei.uim.bp.application.backend.client.web.dto.SelfEmployedPersonDto;
+import sk.stu.fei.uim.bp.application.backend.client.web.editors.SelfEmployedPersonEditor;
+import sk.stu.fei.uim.bp.application.backend.client.web.events.selfEmployedPersonEvents.SelfEmployedPersonSaveEvent;
 import sk.stu.fei.uim.bp.application.backend.file.FileWrapper;
 
-public class SelfEmployedPersonController
+public class SelfEmployedPersonController extends MainClientController
 {
     private final SelfEmployedPersonService service;
 
@@ -16,37 +20,54 @@ public class SelfEmployedPersonController
     private SelfEmployedPerson selfEmployedPerson;
     private SelfEmployedPersonDto selfEmployedPersonDto;
 
-    public SelfEmployedPersonController(ClientServiceImpl clientService)
+    public SelfEmployedPersonController(ClientMainView clientMainView, ObjectId currentAgentId, ClientServiceImpl clientService)
     {
+        super(clientMainView,currentAgentId);
         this.service = clientService;
+        initActionOfEditor();
         this.clear();
 
     }
 
-    public SelfEmployedPersonDto addNewSelfEmployedPerson(ObjectId currentAgent)
+    private void initActionOfEditor()
     {
-        this.isNew = true;
-        this.selfEmployedPerson = new SelfEmployedPerson();
-        this.selfEmployedPerson.setAgent(currentAgent);
-        this.selfEmployedPerson.setAddress(new Address());
-
-        this.selfEmployedPersonDto = new SelfEmployedPersonDto();
-
-        return this.selfEmployedPersonDto;
+        SelfEmployedPersonEditor selfEmployedPersonEditor = this.clientMainView.getSelfEmployedPersonEditor();
+        selfEmployedPersonEditor.addListener(SelfEmployedPersonSaveEvent.class,this::doSaveNewSelfEmployedPerson);
     }
 
-    public SelfEmployedPersonDto updateSelfEmployedPerson(SelfEmployedPerson selfEmployedPerson)
+    private void openEditor(SelfEmployedPersonDto selfEmployedPersonDto)
+    {
+        SelfEmployedPersonEditor editor = super.clientMainView.getSelfEmployedPersonEditor();
+        editor.setSelfEmployedPersonDto(selfEmployedPersonDto);
+        this.clientMainView.showMainWindow(editor);
+    }
+
+    public void addNewSelfEmployedPerson()
+    {
+        this.isNew = true;
+
+        this.selfEmployedPerson = new SelfEmployedPerson();
+        this.selfEmployedPerson.setAgent(super.currentAgentId);
+        this.selfEmployedPerson.setAddress(new Address());
+        this.selfEmployedPersonDto = new SelfEmployedPersonDto();
+
+        openEditor(this.selfEmployedPersonDto);
+    }
+
+
+    public void updateSelfEmployedPerson(SelfEmployedPerson selfEmployedPerson)
     {
         this.isNew = false;
         this.selfEmployedPerson = selfEmployedPerson;
         this.selfEmployedPersonDto = new SelfEmployedPersonDto(this.selfEmployedPerson);
 
-        return this.selfEmployedPersonDto;
+        openEditor(this.selfEmployedPersonDto);
     }
 
 
-    public SelfEmployedPerson doSaveNewSelfEmployedPerson(SelfEmployedPersonDto selfEmployedPersonDto) throws Exception {
-        this.selfEmployedPersonDto = selfEmployedPersonDto;
+    public void doSaveNewSelfEmployedPerson(SelfEmployedPersonSaveEvent event)
+    {
+        this.selfEmployedPersonDto = event.getSelfEmployedPersonDto();
 
         FileWrapper front = this.selfEmployedPersonDto.getFrontSideOfPersonCard();
         FileWrapper back = this.selfEmployedPersonDto.getBackSideOfPersonCard();
@@ -55,23 +76,28 @@ public class SelfEmployedPersonController
             this.selfEmployedPerson = this.selfEmployedPersonDto.toSelfEmployedPerson(this.selfEmployedPerson);
             if(front != null && back !=null)
             {
-                return service.addNewSelfEmployedPerson(this.selfEmployedPerson, front, back);
+                service.addNewSelfEmployedPerson(this.selfEmployedPerson, front, back);
             }
             else if((front == null && back != null) || (front != null && back == null))
+            {
                 throw new Exception("Nebola zadaná jedná strana kópie OP");
+            }
 
-            return service.addNewSelfEmployedPerson(this.selfEmployedPerson);
+            service.addNewSelfEmployedPerson(this.selfEmployedPerson);
+
+            this.clear();
 
         }catch (Exception exception)
         {
             System.out.println("Nepodarilo sa pridať novú Živnostníka (SelfEmployedPersonController)");
-            throw exception;
         }
     }
 
 
     public void clear()
     {
+        super.clientMainView.getSelfEmployedPersonEditor().clear();
+        super.clientMainView.closeMainWindow();
         this.isNew = false;
         this.selfEmployedPerson = null;
         this.selfEmployedPersonDto = null;

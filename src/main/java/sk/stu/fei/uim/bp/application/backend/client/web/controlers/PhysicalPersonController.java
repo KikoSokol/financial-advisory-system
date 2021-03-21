@@ -6,11 +6,14 @@ import sk.stu.fei.uim.bp.application.backend.address.Address;
 import sk.stu.fei.uim.bp.application.backend.client.domain.PhysicalPerson;
 import sk.stu.fei.uim.bp.application.backend.client.service.PhysicalPersonService;
 import sk.stu.fei.uim.bp.application.backend.client.service.implementation.ClientServiceImpl;
+import sk.stu.fei.uim.bp.application.backend.client.web.ClientMainView;
 import sk.stu.fei.uim.bp.application.backend.client.web.dto.PhysicalPersonDto;
+import sk.stu.fei.uim.bp.application.backend.client.web.editors.PhysicalPersonEditor;
+import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEvents.PhysicalPersonSaveEvent;
 import sk.stu.fei.uim.bp.application.backend.file.FileWrapper;
 
 
-public class PhysicalPersonController
+public class PhysicalPersonController extends MainClientController
 {
     private final PhysicalPersonService service;
 
@@ -18,35 +21,54 @@ public class PhysicalPersonController
     private PhysicalPerson physicalPerson;
     private PhysicalPersonDto physicalPersonDto;
 
-    public PhysicalPersonController(ClientServiceImpl clientService)
+    public PhysicalPersonController(ClientMainView clientMainView, ObjectId currentAgentId, ClientServiceImpl clientService)
     {
+        super(clientMainView,currentAgentId);
         this.service = clientService;
+        initActionOfEditor();
         this.clear();
     }
 
-    public PhysicalPersonDto addNewPhysicalPerson(ObjectId currentAgent)
+    private void initActionOfEditor()
+    {
+        PhysicalPersonEditor physicalPersonEditor = this.clientMainView.getPhysicalPersonEditor();
+        physicalPersonEditor.addListener(PhysicalPersonSaveEvent.class,this::doSaveNewPhysicalPerson);
+    }
+
+    private void openEditor(PhysicalPersonDto physicalPersonDto)
+    {
+        PhysicalPersonEditor editor = super.clientMainView.getPhysicalPersonEditor();
+        editor.setPhysicalPersonDto(physicalPersonDto);
+        super.clientMainView.showMainWindow(editor);
+    }
+
+    public void addNewPhysicalPerson()
     {
         this.isNew = true;
+
         this.physicalPerson = new PhysicalPerson();
-        this.physicalPerson.setAgent(currentAgent);
+        this.physicalPerson.setAgent(super.currentAgentId);
         this.physicalPerson.setAddress(new Address());
         this.physicalPersonDto = new PhysicalPersonDto();
 
-        return this.physicalPersonDto;
+        openEditor(this.physicalPersonDto);
     }
 
-    public PhysicalPersonDto updatePhysicalPerson(PhysicalPerson physicalPerson)
+
+
+    public void updatePhysicalPerson(PhysicalPerson physicalPerson)
     {
         this.isNew = false;
         this.physicalPerson = physicalPerson;
         this.physicalPersonDto = new PhysicalPersonDto(this.physicalPerson);
 
-        return this.physicalPersonDto;
+        openEditor(this.physicalPersonDto);
     }
 
-    public PhysicalPerson doSaveNewPhysicalPerson(PhysicalPersonDto physicalPersonDto) throws Exception
+
+    public void doSaveNewPhysicalPerson(PhysicalPersonSaveEvent event)
     {
-        this.physicalPersonDto = physicalPersonDto;
+        this.physicalPersonDto = event.getPhysicalPersonDto();
 
         FileWrapper front = this.physicalPersonDto.getFrontSideOfPersonCard();
         FileWrapper back = this.physicalPersonDto.getBackSideOfPersonCard();
@@ -56,24 +78,30 @@ public class PhysicalPersonController
             this.physicalPerson = this.physicalPersonDto.toPhysicalPerson(this.physicalPerson);
             if(front != null && back != null)
             {
-                return service.addNewPhysicalPerson(this.physicalPerson,front,back);
+                service.addNewPhysicalPerson(this.physicalPerson,front,back);
             }
             else if((front == null && back != null) || (front != null && back == null))
+            {
                 throw new Exception("Nebola zadaná jedná strana kópie OP");
+            }
 
-            return service.addNewPhysicalPerson(this.physicalPerson);
+
+            service.addNewPhysicalPerson(this.physicalPerson);
+
+            this.clear();
 
         }
         catch (Exception exception)
         {
             System.out.println("Nepodarilo sa pridať novú FO (PhysicalPersonController)");
-            throw exception;
         }
     }
 
 
     public void clear()
     {
+        super.clientMainView.getPhysicalPersonEditor().clear();
+        super.clientMainView.closeMainWindow();
         this.isNew = false;
         this.physicalPersonDto = null;
         this.physicalPerson = null;
