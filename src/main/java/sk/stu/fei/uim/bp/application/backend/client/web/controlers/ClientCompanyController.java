@@ -71,6 +71,7 @@ public class ClientCompanyController extends MainClientController
             this.clientCompany = this.clientCompanyDto.toClientCompany(this.clientCompany);
             this.clientCompanyService.addNewClientCompany(this.clientCompany);
             this.clear();
+            super.clientMainView.refreshTable();
         }
         catch (Exception exception)
         {

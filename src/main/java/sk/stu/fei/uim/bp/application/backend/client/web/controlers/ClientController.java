@@ -11,32 +11,37 @@ import sk.stu.fei.uim.bp.application.backend.client.web.table.TableClientItem;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ClientController
+public class ClientController extends MainClientController
 {
     private final ClientService clientService;
-    private final ObjectId currentAgentId = new ObjectId("601b6300dbf3207494372a20");
+
+    List<TableClientItem> allClients;
     private final ListDataProvider<TableClientItem> clientDataProvider;
 
 
-
-    private ClientMainView clientMainView;
-
-    public ClientController(ClientServiceImpl clientService)
+    public ClientController(ClientMainView clientMainView,ObjectId currentAgentId, ClientServiceImpl clientService)
     {
+        super(clientMainView,currentAgentId);
         this.clientService = clientService;
 
-        this.clientDataProvider = new ListDataProvider<>(getDataForTable());
+        this.allClients = loadDataToTable();
 
-    }
+        this.clientDataProvider = new ListDataProvider<>(allClients);
 
-    public void init(ClientMainView clientMainView)
-    {
-        this.clientMainView = clientMainView;
         this.clientMainView.getClientTable().setDataProvider(this.clientDataProvider);
 
+
     }
 
-    public List<Client> getAllClient()
+    public void refreshTable()
+    {
+        this.allClients.clear();
+        this.allClients.addAll(loadDataToTable());
+        this.clientDataProvider.refreshAll();
+    }
+
+
+    public List<Client> getAllClientFromDatabase()
     {
         return this.clientService.getAllClientsOfAgent(currentAgentId);
     }
@@ -53,16 +58,12 @@ public class ClientController
         return dataForTable;
     }
 
-    public List<TableClientItem> getDataForTable()
+    public List<TableClientItem> loadDataToTable()
     {
-        return convertClientsToDataForTable(getAllClient());
+        return convertClientsToDataForTable(getAllClientFromDatabase());
     }
 
 
-    private void updateTable()
-    {
-        this.clientDataProvider.refreshAll();
-    }
 
 
 }

@@ -86,6 +86,7 @@ public class SelfEmployedPersonController extends MainClientController
             service.addNewSelfEmployedPerson(this.selfEmployedPerson);
 
             this.clear();
+            super.clientMainView.refreshTable();
 
         }catch (Exception exception)
         {

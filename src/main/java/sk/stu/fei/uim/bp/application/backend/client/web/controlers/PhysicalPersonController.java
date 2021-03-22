@@ -89,6 +89,7 @@ public class PhysicalPersonController extends MainClientController
             service.addNewPhysicalPerson(this.physicalPerson);
 
             this.clear();
+            super.clientMainView.refreshTable();
 
         }
         catch (Exception exception)

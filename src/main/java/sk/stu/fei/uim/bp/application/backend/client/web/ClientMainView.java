@@ -66,7 +66,7 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
 
     private final ObjectId currentAgentId = new ObjectId("601b6300dbf3207494372a20");
 
-    private final ClientController controller;
+    private final ClientController clientController;
 
     private final PhysicalPersonController physicalPersonController;
     private final SelfEmployedPersonController selfEmployedPersonController;
@@ -78,7 +78,7 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
     public ClientMainView(ClientServiceImpl clientService)
     {
 
-        this.controller = new ClientController(clientService);
+        this.clientController = new ClientController(this,this.currentAgentId,clientService);
 
         initMainWindow();
         initClientWindow();
@@ -99,8 +99,12 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
         initColumns();
         headerRow = clientTable.appendHeaderRow();
         initSearchingRow();
-        this.controller.init(this);
 
+    }
+
+    public void refreshTable()
+    {
+        this.clientController.refreshTable();
     }
 
 
