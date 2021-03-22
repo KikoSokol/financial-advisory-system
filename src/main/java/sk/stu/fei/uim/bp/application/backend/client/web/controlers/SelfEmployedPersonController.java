@@ -9,7 +9,9 @@ import sk.stu.fei.uim.bp.application.backend.client.service.implementation.Clien
 import sk.stu.fei.uim.bp.application.backend.client.web.ClientMainView;
 import sk.stu.fei.uim.bp.application.backend.client.web.dto.SelfEmployedPersonDto;
 import sk.stu.fei.uim.bp.application.backend.client.web.editors.SelfEmployedPersonEditor;
+import sk.stu.fei.uim.bp.application.backend.client.web.events.selfEmployedPersonEvents.SelfEmployedPersonCancelEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.selfEmployedPersonEvents.SelfEmployedPersonSaveEvent;
+import sk.stu.fei.uim.bp.application.backend.client.web.events.selfEmployedPersonEvents.SelfEmployedPersonUpdateEvent;
 import sk.stu.fei.uim.bp.application.backend.file.FileWrapper;
 
 public class SelfEmployedPersonController extends MainClientController
@@ -33,12 +35,14 @@ public class SelfEmployedPersonController extends MainClientController
     {
         SelfEmployedPersonEditor selfEmployedPersonEditor = this.clientMainView.getSelfEmployedPersonEditor();
         selfEmployedPersonEditor.addListener(SelfEmployedPersonSaveEvent.class,this::doSaveNewSelfEmployedPerson);
+        selfEmployedPersonEditor.addListener(SelfEmployedPersonUpdateEvent.class,this::doUpdateSelfEmployedPerson);
+        selfEmployedPersonEditor.addListener(SelfEmployedPersonCancelEvent.class,this::cancelEdit);
     }
 
-    private void openEditor(SelfEmployedPersonDto selfEmployedPersonDto)
+    private void openEditor(SelfEmployedPersonDto selfEmployedPersonDto, boolean isNew)
     {
         SelfEmployedPersonEditor editor = super.clientMainView.getSelfEmployedPersonEditor();
-        editor.setSelfEmployedPersonDto(selfEmployedPersonDto);
+        editor.setSelfEmployedPersonDto(selfEmployedPersonDto,isNew);
         this.clientMainView.showMainWindow(editor);
     }
 
@@ -51,7 +55,7 @@ public class SelfEmployedPersonController extends MainClientController
         this.selfEmployedPerson.setAddress(new Address());
         this.selfEmployedPersonDto = new SelfEmployedPersonDto();
 
-        openEditor(this.selfEmployedPersonDto);
+        openEditor(this.selfEmployedPersonDto,this.isNew);
     }
 
 
@@ -61,11 +65,11 @@ public class SelfEmployedPersonController extends MainClientController
         this.selfEmployedPerson = selfEmployedPerson;
         this.selfEmployedPersonDto = new SelfEmployedPersonDto(this.selfEmployedPerson);
 
-        openEditor(this.selfEmployedPersonDto);
+        openEditor(this.selfEmployedPersonDto,this.isNew);
     }
 
 
-    public void doSaveNewSelfEmployedPerson(SelfEmployedPersonSaveEvent event)
+    private void doSaveNewSelfEmployedPerson(SelfEmployedPersonSaveEvent event)
     {
         this.selfEmployedPersonDto = event.getSelfEmployedPersonDto();
 
@@ -73,7 +77,9 @@ public class SelfEmployedPersonController extends MainClientController
         FileWrapper back = this.selfEmployedPersonDto.getBackSideOfPersonCard();
 
         try {
+
             this.selfEmployedPerson = this.selfEmployedPersonDto.toSelfEmployedPerson(this.selfEmployedPerson);
+
             if(front != null && back !=null)
             {
                 service.addNewSelfEmployedPerson(this.selfEmployedPerson, front, back);
@@ -82,8 +88,8 @@ public class SelfEmployedPersonController extends MainClientController
             {
                 throw new Exception("Nebola zadaná jedná strana kópie OP");
             }
-
-            service.addNewSelfEmployedPerson(this.selfEmployedPerson);
+            else
+                service.addNewSelfEmployedPerson(this.selfEmployedPerson);
 
             this.clear();
             super.clientMainView.refreshTable();
@@ -92,6 +98,44 @@ public class SelfEmployedPersonController extends MainClientController
         {
             System.out.println("Nepodarilo sa pridať novú Živnostníka (SelfEmployedPersonController)");
         }
+    }
+
+
+
+    private void doUpdateSelfEmployedPerson(SelfEmployedPersonUpdateEvent event)
+    {
+        this.selfEmployedPersonDto = event.getSelfEmployedPersonDto();
+
+        FileWrapper front = this.selfEmployedPersonDto.getFrontSideOfPersonCard();
+        FileWrapper back = this.selfEmployedPersonDto.getBackSideOfPersonCard();
+
+        try {
+
+            this.selfEmployedPerson = this.selfEmployedPersonDto.toSelfEmployedPerson(this.selfEmployedPerson);
+
+            if(front != null && back !=null)
+            {
+                service.updateSelfEmplyedPerson(this.selfEmployedPerson, front, back);
+            }
+            else if((front == null && back != null) || (front != null && back == null))
+            {
+                throw new Exception("Nebola zadaná jedná strana kópie OP");
+            }
+            else
+                service.updateSelfEmplyedPerson(this.selfEmployedPerson);
+
+            this.clear();
+            super.clientMainView.refreshTable();
+
+        }catch (Exception exception)
+        {
+            System.out.println("Nepodarilo sa pridať novú Živnostníka (SelfEmployedPersonController)");
+        }
+    }
+
+    private void cancelEdit(SelfEmployedPersonCancelEvent event)
+    {
+        this.clear();
     }
 
 

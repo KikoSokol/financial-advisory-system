@@ -9,7 +9,7 @@ public abstract class PhysicalPersonFormEvent extends ComponentEvent<PhysicalPer
 {
     private PhysicalPersonDto physicalPersonDto;
 
-    protected PhysicalPersonFormEvent(PhysicalPersonEditor source, PhysicalPersonDto physicalPersonDto) {
+    public PhysicalPersonFormEvent(PhysicalPersonEditor source, PhysicalPersonDto physicalPersonDto) {
         super(source, false);
         this.physicalPersonDto = physicalPersonDto;
     }

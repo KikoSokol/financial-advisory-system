@@ -9,7 +9,9 @@ import sk.stu.fei.uim.bp.application.backend.client.service.implementation.Clien
 import sk.stu.fei.uim.bp.application.backend.client.web.ClientMainView;
 import sk.stu.fei.uim.bp.application.backend.client.web.dto.PhysicalPersonDto;
 import sk.stu.fei.uim.bp.application.backend.client.web.editors.PhysicalPersonEditor;
+import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEvents.PhysicalPersonCancelEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEvents.PhysicalPersonSaveEvent;
+import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEvents.PhysicalPersonUpdateEvent;
 import sk.stu.fei.uim.bp.application.backend.file.FileWrapper;
 
 
@@ -33,12 +35,14 @@ public class PhysicalPersonController extends MainClientController
     {
         PhysicalPersonEditor physicalPersonEditor = this.clientMainView.getPhysicalPersonEditor();
         physicalPersonEditor.addListener(PhysicalPersonSaveEvent.class,this::doSaveNewPhysicalPerson);
+        physicalPersonEditor.addListener(PhysicalPersonUpdateEvent.class,this::doUpdatePhysicalPerson);
+        physicalPersonEditor.addListener(PhysicalPersonCancelEvent.class,this::cancelEdit);
     }
 
-    private void openEditor(PhysicalPersonDto physicalPersonDto)
+    private void openEditor(PhysicalPersonDto physicalPersonDto, boolean isNew)
     {
         PhysicalPersonEditor editor = super.clientMainView.getPhysicalPersonEditor();
-        editor.setPhysicalPersonDto(physicalPersonDto);
+        editor.setPhysicalPersonDto(physicalPersonDto,isNew);
         super.clientMainView.showMainWindow(editor);
     }
 
@@ -51,7 +55,7 @@ public class PhysicalPersonController extends MainClientController
         this.physicalPerson.setAddress(new Address());
         this.physicalPersonDto = new PhysicalPersonDto();
 
-        openEditor(this.physicalPersonDto);
+        openEditor(this.physicalPersonDto, this.isNew);
     }
 
 
@@ -62,11 +66,11 @@ public class PhysicalPersonController extends MainClientController
         this.physicalPerson = physicalPerson;
         this.physicalPersonDto = new PhysicalPersonDto(this.physicalPerson);
 
-        openEditor(this.physicalPersonDto);
+        openEditor(this.physicalPersonDto,this.isNew);
     }
 
 
-    public void doSaveNewPhysicalPerson(PhysicalPersonSaveEvent event)
+    private void doSaveNewPhysicalPerson(PhysicalPersonSaveEvent event)
     {
         this.physicalPersonDto = event.getPhysicalPersonDto();
 
@@ -84,9 +88,8 @@ public class PhysicalPersonController extends MainClientController
             {
                 throw new Exception("Nebola zadaná jedná strana kópie OP");
             }
-
-
-            service.addNewPhysicalPerson(this.physicalPerson);
+            else
+                service.addNewPhysicalPerson(this.physicalPerson);
 
             this.clear();
             super.clientMainView.refreshTable();
@@ -97,6 +100,49 @@ public class PhysicalPersonController extends MainClientController
             System.out.println("Nepodarilo sa pridať novú FO (PhysicalPersonController)");
         }
     }
+
+
+
+    private void doUpdatePhysicalPerson(PhysicalPersonUpdateEvent event)
+    {
+        this.physicalPersonDto = event.getPhysicalPersonDto();
+
+        FileWrapper front = this.physicalPersonDto.getFrontSideOfPersonCard();
+        FileWrapper back = this.physicalPersonDto.getBackSideOfPersonCard();
+
+        try
+        {
+            this.physicalPerson = this.physicalPersonDto.toPhysicalPerson(this.physicalPerson);
+            if(front != null && back != null)
+            {
+                service.updatePhysicalPerson(this.physicalPerson,front,back);
+            }
+            else if((front == null && back != null) || (front != null && back == null))
+            {
+                throw new Exception("Nebola zadaná jedná strana kópie OP");
+            }
+            else
+                service.updatePhysicalPerson(this.physicalPerson);
+
+            this.clear();
+            super.clientMainView.refreshTable();
+
+        }
+        catch (Exception exception)
+        {
+            System.out.println("Nepodarilo sa pridať novú FO (PhysicalPersonController)");
+        }
+
+    }
+
+    private void cancelEdit(PhysicalPersonCancelEvent event)
+    {
+        this.clear();
+    }
+
+
+
+
 
 
     public void clear()

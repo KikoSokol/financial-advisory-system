@@ -122,6 +122,7 @@ public class SearchClientView extends PolymerTemplate<SearchClientView.SearchCli
     public void clear()
     {
         this.search.setValue("");
+        this.tableClient.setItems(new LinkedList<TableClientItem>());
     }
 
 

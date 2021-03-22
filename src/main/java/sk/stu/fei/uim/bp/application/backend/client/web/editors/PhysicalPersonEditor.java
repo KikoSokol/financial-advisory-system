@@ -17,7 +17,9 @@ import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import sk.stu.fei.uim.bp.application.backend.client.web.components.PersonalCardComponent;
 import sk.stu.fei.uim.bp.application.backend.client.web.dto.PhysicalPersonDto;
+import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEvents.PhysicalPersonCancelEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEvents.PhysicalPersonSaveEvent;
+import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEvents.PhysicalPersonUpdateEvent;
 import sk.stu.fei.uim.bp.application.backend.file.FileWrapper;
 import sk.stu.fei.uim.bp.application.validarors.PersonalNumberValidator;
 import sk.stu.fei.uim.bp.application.validarors.messages.ClientValidatorsMessages;
@@ -97,12 +99,16 @@ public class PhysicalPersonEditor extends PolymerTemplate<PhysicalPersonEditor.P
     private PhysicalPersonDto physicalPersonDto;
     private final BeanValidationBinder<PhysicalPersonDto> binder = new BeanValidationBinder<>(PhysicalPersonDto.class);
 
+    private boolean isNew;
+
 
     public PhysicalPersonEditor()
     {
         LocalDate now = LocalDate.now();
+        this.isNew = true;
 
         save.addClickListener(click -> validateAndSave());
+        cancel.addClickListener(event -> fireEvent(new PhysicalPersonCancelEvent(this,null)));
 
 
         binder.forField(firstName)
@@ -187,14 +193,11 @@ public class PhysicalPersonEditor extends PolymerTemplate<PhysicalPersonEditor.P
                 .bind(PhysicalPersonDto::getNote,PhysicalPersonDto::setNote);
 
 
-
-
-
-
     }
 
-    public void setPhysicalPersonDto(PhysicalPersonDto physicalPersonDto)
+    public void setPhysicalPersonDto(PhysicalPersonDto physicalPersonDto, boolean isNew)
     {
+        this.isNew = isNew;
         this.physicalPersonDto = physicalPersonDto;
         this.identityCardCopy.setFiles(physicalPersonDto.getIdentifyCardCopyReference());
         this.binder.readBean(physicalPersonDto);
@@ -230,7 +233,10 @@ public class PhysicalPersonEditor extends PolymerTemplate<PhysicalPersonEditor.P
 
         if(isAllCorrect)
         {
-            fireEvent(new PhysicalPersonSaveEvent(this,this.physicalPersonDto));
+            if(isNew)
+                fireEvent(new PhysicalPersonSaveEvent(this,this.physicalPersonDto));
+            else
+                fireEvent(new PhysicalPersonUpdateEvent(this,this.physicalPersonDto));
             System.out.println("parada");
         }
         else

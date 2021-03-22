@@ -17,6 +17,10 @@ import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import sk.stu.fei.uim.bp.application.MainView;
+import sk.stu.fei.uim.bp.application.backend.client.domain.Client;
+import sk.stu.fei.uim.bp.application.backend.client.domain.ClientCompany;
+import sk.stu.fei.uim.bp.application.backend.client.domain.PhysicalPerson;
+import sk.stu.fei.uim.bp.application.backend.client.domain.SelfEmployedPerson;
 import sk.stu.fei.uim.bp.application.backend.client.service.implementation.ClientServiceImpl;
 import sk.stu.fei.uim.bp.application.backend.client.web.components.ClientWindow;
 import sk.stu.fei.uim.bp.application.backend.client.web.controlers.*;
@@ -24,6 +28,8 @@ import sk.stu.fei.uim.bp.application.backend.client.web.editors.CompanyEditor;
 import sk.stu.fei.uim.bp.application.backend.client.web.editors.PhysicalPersonEditor;
 import sk.stu.fei.uim.bp.application.backend.client.web.editors.SelfEmployedPersonEditor;
 import sk.stu.fei.uim.bp.application.backend.client.web.table.TableClientItem;
+
+import java.util.Optional;
 
 
 /**
@@ -100,6 +106,11 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
         headerRow = clientTable.appendHeaderRow();
         initSearchingRow();
 
+        this.clientTable.addItemDoubleClickListener(item ->{
+           TableClientItem selectedClientItem = item.getItem();
+           this.doUpdateClient(selectedClientItem.getId());
+        });
+
     }
 
     public void refreshTable()
@@ -115,6 +126,29 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
         this.addSelfEmployedPersonButton.addClickListener(event -> this.selfEmployedPersonController.addNewSelfEmployedPerson());
 
         this.addClientCompanyButton.addClickListener(event -> this.clientCompanyController.addNewClientCompany());
+    }
+
+    private void doUpdateClient(ObjectId clientId)
+    {
+        Optional<Client> clientOptional = this.clientController.getClientById(clientId);
+
+        if(clientOptional.isEmpty())
+        {
+            //TODO:Pridaj upozornenie že klient sa nevie nájsť
+            return;
+        }
+
+        Client client = clientOptional.get();
+
+        if(client instanceof PhysicalPerson)
+            this.physicalPersonController.updatePhysicalPerson((PhysicalPerson) client);
+
+        if(client instanceof SelfEmployedPerson)
+            this.selfEmployedPersonController.updateSelfEmployedPerson((SelfEmployedPerson) client);
+
+        if(client instanceof ClientCompany)
+            this.clientCompanyController.updateClientCompany((ClientCompany) client);
+
     }
 
     public void resetMainWindow()

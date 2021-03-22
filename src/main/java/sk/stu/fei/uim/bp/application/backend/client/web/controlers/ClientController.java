@@ -10,6 +10,7 @@ import sk.stu.fei.uim.bp.application.backend.client.web.table.TableClientItem;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class ClientController extends MainClientController
 {
@@ -63,7 +64,10 @@ public class ClientController extends MainClientController
         return convertClientsToDataForTable(getAllClientFromDatabase());
     }
 
-
+    public Optional<Client> getClientById(ObjectId clientId)
+    {
+        return this.clientService.getClientById(clientId);
+    }
 
 
 }

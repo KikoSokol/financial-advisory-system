@@ -18,7 +18,9 @@ import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import sk.stu.fei.uim.bp.application.backend.client.web.components.PersonalCardComponent;
 import sk.stu.fei.uim.bp.application.backend.client.web.dto.SelfEmployedPersonDto;
+import sk.stu.fei.uim.bp.application.backend.client.web.events.selfEmployedPersonEvents.SelfEmployedPersonCancelEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.selfEmployedPersonEvents.SelfEmployedPersonSaveEvent;
+import sk.stu.fei.uim.bp.application.backend.client.web.events.selfEmployedPersonEvents.SelfEmployedPersonUpdateEvent;
 import sk.stu.fei.uim.bp.application.backend.file.FileWrapper;
 import sk.stu.fei.uim.bp.application.validarors.PersonalNumberValidator;
 import sk.stu.fei.uim.bp.application.validarors.messages.ClientValidatorsMessages;
@@ -107,11 +109,15 @@ public class SelfEmployedPersonEditor extends PolymerTemplate<SelfEmployedPerson
     private SelfEmployedPersonDto selfEmployedPersonDto;
     private final BeanValidationBinder<SelfEmployedPersonDto> binder = new BeanValidationBinder<>(SelfEmployedPersonDto.class);
 
+    private boolean isNew;
+
     public SelfEmployedPersonEditor()
     {
         LocalDate now = LocalDate.now();
+        this.isNew = true;
 
         save.addClickListener(event -> validateAndSave());
+        cancel.addClickListener(event -> fireEvent(new SelfEmployedPersonCancelEvent(this,null)));
 
         binder.forField(firstName)
                 .withValidator(name -> name.length() > 0, ClientValidatorsMessages.FIRST_NAME_MESSAGE_NOT_BLANK)
@@ -209,8 +215,9 @@ public class SelfEmployedPersonEditor extends PolymerTemplate<SelfEmployedPerson
 
     }
 
-    public void setSelfEmployedPersonDto(SelfEmployedPersonDto selfEmployedPersonDto)
+    public void setSelfEmployedPersonDto(SelfEmployedPersonDto selfEmployedPersonDto, boolean isNew)
     {
+        this.isNew = isNew;
         this.selfEmployedPersonDto = selfEmployedPersonDto;
         this.identityCardCopy.setFiles(selfEmployedPersonDto.getIdentifyCardCopyReference());
         this.binder.readBean(selfEmployedPersonDto);
@@ -245,7 +252,10 @@ public class SelfEmployedPersonEditor extends PolymerTemplate<SelfEmployedPerson
 
         if(isAllCorrect)
         {
-            fireEvent(new SelfEmployedPersonSaveEvent(this,this.selfEmployedPersonDto));
+            if(isNew)
+                fireEvent(new SelfEmployedPersonSaveEvent(this,this.selfEmployedPersonDto));
+            else
+                fireEvent(new SelfEmployedPersonUpdateEvent(this,this.selfEmployedPersonDto));
             System.out.println("parada");
         }
         else

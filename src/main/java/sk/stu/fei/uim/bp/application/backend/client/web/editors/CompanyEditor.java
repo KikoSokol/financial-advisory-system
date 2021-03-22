@@ -23,7 +23,9 @@ import sk.stu.fei.uim.bp.application.backend.client.service.implementation.Clien
 import sk.stu.fei.uim.bp.application.backend.client.web.components.PhysicalPersonCard;
 import sk.stu.fei.uim.bp.application.backend.client.web.components.SearchClientView;
 import sk.stu.fei.uim.bp.application.backend.client.web.dto.ClientCompanyDto;
+import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanyCancelEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanySaveEvent;
+import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanyUpdateEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.searchClientEvent.SearchGetChoosedClientEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.table.TableClientItem;
 import sk.stu.fei.uim.bp.application.validarors.messages.ClientValidatorsMessages;
@@ -81,8 +83,6 @@ public class CompanyEditor extends PolymerTemplate<CompanyEditor.CompanyEditorMo
     @Id("managerTable")
     private Grid<TableClientItem> managerTable;
 
-//    @Id("searchedManagerTable")
-//    private Grid searchedManagerTable;
 
     @Id("cancel")
     private Button cancel;
@@ -102,7 +102,7 @@ public class CompanyEditor extends PolymerTemplate<CompanyEditor.CompanyEditorMo
     private ClientCompanyDto clientCompanyDto;
     private final BeanValidationBinder<ClientCompanyDto> binder = new BeanValidationBinder<>(ClientCompanyDto.class);
 
-
+    private boolean isNew;
 
     public CompanyEditor(ClientServiceImpl clientService) {
         this.clientService = clientService;
@@ -158,6 +158,9 @@ public class CompanyEditor extends PolymerTemplate<CompanyEditor.CompanyEditorMo
         binder.forField(note)
                 .bind(ClientCompanyDto::getNote,ClientCompanyDto::setNote);
 
+
+        this.isNew = true;
+
         initColumn();
 
         this.seachManager.setSearchPhysicalPerson();
@@ -167,13 +170,15 @@ public class CompanyEditor extends PolymerTemplate<CompanyEditor.CompanyEditorMo
         this.addManager.addClickListener(event -> this.seachManager.setVisible(true));
 
         this.save.addClickListener(event -> validateAndSave());
+        this.cancel.addClickListener(event -> fireEvent(new ClientCompanyCancelEvent(this,null)));
 
 
 
     }
 
-    public void setClientCompanyDto(ClientCompanyDto clientCompanyDto)
+    public void setClientCompanyDto(ClientCompanyDto clientCompanyDto, boolean isNew)
     {
+        this.isNew = isNew;
         this.clientCompanyDto = clientCompanyDto;
         this.binder.readBean(clientCompanyDto);
         this.setManagers(clientCompanyDto.getManagers());
@@ -185,6 +190,7 @@ public class CompanyEditor extends PolymerTemplate<CompanyEditor.CompanyEditorMo
             Optional<Client> client = this.clientService.getClientById(managersReference);
             this.managers.add(client.get());
         }
+        updateManagerTable();
     }
 
 
@@ -250,7 +256,13 @@ public class CompanyEditor extends PolymerTemplate<CompanyEditor.CompanyEditorMo
             setManagersToClientCompanyDto();
 
         if(isAllCorrect)
-            fireEvent(new ClientCompanySaveEvent(this,this.clientCompanyDto));
+        {
+            if(isNew)
+                fireEvent(new ClientCompanySaveEvent(this,this.clientCompanyDto));
+            else
+                fireEvent(new ClientCompanyUpdateEvent(this,this.clientCompanyDto));
+        }
+
         else
         {
             //TODO:pridaj informáciu že sa nepodarilo pridať klienta do databázy
@@ -279,6 +291,7 @@ public class CompanyEditor extends PolymerTemplate<CompanyEditor.CompanyEditorMo
         this.binder.setBean(null);
         this.binder.readBean(null);
         this.seachManager.clear();
+        this.seachManager.setVisible(false);
     }
 
 
