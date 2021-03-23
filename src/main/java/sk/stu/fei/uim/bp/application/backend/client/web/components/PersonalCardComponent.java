@@ -20,6 +20,9 @@ import sk.stu.fei.uim.bp.application.backend.client.domain.IdentifyCardCopyRefer
 import sk.stu.fei.uim.bp.application.backend.file.FileRepository;
 import sk.stu.fei.uim.bp.application.backend.file.FileRepositoryImpl;
 import sk.stu.fei.uim.bp.application.backend.file.FileWrapper;
+import sk.stu.fei.uim.bp.application.ui.NotificationProvider;
+import sk.stu.fei.uim.bp.application.validarors.messages.FileMessages;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -78,7 +81,7 @@ public class PersonalCardComponent extends PolymerTemplate<PersonalCardComponent
                 downloadFile(this.infoAboutFiles.getFrontSide());
             else
             {
-                //TODO: dorob notifikaciu o nenastavenom subore
+                showErrorMessage(FileMessages.ERROR_LOAD_FILE);
             }
         });
 
@@ -87,7 +90,7 @@ public class PersonalCardComponent extends PolymerTemplate<PersonalCardComponent
                 downloadFile(this.infoAboutFiles.getBackSide());
             else
             {
-                //TODO: dorob notifikaciu o nenastavenom subore
+                showErrorMessage(FileMessages.ERROR_LOAD_FILE);
             }
         });
 
@@ -164,7 +167,7 @@ public class PersonalCardComponent extends PolymerTemplate<PersonalCardComponent
             UI.getCurrent().getPage().open(registration.getResourceUri().getRawPath(),"_blank");
         } catch (IOException e) {
             e.printStackTrace();
-            //TODO: pridaj notifikáciu o tom že sa nepodarilo stiahnuť súbor
+            showErrorMessage(FileMessages.DOWNLOAD_FILE_ERROR);
         }
     }
 
@@ -205,6 +208,12 @@ public class PersonalCardComponent extends PolymerTemplate<PersonalCardComponent
         return Optional.of(new FileWrapper(bufferForBackSideFile.getInputStream(),bufferForBackSideFile.getFileData()));
     }
 
+
+    private void showErrorMessage(String errorText)
+    {
+        NotificationProvider notificationProvider = new NotificationProvider();
+        notificationProvider.showErrorMessage(errorText);
+    }
 
 
     /**

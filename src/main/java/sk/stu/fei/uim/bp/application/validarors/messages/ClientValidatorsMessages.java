@@ -28,9 +28,6 @@ public class ClientValidatorsMessages
     public static String BUSINESS_NAME_MESSAGE_NOT_BLANK =  "Obchodné meno je povinné pole";
     public static String BUSINESS_OBJECT_MESSAGE_NOT_BLANK =  "Hlavný predmet podnikania je povinné pole";
 
-
-    public static String MANAGER_LIST_EMPTY =  "Spoločnosť musí mať minimálne 1 konateľa";
-
     public static String FIRST_NAME_MESSAGE_NOT_BLANK =  "Meno je povinné pole";
     public static String FIRST_NAME_MESSAGE_FORMAT =  "Meno musí obsahovať iba platné znaky";
 
@@ -66,5 +63,13 @@ public class ClientValidatorsMessages
 
     public static String IBAN_MESSAGE_NOT_EMPTY = "Iban je povinné pole";
     public static String IBAN_MESSAGE_FORMAT = "Iban musí mať správny tvar";
+
+
+
+    public static String MANAGER_LIST_IS_EMPTY = "Nebol zadaný žiaden manažér (Spoločnosť musí mať minimálne jedného manažéra)";
+
+    public static String BAD_CLIENT_OPERATION = "Klient nebol pridaný. Skontroluj správnosť údajov";
+
+    public static String MISSING_ONE_SIDE_OF_PERSONAL_CARD = "Chýba jedna strana občianského preukazu";
 
 }

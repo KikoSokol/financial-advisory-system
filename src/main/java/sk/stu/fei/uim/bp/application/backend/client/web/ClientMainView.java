@@ -31,6 +31,7 @@ import sk.stu.fei.uim.bp.application.backend.client.web.editors.SelfEmployedPers
 import sk.stu.fei.uim.bp.application.backend.client.web.table.TableClientItem;
 import sk.stu.fei.uim.bp.application.ui.NotificationMessage;
 import sk.stu.fei.uim.bp.application.ui.NotificationMessageType;
+import sk.stu.fei.uim.bp.application.ui.NotificationProvider;
 
 import java.util.Optional;
 
@@ -137,7 +138,7 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
 
         if(clientOptional.isEmpty())
         {
-            //TODO:Pridaj upozornenie že klient sa nevie nájsť
+            showErrorMessage("Klienta sa nepodarilo načítať");
             return;
         }
 
@@ -338,6 +339,12 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
         notification.setDuration(5000);
         notification.setPosition(Notification.Position.BOTTOM_START);
         notification.open();
+    }
+
+    private void showErrorMessage(String errorText)
+    {
+        NotificationProvider notificationProvider = new NotificationProvider();
+        notificationProvider.showErrorMessage(errorText);
     }
 
 

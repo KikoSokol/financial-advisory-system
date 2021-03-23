@@ -4,6 +4,8 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -28,6 +30,9 @@ import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEven
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanyUpdateEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.searchClientEvent.SearchGetChoosedClientEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.table.TableClientItem;
+import sk.stu.fei.uim.bp.application.ui.NotificationMessage;
+import sk.stu.fei.uim.bp.application.ui.NotificationMessageType;
+import sk.stu.fei.uim.bp.application.ui.NotificationProvider;
 import sk.stu.fei.uim.bp.application.validarors.messages.ClientValidatorsMessages;
 
 import java.util.LinkedList;
@@ -104,6 +109,7 @@ public class CompanyEditor extends PolymerTemplate<CompanyEditor.CompanyEditorMo
 
     private boolean isNew;
 
+
     public CompanyEditor(ClientServiceImpl clientService) {
         this.clientService = clientService;
 
@@ -157,7 +163,6 @@ public class CompanyEditor extends PolymerTemplate<CompanyEditor.CompanyEditorMo
 
         binder.forField(note)
                 .bind(ClientCompanyDto::getNote,ClientCompanyDto::setNote);
-
 
         this.isNew = true;
 
@@ -250,7 +255,7 @@ public class CompanyEditor extends PolymerTemplate<CompanyEditor.CompanyEditorMo
         if(this.managers.isEmpty())
         {
             isAllCorrect = false;
-            //TODO: pridaj upozornenie že nebol zadaný žiaden manažer
+            showErrorMessage(ClientValidatorsMessages.MANAGER_LIST_IS_EMPTY);
         }
         else
             setManagersToClientCompanyDto();
@@ -262,11 +267,9 @@ public class CompanyEditor extends PolymerTemplate<CompanyEditor.CompanyEditorMo
             else
                 fireEvent(new ClientCompanyUpdateEvent(this,this.clientCompanyDto));
         }
-
         else
         {
-            //TODO:pridaj informáciu že sa nepodarilo pridať klienta do databázy
-            System.out.println("Nepodarilo sa pridat klienta");
+            System.out.println("Došlo ku chybe v CompanyEditor");
         }
 
 
@@ -295,11 +298,21 @@ public class CompanyEditor extends PolymerTemplate<CompanyEditor.CompanyEditorMo
     }
 
 
+    private void showErrorMessage(String errorText)
+    {
+        NotificationProvider notificationProvider = new NotificationProvider();
+        notificationProvider.showErrorMessage(errorText);
+    }
+
+
 
     public <T extends ComponentEvent<?>>Registration addListener(Class<T> eventType, ComponentEventListener<T> listener)
     {
         return getEventBus().addListener(eventType,listener);
     }
+
+
+
 
 
 

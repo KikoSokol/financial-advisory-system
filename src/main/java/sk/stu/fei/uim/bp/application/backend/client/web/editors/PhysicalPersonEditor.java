@@ -4,6 +4,7 @@ import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.datepicker.DatePicker;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextArea;
@@ -21,6 +22,9 @@ import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEve
 import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEvents.PhysicalPersonSaveEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEvents.PhysicalPersonUpdateEvent;
 import sk.stu.fei.uim.bp.application.backend.file.FileWrapper;
+import sk.stu.fei.uim.bp.application.ui.NotificationMessage;
+import sk.stu.fei.uim.bp.application.ui.NotificationMessageType;
+import sk.stu.fei.uim.bp.application.ui.NotificationProvider;
 import sk.stu.fei.uim.bp.application.validarors.PersonalNumberValidator;
 import sk.stu.fei.uim.bp.application.validarors.messages.ClientValidatorsMessages;
 import java.time.LocalDate;
@@ -206,29 +210,25 @@ public class PhysicalPersonEditor extends PolymerTemplate<PhysicalPersonEditor.P
 
     private void validateAndSave()
     {
-        boolean isAllCorrect = false;
+        boolean isAllCorrect = true;
 
         boolean isCopyFilesIsCorrect = checkCopyCard();
         if(isCopyFilesIsCorrect)
         {
             setCopyFilesToThisDtoObject();
-            isAllCorrect = true;
         }
         else
         {
             isAllCorrect = false;
-            //TODO: dorob notifikaciu/vypisovanie ze neboli predane dva subory naraz
-            System.out.println("jedna strana OP chyba");
+            showErrorMessage(ClientValidatorsMessages.MISSING_ONE_SIDE_OF_PERSONAL_CARD);
         }
 
         try {
             binder.writeBean(this.physicalPersonDto);
-            isAllCorrect = true;
         }
         catch (ValidationException exception)
         {
             isAllCorrect = false;
-            System.out.println("Zadane údaje nie sú validné");
         }
 
         if(isAllCorrect)
@@ -237,11 +237,9 @@ public class PhysicalPersonEditor extends PolymerTemplate<PhysicalPersonEditor.P
                 fireEvent(new PhysicalPersonSaveEvent(this,this.physicalPersonDto));
             else
                 fireEvent(new PhysicalPersonUpdateEvent(this,this.physicalPersonDto));
-            System.out.println("parada");
         }
         else
         {
-            //TODO:dorob info o chybach
             System.out.println("Neocakavana chyba");
         }
 
@@ -289,6 +287,13 @@ public class PhysicalPersonEditor extends PolymerTemplate<PhysicalPersonEditor.P
         this.binder.setBean(null);
         this.binder.readBean(null);
         this.identityCardCopy.clear();
+    }
+
+
+    private void showErrorMessage(String errorText)
+    {
+        NotificationProvider notificationProvider = new NotificationProvider();
+        notificationProvider.showErrorMessage(errorText);
     }
 
 
