@@ -91,8 +91,7 @@ public class PhysicalPersonController extends MainClientController
             else
                 service.addNewPhysicalPerson(this.physicalPerson);
 
-            this.clear();
-            super.clientMainView.refreshTable();
+            successOperation("Nový klient bol úspešne pridaný");
 
         }
         catch (Exception exception)
@@ -124,8 +123,7 @@ public class PhysicalPersonController extends MainClientController
             else
                 service.updatePhysicalPerson(this.physicalPerson);
 
-            this.clear();
-            super.clientMainView.refreshTable();
+            successOperation("Údaje klienta boli úspešne zmenené");
 
         }
         catch (Exception exception)
@@ -152,6 +150,14 @@ public class PhysicalPersonController extends MainClientController
         this.isNew = false;
         this.physicalPersonDto = null;
         this.physicalPerson = null;
+    }
+
+
+    private void successOperation(String successText)
+    {
+        this.clear();
+        super.clientMainView.refreshTable();
+        super.clientMainView.showSuccessOperationClientNotification(successText);
     }
 
 }

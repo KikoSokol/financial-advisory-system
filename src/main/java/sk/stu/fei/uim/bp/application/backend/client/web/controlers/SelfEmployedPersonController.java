@@ -91,8 +91,7 @@ public class SelfEmployedPersonController extends MainClientController
             else
                 service.addNewSelfEmployedPerson(this.selfEmployedPerson);
 
-            this.clear();
-            super.clientMainView.refreshTable();
+            successOperation("Nový klient bol úspešne pridaný");
 
         }catch (Exception exception)
         {
@@ -124,8 +123,7 @@ public class SelfEmployedPersonController extends MainClientController
             else
                 service.updateSelfEmplyedPerson(this.selfEmployedPerson);
 
-            this.clear();
-            super.clientMainView.refreshTable();
+            successOperation("Údaje klienta boli úspešne zmenené");
 
         }catch (Exception exception)
         {
@@ -147,5 +145,12 @@ public class SelfEmployedPersonController extends MainClientController
         this.selfEmployedPerson = null;
         this.selfEmployedPersonDto = null;
 
+    }
+
+    private void successOperation(String successText)
+    {
+        this.clear();
+        super.clientMainView.refreshTable();
+        super.clientMainView.showSuccessOperationClientNotification(successText);
     }
 }

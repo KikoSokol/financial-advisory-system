@@ -4,10 +4,10 @@ import '@vaadin/vaadin-date-picker/src/vaadin-date-picker.js';
 import './personal-card-component.js';
 import '@vaadin/vaadin-text-field/src/vaadin-text-area.js';
 import '@vaadin/vaadin-form-layout/src/vaadin-form-layout.js';
-import '@vaadin/vaadin-ordered-layout/src/vaadin-horizontal-layout.js';
 import '@vaadin/vaadin-button/src/vaadin-button.js';
 import '@polymer/iron-icon/iron-icon.js';
 import '@vaadin/vaadin-text-field/src/vaadin-email-field.js';
+import '@vaadin/vaadin-ordered-layout/src/vaadin-horizontal-layout.js';
 
 class PhysicalPersonEditor extends PolymerElement {
 
@@ -53,7 +53,7 @@ class PhysicalPersonEditor extends PolymerElement {
   <vaadin-text-area label="Poznámka" placeholder="Add detailed explanation" id="note" colspan="2"></vaadin-text-area>
  </vaadin-form-layout>
 </vaadin-form-layout>
-<vaadin-horizontal-layout style="justify-content: flex-end;">
+<vaadin-horizontal-layout style="justify-content: flex-end; flex-wrap: wrap;">
  <vaadin-button theme="primary" id="cancel">
    ZRUŠIŤ 
  </vaadin-button>

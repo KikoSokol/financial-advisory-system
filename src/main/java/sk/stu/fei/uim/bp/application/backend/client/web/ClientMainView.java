@@ -5,6 +5,7 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
@@ -28,6 +29,8 @@ import sk.stu.fei.uim.bp.application.backend.client.web.editors.CompanyEditor;
 import sk.stu.fei.uim.bp.application.backend.client.web.editors.PhysicalPersonEditor;
 import sk.stu.fei.uim.bp.application.backend.client.web.editors.SelfEmployedPersonEditor;
 import sk.stu.fei.uim.bp.application.backend.client.web.table.TableClientItem;
+import sk.stu.fei.uim.bp.application.ui.NotificationMessage;
+import sk.stu.fei.uim.bp.application.ui.NotificationMessageType;
 
 import java.util.Optional;
 
@@ -87,7 +90,7 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
         this.clientController = new ClientController(this,this.currentAgentId,clientService);
 
         initMainWindow();
-        initClientWindow();
+//        initClientWindow();
         initPhysicalPersonEditor();
         initSelfEmployedPersonEditor();
         initCompanyEditor(clientService);
@@ -97,7 +100,7 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
         this.selfEmployedPersonController = new SelfEmployedPersonController(this,this.currentAgentId,clientService);
         this.clientCompanyController = new ClientCompanyController(this,this.currentAgentId,clientService);
 
-        this.mainWindow.add(this.clientWindow);
+//        this.mainWindow.add(this.clientWindow);
 
 
         setActionOnAddButton();
@@ -154,7 +157,7 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
     public void resetMainWindow()
     {
         this.mainWindow.removeAll();
-        this.mainWindow.add(this.clientWindow);
+//        this.mainWindow.add(this.clientWindow);
     }
 
     public void showMainWindow(Component component)
@@ -176,10 +179,10 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
         this.mainWindow = new Dialog();
     }
 
-    private void initClientWindow()
-    {
-        this.clientWindow = new ClientWindow();
-    }
+//    private void initClientWindow()
+//    {
+//        this.clientWindow = new ClientWindow();
+//    }
 
     private void initPhysicalPersonEditor()
     {
@@ -325,6 +328,16 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
         headerRow.getCell(column).setComponent(icoSearch);
         icoSearch.setSizeFull();
         icoSearch.setPlaceholder("Filter");
+    }
+
+
+    public void showSuccessOperationClientNotification(String text)
+    {
+        NotificationMessage message = new NotificationMessage(text,NotificationMessageType.SUCCESS);
+        Notification notification = new Notification(message);
+        notification.setDuration(5000);
+        notification.setPosition(Notification.Position.BOTTOM_START);
+        notification.open();
     }
 
 

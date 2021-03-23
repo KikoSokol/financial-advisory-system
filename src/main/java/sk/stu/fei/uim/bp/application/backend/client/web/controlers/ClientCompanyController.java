@@ -74,8 +74,7 @@ public class ClientCompanyController extends MainClientController
         try {
             this.clientCompany = this.clientCompanyDto.toClientCompany(this.clientCompany);
             this.clientCompanyService.addNewClientCompany(this.clientCompany);
-            this.clear();
-            super.clientMainView.refreshTable();
+            successOperation("Nový klient bol úspešne pridaný");
         }
         catch (Exception exception)
         {
@@ -90,8 +89,7 @@ public class ClientCompanyController extends MainClientController
         try {
             this.clientCompany = this.clientCompanyDto.toClientCompany(this.clientCompany);
             this.clientCompanyService.updateClientCompany(this.clientCompany);
-            this.clear();
-            super.clientMainView.refreshTable();
+            successOperation("Údaje klienta boli úspešne zmenené");
         }
         catch (Exception exception)
         {
@@ -111,5 +109,12 @@ public class ClientCompanyController extends MainClientController
         this.isNew = false;
         this.clientCompany = null;
         this.clientCompanyDto = null;
+    }
+
+    private void successOperation(String successText)
+    {
+        this.clear();
+        super.clientMainView.refreshTable();
+        super.clientMainView.showSuccessOperationClientNotification(successText);
     }
 }
