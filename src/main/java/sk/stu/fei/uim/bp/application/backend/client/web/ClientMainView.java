@@ -264,6 +264,10 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
         Grid.Column<TableClientItem> column = clientTable.getColumnByKey("nameColumn");
 
         TextField nameSearch = new TextField();
+        nameSearch.addValueChangeListener(event -> {
+            this.clientController.getTableFilter().setName(event.getValue());
+            this.clientController.filterDataInTable();
+        });
         nameSearch.setValueChangeMode(ValueChangeMode.EAGER);
 
         headerRow.getCell(column).setComponent(nameSearch);
@@ -276,6 +280,10 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
         Grid.Column<TableClientItem> column = clientTable.getColumnByKey("surnameColumn");
 
         TextField surnameSearch = new TextField();
+        surnameSearch.addValueChangeListener(event -> {
+            this.clientController.getTableFilter().setSurname(event.getValue());
+            this.clientController.filterDataInTable();
+        });
         surnameSearch.setValueChangeMode(ValueChangeMode.EAGER);
 
         headerRow.getCell(column).setComponent(surnameSearch);
@@ -288,6 +296,10 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
         Grid.Column<TableClientItem> column = clientTable.getColumnByKey("emailColumn");
 
         TextField emailSearch = new TextField();
+        emailSearch.addValueChangeListener(event -> {
+            this.clientController.getTableFilter().setEmail(event.getValue());
+            this.clientController.filterDataInTable();
+        });
         emailSearch.setValueChangeMode(ValueChangeMode.EAGER);
 
         headerRow.getCell(column).setComponent(emailSearch);
@@ -300,6 +312,10 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
         Grid.Column<TableClientItem> column = clientTable.getColumnByKey("phoneColumn");
 
         TextField phoneSearch = new TextField();
+        phoneSearch.addValueChangeListener(event -> {
+            this.clientController.getTableFilter().setPhone(event.getValue());
+            this.clientController.filterDataInTable();
+        });
         phoneSearch.setValueChangeMode(ValueChangeMode.EAGER);
 
         headerRow.getCell(column).setComponent(phoneSearch);
@@ -312,6 +328,10 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
         Grid.Column<TableClientItem> column = clientTable.getColumnByKey("personalNumberColumn");
 
         TextField personalNumberSearch = new TextField();
+        personalNumberSearch.addValueChangeListener(event -> {
+            this.clientController.getTableFilter().setPersonalNumber(event.getValue());
+            this.clientController.filterDataInTable();
+        });
         personalNumberSearch.setValueChangeMode(ValueChangeMode.EAGER);
 
         headerRow.getCell(column).setComponent(personalNumberSearch);
@@ -324,6 +344,10 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
         Grid.Column<TableClientItem> column = clientTable.getColumnByKey("icoColumn");
 
         TextField icoSearch = new TextField();
+        icoSearch.addValueChangeListener(event -> {
+            this.clientController.getTableFilter().setIco(event.getValue());
+            this.clientController.filterDataInTable();
+        });
         icoSearch.setValueChangeMode(ValueChangeMode.EAGER);
 
         headerRow.getCell(column).setComponent(icoSearch);
