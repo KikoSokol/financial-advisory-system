@@ -3,7 +3,9 @@ package sk.stu.fei.uim.bp.application.backend.client.web.components;
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Span;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
@@ -43,13 +45,13 @@ public class PersonalCardComponent extends PolymerTemplate<PersonalCardComponent
     private Span frontSideName;
     @Id("downloadFrontSide")
     private Button downloadFrontSide;
-    @Id("uploadFrontSide")
+    //    @Id("uploadFrontSide")
     private Upload uploadFrontSide;
     @Id("backSideName")
     private Span backSideName;
     @Id("downloadBackSide")
     private Button downloadBackSide;
-    @Id("uploadBackSide")
+    //    @Id("uploadBackSide")
     private Upload uploadBackSide;
 
     private boolean isSetFiles;
@@ -63,6 +65,10 @@ public class PersonalCardComponent extends PolymerTemplate<PersonalCardComponent
 
     private boolean isUploadedFrontSideFile;
     private boolean isUploadedBackSideFile;
+    @Id("frontSideLayout")
+    private VerticalLayout frontSideLayout;
+    @Id("backSideLayout")
+    private VerticalLayout backSideLayout;
 
 
     @Autowired
@@ -70,6 +76,44 @@ public class PersonalCardComponent extends PolymerTemplate<PersonalCardComponent
         this.fileRepository = fileRepository;
         clear();
 
+    }
+
+    public void clear()
+    {
+        this.frontSideName.setText("Subor nebol pridaný");
+        this.backSideName.setText("Subor nebol pridaný");
+        this.isSetFiles = false;
+        this.isUploadedFrontSideFile = false;
+        this.isUploadedBackSideFile = false;
+        this.bufferFrontSideFile = null;
+        this.bufferForBackSideFile = null;
+        setEnabledDownloadButtons(false);
+        initBuffers();
+    }
+
+    private void initBuffers()
+    {
+        this.bufferFrontSideFile = new MemoryBuffer();
+        this.bufferForBackSideFile = new MemoryBuffer();
+
+        initUpload();
+
+        this.uploadFrontSide.setReceiver(bufferFrontSideFile);
+        this.uploadBackSide.setReceiver(bufferForBackSideFile);
+    }
+
+    private void initUpload()
+    {
+        if(this.uploadBackSide != null)
+            this.backSideLayout.remove(this.uploadBackSide);
+        if(this.uploadFrontSide != null)
+            this.frontSideLayout.remove(this.uploadFrontSide);
+        this.uploadFrontSide = new Upload();
+        this.uploadFrontSide.addClassNames("align-self:center","flex-shrink:0");
+        this.uploadBackSide = new Upload();
+        this.uploadBackSide.addClassNames("align-self:center","flex-shrink:0");
+        this.backSideLayout.add(this.uploadBackSide);
+        this.frontSideLayout.add(this.uploadFrontSide);
 
         this.uploadFrontSide.addSucceededListener(succeededEvent -> isUploadedFrontSideFile = true);
 
@@ -93,33 +137,9 @@ public class PersonalCardComponent extends PolymerTemplate<PersonalCardComponent
                 showErrorMessage(FileMessages.ERROR_LOAD_FILE);
             }
         });
-
-
-
-
     }
 
-    public void clear()
-    {
-        this.frontSideName.setText("Subor nebol pridaný");
-        this.backSideName.setText("Subor nebol pridaný");
-        this.isSetFiles = false;
-        this.isUploadedFrontSideFile = false;
-        this.isUploadedBackSideFile = false;
-        this.bufferFrontSideFile = null;
-        this.bufferForBackSideFile = null;
-        setEnabledDownloadButtons(false);
-        initBuffers();
-    }
 
-    private void initBuffers()
-    {
-        this.bufferFrontSideFile = new MemoryBuffer();
-        this.bufferForBackSideFile = new MemoryBuffer();
-
-        this.uploadFrontSide.setReceiver(bufferFrontSideFile);
-        this.uploadBackSide.setReceiver(bufferForBackSideFile);
-    }
 
     public void setFiles(IdentifyCardCopyReference identifyCardCopyReference)
     {
