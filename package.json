@@ -38,7 +38,8 @@
       "@vaadin/vaadin-tabs": "3.2.0",
       "@vaadin/vaadin-radio-button": "1.5.1",
       "@vaadin/vaadin-lumo-styles": "1.6.0",
-      "@vaadin/vaadin-material-styles": "1.3.2"
+      "@vaadin/vaadin-material-styles": "1.3.2",
+      "@vaadin/vaadin-confirm-dialog": "1.3.0"
     },
     "devDependencies": {
       "webpack-babel-multi-target-plugin": "2.3.3",
@@ -51,7 +52,7 @@
       "webpack-merge": "4.2.2",
       "webpack-dev-server": "3.11.0"
     },
-    "hash": "81e4e85e9dc7a45e5a41450097efe6d283d7e2067abc020c2b0b385d9e82135e"
+    "hash": "1d187133fb1733dc564f84caf444f211baefe00e8f5dad7e88c82650877756b1"
   },
   "dependencies": {
     "lit-element": "^2.2.1",
@@ -89,7 +90,8 @@
     "@vaadin/vaadin-tabs": "3.2.0",
     "@vaadin/vaadin-radio-button": "1.5.1",
     "@vaadin/vaadin-lumo-styles": "1.6.0",
-    "@vaadin/vaadin-material-styles": "1.3.2"
+    "@vaadin/vaadin-material-styles": "1.3.2",
+    "@vaadin/vaadin-confirm-dialog": "1.3.0"
   },
   "devDependencies": {
     "webpack-babel-multi-target-plugin": "2.3.3",

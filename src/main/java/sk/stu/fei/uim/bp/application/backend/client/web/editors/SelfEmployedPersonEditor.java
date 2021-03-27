@@ -3,6 +3,7 @@ package sk.stu.fei.uim.bp.application.backend.client.web.editors;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.polymertemplate.Id;
@@ -19,6 +20,7 @@ import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import sk.stu.fei.uim.bp.application.backend.client.web.components.PersonalCardComponent;
 import sk.stu.fei.uim.bp.application.backend.client.web.dto.SelfEmployedPersonDto;
+import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanyCancelEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.selfEmployedPersonEvents.SelfEmployedPersonCancelEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.selfEmployedPersonEvents.SelfEmployedPersonSaveEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.selfEmployedPersonEvents.SelfEmployedPersonUpdateEvent;
@@ -110,6 +112,8 @@ public class SelfEmployedPersonEditor extends PolymerTemplate<SelfEmployedPerson
     @Id("save")
     private Button save;
 
+    private final ConfirmDialog confirmDialog;
+
     private SelfEmployedPersonDto selfEmployedPersonDto;
     private final BeanValidationBinder<SelfEmployedPersonDto> binder = new BeanValidationBinder<>(SelfEmployedPersonDto.class);
 
@@ -117,11 +121,14 @@ public class SelfEmployedPersonEditor extends PolymerTemplate<SelfEmployedPerson
 
     public SelfEmployedPersonEditor()
     {
+        this.confirmDialog = new ConfirmDialog("Naozaj si prajete zavrieť editor?","Všetky zmeny nebudú uložené !!!","Naozaj chcem odísť", confirmEvent -> exit(),"Chcem ostať", cancelEvent -> closeConfirmDialog());
+        this.confirmDialog.setConfirmButtonTheme("error primary");
+
         LocalDate now = LocalDate.now();
         this.isNew = true;
 
         save.addClickListener(event -> validateAndSave());
-        cancel.addClickListener(event -> fireEvent(new SelfEmployedPersonCancelEvent(this,null)));
+        cancel.addClickListener(event -> this.confirmDialog.open());
 
         binder.forField(firstName)
                 .withValidator(name -> name.length() > 0, ClientValidatorsMessages.FIRST_NAME_MESSAGE_NOT_BLANK)
@@ -299,6 +306,19 @@ public class SelfEmployedPersonEditor extends PolymerTemplate<SelfEmployedPerson
         this.binder.readBean(null);
         this.identityCardCopy.clear();
     }
+
+
+    private void exit()
+    {
+        fireEvent(new SelfEmployedPersonCancelEvent(this,null));
+    }
+
+    private void closeConfirmDialog()
+    {
+        if(this.confirmDialog.isOpened())
+            this.confirmDialog.close();
+    }
+
 
 
     public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType, ComponentEventListener<T> listener)

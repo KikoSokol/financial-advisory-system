@@ -3,6 +3,7 @@ package sk.stu.fei.uim.bp.application.backend.client.web.editors;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.polymertemplate.Id;
@@ -100,6 +101,8 @@ public class PhysicalPersonEditor extends PolymerTemplate<PhysicalPersonEditor.P
     @Id("save")
     private Button save;
 
+    private final ConfirmDialog confirmDialog;
+
     private PhysicalPersonDto physicalPersonDto;
     private final BeanValidationBinder<PhysicalPersonDto> binder = new BeanValidationBinder<>(PhysicalPersonDto.class);
 
@@ -108,11 +111,15 @@ public class PhysicalPersonEditor extends PolymerTemplate<PhysicalPersonEditor.P
 
     public PhysicalPersonEditor()
     {
+        this.confirmDialog = new ConfirmDialog("Naozaj si prajete zavrieť editor?","Všetky zmeny nebudú uložené !!!","Naozaj chcem odísť",confirmEvent -> exit(),"Chcem ostať",cancelEvent -> closeConfirmDialog());
+        this.confirmDialog.setConfirmButtonTheme("error primary");
+
+
         LocalDate now = LocalDate.now();
         this.isNew = true;
 
         save.addClickListener(click -> validateAndSave());
-        cancel.addClickListener(event -> fireEvent(new PhysicalPersonCancelEvent(this,null)));
+        cancel.addClickListener(event -> this.confirmDialog.open());
 
 
         binder.forField(firstName)
@@ -287,6 +294,7 @@ public class PhysicalPersonEditor extends PolymerTemplate<PhysicalPersonEditor.P
         this.binder.setBean(null);
         this.binder.readBean(null);
         this.identityCardCopy.clear();
+        this.closeConfirmDialog();
     }
 
 
@@ -296,6 +304,17 @@ public class PhysicalPersonEditor extends PolymerTemplate<PhysicalPersonEditor.P
         notificationProvider.showErrorMessage(errorText);
     }
 
+
+    private void exit()
+    {
+        fireEvent(new PhysicalPersonCancelEvent(this,null));
+    }
+
+    private void closeConfirmDialog()
+    {
+        if(this.confirmDialog.isOpened())
+            this.confirmDialog.close();
+    }
 
 
 

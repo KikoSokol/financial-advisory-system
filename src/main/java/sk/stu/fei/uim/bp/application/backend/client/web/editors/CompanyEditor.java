@@ -3,6 +3,7 @@ package sk.stu.fei.uim.bp.application.backend.client.web.editors;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.notification.Notification;
@@ -28,6 +29,7 @@ import sk.stu.fei.uim.bp.application.backend.client.web.dto.ClientCompanyDto;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanyCancelEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanySaveEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanyUpdateEvent;
+import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEvents.PhysicalPersonCancelEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.searchClientEvent.SearchGetChoosedClientEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.table.TableClientItem;
 import sk.stu.fei.uim.bp.application.ui.NotificationMessage;
@@ -98,6 +100,8 @@ public class CompanyEditor extends PolymerTemplate<CompanyEditor.CompanyEditorMo
     @Id("seachManager")
     private SearchClientView seachManager;
 
+    private final ConfirmDialog confirmDialog;
+
     private final ClientService clientService;
 
     private List<Client> managers = new LinkedList<>();
@@ -112,6 +116,9 @@ public class CompanyEditor extends PolymerTemplate<CompanyEditor.CompanyEditorMo
 
     public CompanyEditor(ClientServiceImpl clientService) {
         this.clientService = clientService;
+
+        this.confirmDialog = new ConfirmDialog("Naozaj si prajete zavrieť editor?","Všetky zmeny nebudú uložené !!!","Naozaj chcem odísť", confirmEvent -> exit(),"Chcem ostať", cancelEvent -> closeConfirmDialog());
+        this.confirmDialog.setConfirmButtonTheme("error primary");
 
 
         binder.forField(businessName)
@@ -175,7 +182,7 @@ public class CompanyEditor extends PolymerTemplate<CompanyEditor.CompanyEditorMo
         this.addManager.addClickListener(event -> this.seachManager.setVisible(true));
 
         this.save.addClickListener(event -> validateAndSave());
-        this.cancel.addClickListener(event -> fireEvent(new ClientCompanyCancelEvent(this,null)));
+        this.cancel.addClickListener(event -> this.confirmDialog.open());
 
 
 
@@ -295,6 +302,7 @@ public class CompanyEditor extends PolymerTemplate<CompanyEditor.CompanyEditorMo
         this.binder.readBean(null);
         this.seachManager.clear();
         this.seachManager.setVisible(false);
+        this.closeConfirmDialog();
     }
 
 
@@ -302,6 +310,18 @@ public class CompanyEditor extends PolymerTemplate<CompanyEditor.CompanyEditorMo
     {
         NotificationProvider notificationProvider = new NotificationProvider();
         notificationProvider.showErrorMessage(errorText);
+    }
+
+
+    private void exit()
+    {
+        fireEvent(new ClientCompanyCancelEvent(this,null));
+    }
+
+    private void closeConfirmDialog()
+    {
+        if(this.confirmDialog.isOpened())
+            this.confirmDialog.close();
     }
 
 
