@@ -108,10 +108,14 @@ public class PersonalCardComponent extends PolymerTemplate<PersonalCardComponent
             this.backSideLayout.remove(this.uploadBackSide);
         if(this.uploadFrontSide != null)
             this.frontSideLayout.remove(this.uploadFrontSide);
+
         this.uploadFrontSide = new Upload();
+        this.uploadFrontSide.setMaxFileSize(1073741824);
         this.uploadFrontSide.addClassNames("align-self:center","flex-shrink:0");
         this.uploadBackSide = new Upload();
+        this.uploadBackSide.setMaxFileSize(1073741824);
         this.uploadBackSide.addClassNames("align-self:center","flex-shrink:0");
+
         this.backSideLayout.add(this.uploadBackSide);
         this.frontSideLayout.add(this.uploadFrontSide);
 
