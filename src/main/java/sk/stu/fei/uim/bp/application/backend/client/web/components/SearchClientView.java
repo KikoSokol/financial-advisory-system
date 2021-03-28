@@ -92,7 +92,14 @@ public class SearchClientView extends PolymerTemplate<SearchClientView.SearchCli
         search.addValueChangeListener(event-> {
             if(whatSearch.equals("PhysicalPerson"))
             {
-                setPhysicalPersonIntoTable(this.clientService.getPhysicalPersonByNameOrBySurnameOrByEmailOrByPersonalNumber(event.getValue()));
+                if(event.getValue().equals(""))
+                {
+                    setPhysicalPersonIntoTable(new LinkedList<>());
+                }
+                else {
+                    setPhysicalPersonIntoTable(this.clientService.getPhysicalPersonByNameOrBySurnameOrByEmailOrByPersonalNumber(event.getValue()));
+
+                }
             }
         });
         search.setValueChangeMode(ValueChangeMode.EAGER);
