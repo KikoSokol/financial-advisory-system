@@ -1,6 +1,5 @@
 package sk.stu.fei.uim.bp.application.ui;
 
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -61,7 +60,7 @@ public class NotificationProvider
     }
 
 
-    public HorizontalLayout createLayoutForNotification(Notification notification, String message,VaadinIcon iconType,String iconColor)
+    private HorizontalLayout createLayoutForNotification(Notification notification, String message,VaadinIcon iconType,String iconColor)
     {
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.setAlignItems(FlexComponent.Alignment.CENTER);
@@ -79,7 +78,7 @@ public class NotificationProvider
         return horizontalLayout;
     }
 
-    public HorizontalLayout createLayoutForNotification(String message,VaadinIcon iconType,String iconColor)
+    private HorizontalLayout createLayoutForNotification(String message,VaadinIcon iconType,String iconColor)
     {
         HorizontalLayout horizontalLayout = new HorizontalLayout();
         horizontalLayout.setAlignItems(FlexComponent.Alignment.CENTER);
@@ -90,7 +89,7 @@ public class NotificationProvider
         return horizontalLayout;
     }
 
-    public Icon createIcon(VaadinIcon iconType,String color)
+    private Icon createIcon(VaadinIcon iconType,String color)
     {
         Icon icon = new Icon(iconType);
         icon.setColor(color);

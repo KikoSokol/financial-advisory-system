@@ -78,7 +78,7 @@ public class ClientCompanyController extends MainClientController
         }
         catch (Exception exception)
         {
-            System.out.println("Nepodarilo sa pridať spoločnosť (ClientCompanyController)");
+            super.clientMainView.showErrorMessage("Klienta sa nepodarilo pridať. Skontrolujte prosím správnosť a úplnosť zadaných údajov.");
         }
     }
 
@@ -93,7 +93,7 @@ public class ClientCompanyController extends MainClientController
         }
         catch (Exception exception)
         {
-            System.out.println("Nepodarilo sa pridať spoločnosť (ClientCompanyController)");
+            super.clientMainView.showErrorMessage("Klientovi sa nepodarilo zmeniť údaje. Skontrolujte prosím správnosť a úplnosť zadaných údajov.");
         }
     }
 

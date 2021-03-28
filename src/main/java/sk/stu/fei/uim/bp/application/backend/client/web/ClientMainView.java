@@ -362,7 +362,7 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
         notificationProvider.showSuccessMessage(successMessage,5000);
     }
 
-    private void showErrorMessage(String errorMessage)
+    public void showErrorMessage(String errorMessage)
     {
         NotificationProvider notificationProvider = new NotificationProvider();
         notificationProvider.showErrorMessage(errorMessage);
