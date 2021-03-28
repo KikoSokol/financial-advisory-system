@@ -10,6 +10,7 @@ import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.page.Viewport;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.component.tabs.TabsVariant;
@@ -21,7 +22,7 @@ import com.vaadin.flow.theme.material.Material;
 import sk.stu.fei.uim.bp.application.backend.client.web.ClientMainView;
 
 import java.util.Optional;
-
+@Viewport("width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes, viewport-fit=cover")
 @CssImport("views/main/main-view.css")
 @JsModule("views/main/shared-styles.js")
 @Route(value = "")

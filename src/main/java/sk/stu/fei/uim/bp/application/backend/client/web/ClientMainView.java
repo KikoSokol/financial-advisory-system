@@ -226,31 +226,37 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
     private void initColumns()
     {
         Grid.Column<TableClientItem> nameColumn = clientTable.addColumn(TableClientItem::getName);
+        nameColumn.setAutoWidth(true);
         nameColumn.setHeader("Meno");
         nameColumn.setKey("nameColumn");
         nameColumn.setId("nameColumn");
 
         Grid.Column<TableClientItem> surnameColumn = clientTable.addColumn(TableClientItem::getSurname);
+        surnameColumn.setAutoWidth(true);
         surnameColumn.setHeader("Priezvisko");
         surnameColumn.setKey("surnameColumn");
         surnameColumn.setId("surnameColumn");
 
         Grid.Column<TableClientItem> emailColumn = clientTable.addColumn(TableClientItem::getEmail);
+        emailColumn.setAutoWidth(true);
         emailColumn.setHeader("Email");
         emailColumn.setKey("emailColumn");
         emailColumn.setId("emailColumn");
 
         Grid.Column<TableClientItem> phoneColumn = clientTable.addColumn(TableClientItem::getPhone);
+        phoneColumn.setAutoWidth(true);
         phoneColumn.setHeader("Telefón");
         phoneColumn.setKey("phoneColumn");
         phoneColumn.setId("phoneColumn");
 
         Grid.Column<TableClientItem> personalNumberColumn = clientTable.addColumn(TableClientItem::getPersonalNumber);
+        personalNumberColumn.setAutoWidth(true);
         personalNumberColumn.setHeader("Rodné číslo");
         personalNumberColumn.setKey("personalNumberColumn");
         personalNumberColumn.setId("personalNumberColumn");
 
         Grid.Column<TableClientItem> icoColumn = clientTable.addColumn(TableClientItem::getIco);
+        icoColumn.setAutoWidth(true);
         icoColumn.setHeader("IČO");
         icoColumn.setKey("icoColumn");
         icoColumn.setId("icoColumn");
