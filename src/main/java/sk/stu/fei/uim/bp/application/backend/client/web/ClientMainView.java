@@ -356,19 +356,16 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
     }
 
 
-    public void showSuccessOperationClientNotification(String text)
-    {
-        NotificationMessage message = new NotificationMessage(text,NotificationMessageType.SUCCESS);
-        Notification notification = new Notification(message);
-        notification.setDuration(5000);
-        notification.setPosition(Notification.Position.BOTTOM_START);
-        notification.open();
-    }
-
-    private void showErrorMessage(String errorText)
+    public void showSuccessOperationClientNotification(String successMessage)
     {
         NotificationProvider notificationProvider = new NotificationProvider();
-        notificationProvider.showErrorMessage(errorText);
+        notificationProvider.showSuccessMessage(successMessage,5000);
+    }
+
+    private void showErrorMessage(String errorMessage)
+    {
+        NotificationProvider notificationProvider = new NotificationProvider();
+        notificationProvider.showErrorMessage(errorMessage);
     }
 
 
