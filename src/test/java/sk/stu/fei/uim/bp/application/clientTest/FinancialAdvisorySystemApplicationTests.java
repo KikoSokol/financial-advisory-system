@@ -1,4 +1,4 @@
-package sk.stu.fei.uim.bp.application;
+package sk.stu.fei.uim.bp.application.clientTest;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
