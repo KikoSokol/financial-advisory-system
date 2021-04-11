@@ -91,7 +91,13 @@ public class CompanyTest
         System.out.println("vymazane produkty");
         System.out.println(this.companyService.getAllCompanyByCurrentAgent(new ObjectId("601b6300dbf3207494372a20")));
 
+        List<Company> findByName = this.companyService.getCompanyByNameOrByIco(new ObjectId("601b6300dbf3207494372a20"),"87654321");
 
+        assert !findByName.isEmpty();
+
+        System.out.println();
+        System.out.println("podla name");
+        System.out.println(findByName);
 
 
 
