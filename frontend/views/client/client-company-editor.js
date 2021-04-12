@@ -59,7 +59,7 @@ class ClientCompanyEditor extends PolymerElement {
     }
 
     static get is() {
-        return 'company-editor';
+        return 'client-company-editor';
     }
 
     static get properties() {

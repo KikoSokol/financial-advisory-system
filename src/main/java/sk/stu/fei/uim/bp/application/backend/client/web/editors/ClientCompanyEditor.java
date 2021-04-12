@@ -42,7 +42,7 @@ import java.util.Optional;
  * Designer will add and remove fields with @Id mappings but
  * does not overwrite or otherwise change this file.
  */
-@Tag("company-editor")
+@Tag("client-company-editor")
 @JsModule("./views/client/client-company-editor.js")
 public class ClientCompanyEditor extends PolymerTemplate<ClientCompanyEditor.CompanyEditorModel> {
 
