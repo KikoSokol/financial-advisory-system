@@ -5,7 +5,6 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.HeaderRow;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
@@ -25,12 +24,10 @@ import sk.stu.fei.uim.bp.application.backend.client.domain.SelfEmployedPerson;
 import sk.stu.fei.uim.bp.application.backend.client.service.implementation.ClientServiceImpl;
 import sk.stu.fei.uim.bp.application.backend.client.web.components.ClientWindow;
 import sk.stu.fei.uim.bp.application.backend.client.web.controlers.*;
-import sk.stu.fei.uim.bp.application.backend.client.web.editors.CompanyEditor;
+import sk.stu.fei.uim.bp.application.backend.client.web.editors.ClientCompanyEditor;
 import sk.stu.fei.uim.bp.application.backend.client.web.editors.PhysicalPersonEditor;
 import sk.stu.fei.uim.bp.application.backend.client.web.editors.SelfEmployedPersonEditor;
 import sk.stu.fei.uim.bp.application.backend.client.web.table.TableClientItem;
-import sk.stu.fei.uim.bp.application.ui.NotificationMessage;
-import sk.stu.fei.uim.bp.application.ui.NotificationMessageType;
 import sk.stu.fei.uim.bp.application.ui.NotificationProvider;
 
 import java.util.Optional;
@@ -67,7 +64,7 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
 
     private ClientWindow clientWindow;
 
-    private CompanyEditor companyEditor;
+    private ClientCompanyEditor clientCompanyEditor;
 
     private PhysicalPersonEditor physicalPersonEditor;
 
@@ -197,7 +194,7 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
 
     private void initCompanyEditor(ClientServiceImpl clientService)
     {
-        this.companyEditor = new CompanyEditor(clientService);
+        this.clientCompanyEditor = new ClientCompanyEditor(clientService);
     }
 
     public PhysicalPersonEditor getPhysicalPersonEditor() {
@@ -209,8 +206,8 @@ public class ClientMainView extends PolymerTemplate<ClientMainView.ClientMainVie
         return this.selfEmployedPersonEditor;
     }
 
-    public CompanyEditor getCompanyEditor(){
-        return this.companyEditor;
+    public ClientCompanyEditor getCompanyEditor(){
+        return this.clientCompanyEditor;
     }
 
     private void initSearchingRow()

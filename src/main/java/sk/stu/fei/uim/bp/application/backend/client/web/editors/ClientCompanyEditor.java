@@ -5,8 +5,6 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
@@ -29,11 +27,8 @@ import sk.stu.fei.uim.bp.application.backend.client.web.dto.ClientCompanyDto;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanyCancelEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanySaveEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanyUpdateEvent;
-import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEvents.PhysicalPersonCancelEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.searchClientEvent.SearchGetChoosedClientEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.table.TableClientItem;
-import sk.stu.fei.uim.bp.application.ui.NotificationMessage;
-import sk.stu.fei.uim.bp.application.ui.NotificationMessageType;
 import sk.stu.fei.uim.bp.application.ui.NotificationProvider;
 import sk.stu.fei.uim.bp.application.validarors.messages.ClientValidatorsMessages;
 
@@ -48,8 +43,8 @@ import java.util.Optional;
  * does not overwrite or otherwise change this file.
  */
 @Tag("company-editor")
-@JsModule("./views/client/company-editor.js")
-public class CompanyEditor extends PolymerTemplate<CompanyEditor.CompanyEditorModel> {
+@JsModule("./views/client/client-company-editor.js")
+public class ClientCompanyEditor extends PolymerTemplate<ClientCompanyEditor.CompanyEditorModel> {
 
     @Id("businessName")
     private TextField businessName;
@@ -114,7 +109,7 @@ public class CompanyEditor extends PolymerTemplate<CompanyEditor.CompanyEditorMo
     private boolean isNew;
 
 
-    public CompanyEditor(ClientServiceImpl clientService) {
+    public ClientCompanyEditor(ClientServiceImpl clientService) {
         this.clientService = clientService;
 
         this.confirmDialog = new ConfirmDialog("Naozaj si prajete zavrieť editor?","Všetky zmeny nebudú uložené !!!","Naozaj chcem odísť", confirmEvent -> exit(),"Chcem ostať", cancelEvent -> closeConfirmDialog());

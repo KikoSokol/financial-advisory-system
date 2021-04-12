@@ -8,7 +8,7 @@ import './search-client-view.js';
 import '@vaadin/vaadin-text-field/src/vaadin-text-area.js';
 import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
 
-class CompanyEditor extends PolymerElement {
+class ClientCompanyEditor extends PolymerElement {
 
     static get template() {
         return html`
@@ -69,4 +69,4 @@ class CompanyEditor extends PolymerElement {
     }
 }
 
-customElements.define(CompanyEditor.is, CompanyEditor);
+customElements.define(ClientCompanyEditor.is, ClientCompanyEditor);

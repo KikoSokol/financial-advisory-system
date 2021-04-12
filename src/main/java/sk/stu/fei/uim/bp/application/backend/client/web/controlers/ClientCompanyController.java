@@ -7,7 +7,7 @@ import sk.stu.fei.uim.bp.application.backend.client.service.ClientCompanyService
 import sk.stu.fei.uim.bp.application.backend.client.service.implementation.ClientServiceImpl;
 import sk.stu.fei.uim.bp.application.backend.client.web.ClientMainView;
 import sk.stu.fei.uim.bp.application.backend.client.web.dto.ClientCompanyDto;
-import sk.stu.fei.uim.bp.application.backend.client.web.editors.CompanyEditor;
+import sk.stu.fei.uim.bp.application.backend.client.web.editors.ClientCompanyEditor;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanyCancelEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanySaveEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanyUpdateEvent;
@@ -30,16 +30,16 @@ public class ClientCompanyController extends MainClientController
 
     public void initActionOfEditor()
     {
-        CompanyEditor companyEditor = this.clientMainView.getCompanyEditor();
-        companyEditor.addListener(ClientCompanySaveEvent.class,this::doSaveNewClientCompany);
-        companyEditor.addListener(ClientCompanyUpdateEvent.class,this::doUpdateClientCompany);
-        companyEditor.addListener(ClientCompanyCancelEvent.class,this::cancelEdit);
+        ClientCompanyEditor clientCompanyEditor = this.clientMainView.getCompanyEditor();
+        clientCompanyEditor.addListener(ClientCompanySaveEvent.class,this::doSaveNewClientCompany);
+        clientCompanyEditor.addListener(ClientCompanyUpdateEvent.class,this::doUpdateClientCompany);
+        clientCompanyEditor.addListener(ClientCompanyCancelEvent.class,this::cancelEdit);
 
     }
 
     private void openEditor(ClientCompanyDto clientCompanyDto, boolean isNew)
     {
-        CompanyEditor editor = this.clientMainView.getCompanyEditor();
+        ClientCompanyEditor editor = this.clientMainView.getCompanyEditor();
         editor.setClientCompanyDto(clientCompanyDto,isNew);
         this.clientMainView.showMainWindow(editor);
     }
