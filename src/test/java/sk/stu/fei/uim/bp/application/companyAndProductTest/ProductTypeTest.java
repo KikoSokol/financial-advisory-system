@@ -162,7 +162,6 @@ public class ProductTypeTest
         System.out.println();
 
 
-        this.service.deleteProductType(inserted1);
 
         Optional<ProductType> deleted = this.service.getProductTypeById(inserted1.getProductTypeId());
 
