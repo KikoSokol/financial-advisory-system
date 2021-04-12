@@ -45,8 +45,8 @@ public class CompanyAndProductMainView extends PolymerTemplate<CompanyAndProduct
     @Autowired
     public CompanyAndProductMainView(ProductTypeServiceImpl productTypeService, CompanyServiceIml companyService)
     {
-//        this.productTypeService = productTypeService;
-//        this.productTypeView.initService(this.productTypeService);
+        this.productTypeService = productTypeService;
+        this.productTypeView.initService(this.productTypeService);
 //
 //        this.companyService = companyService;
 //        this.companyView.initService(this.companyService);
