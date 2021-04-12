@@ -20,6 +20,7 @@ import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.material.Material;
 import sk.stu.fei.uim.bp.application.backend.client.web.ClientMainView;
+import sk.stu.fei.uim.bp.application.backend.clientAndProduct.CompanyAndProductMainView;
 
 import java.util.Optional;
 @Viewport("width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes, viewport-fit=cover")
@@ -87,8 +88,12 @@ public class MainView extends AppLayout
 
     private Component[] getMenuItems()
     {
-        Component[] components = {getTab("Domov",MainView.class),
-                getTab("Klienti", ClientMainView.class),getTab("Zmluvy",MainView.class)};
+        Tab home = getTab("Domov",MainView.class);
+        Tab clients = getTab("Klienti", ClientMainView.class);
+        Tab contracts = getTab("Zmluvy",MainView.class);
+        Tab companyAndProducts = getTab("Spoločnosti a produkty", CompanyAndProductMainView.class);
+
+        Component[] components = {home,clients,contracts,companyAndProducts};
 
         return components;
     }

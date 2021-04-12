@@ -80,7 +80,12 @@
 			<artifactId>vaadin-confirm-dialog-flow</artifactId>
 			<version>2.2.3</version>
 		</dependency>
-		<!--		<dependency>-->
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-board-flow</artifactId>
+            <version>3.2.2</version>
+        </dependency>
+        <!--		<dependency>-->
 <!--			<groupId>org.springframework.security</groupId>-->
 <!--			<artifactId>spring-security-test</artifactId>-->
 <!--			<scope>test</scope>-->
