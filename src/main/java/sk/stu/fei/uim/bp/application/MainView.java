@@ -17,10 +17,8 @@ import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.theme.Theme;
-import com.vaadin.flow.theme.material.Material;
 import sk.stu.fei.uim.bp.application.backend.client.web.ClientMainView;
-import sk.stu.fei.uim.bp.application.backend.clientAndProduct.CompanyAndProductMainView;
+import sk.stu.fei.uim.bp.application.backend.companyAndProduct.CompanyAndProductMainView;
 
 import java.util.Optional;
 @Viewport("width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes, viewport-fit=cover")

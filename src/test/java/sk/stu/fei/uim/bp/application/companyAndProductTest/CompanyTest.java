@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import sk.stu.fei.uim.bp.application.backend.address.Address;
-import sk.stu.fei.uim.bp.application.backend.clientAndProduct.domain.Company;
-import sk.stu.fei.uim.bp.application.backend.clientAndProduct.repository.CompanyRepository;
-import sk.stu.fei.uim.bp.application.backend.clientAndProduct.service.CompanyService;
+import sk.stu.fei.uim.bp.application.backend.companyAndProduct.domain.Company;
+import sk.stu.fei.uim.bp.application.backend.companyAndProduct.repository.CompanyRepository;
+import sk.stu.fei.uim.bp.application.backend.companyAndProduct.service.CompanyService;
 
 import java.util.List;
 import java.util.Optional;

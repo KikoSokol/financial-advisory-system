@@ -7,10 +7,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import sk.stu.fei.uim.bp.application.backend.clientAndProduct.domain.Product;
-import sk.stu.fei.uim.bp.application.backend.clientAndProduct.domain.ProductType;
-import sk.stu.fei.uim.bp.application.backend.clientAndProduct.domain.ProductTypeCategory;
-import sk.stu.fei.uim.bp.application.backend.clientAndProduct.service.ProductTypeService;
+import sk.stu.fei.uim.bp.application.backend.companyAndProduct.domain.ProductType;
+import sk.stu.fei.uim.bp.application.backend.companyAndProduct.domain.ProductTypeCategory;
+import sk.stu.fei.uim.bp.application.backend.companyAndProduct.service.ProductTypeService;
 
 import java.util.List;
 import java.util.Optional;
