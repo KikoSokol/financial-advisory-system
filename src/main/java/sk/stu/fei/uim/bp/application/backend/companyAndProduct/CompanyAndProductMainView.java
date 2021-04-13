@@ -11,8 +11,10 @@ import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import sk.stu.fei.uim.bp.application.MainView;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.service.CompanyService;
+import sk.stu.fei.uim.bp.application.backend.companyAndProduct.service.ProductService;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.service.ProductTypeService;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.service.implementation.CompanyServiceIml;
+import sk.stu.fei.uim.bp.application.backend.companyAndProduct.service.implementation.ProductServiceImpl;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.service.implementation.ProductTypeServiceImpl;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.views.CompanyView;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.views.ProductTypeView;
@@ -39,17 +41,21 @@ public class CompanyAndProductMainView extends PolymerTemplate<CompanyAndProduct
     private ProductTypeView productTypeView;
 
 
-    private ProductTypeService productTypeService;
-    private CompanyService companyService;
+    private final ProductTypeService productTypeService;
+    private final CompanyService companyService;
+    private final ProductService productService;
 
     @Autowired
-    public CompanyAndProductMainView(ProductTypeServiceImpl productTypeService, CompanyServiceIml companyService)
+    public CompanyAndProductMainView(ProductTypeServiceImpl productTypeService, CompanyServiceIml companyService, ProductServiceImpl productService)
     {
         this.productTypeService = productTypeService;
         this.productTypeView.initService(this.productTypeService);
 
         this.companyService = companyService;
         this.companyView.initService(this.companyService);
+
+        this.productService = productService;
+        this.productView.initService(productService,productTypeService,companyService);
     }
 
 

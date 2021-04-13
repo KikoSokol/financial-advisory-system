@@ -49,6 +49,21 @@ public class ProductDto
         return product;
     }
 
+    public String getProductTypeName()
+    {
+        return this.productType.getName();
+    }
+
+    public String getProductTypeCategoryName()
+    {
+        return this.productType.getCategoryName();
+    }
+
+    public String getCompanyName()
+    {
+        return this.company.getName();
+    }
+
 
 
 }

@@ -1,9 +1,9 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 import '@vaadin/vaadin-board/src/vaadin-board.js';
 import '@vaadin/vaadin-board/src/vaadin-board-row.js';
+import '../product/product-type-view.js';
 import '../company/company-view.js';
 import '../product/product-view.js';
-import '../product/product-type-view.js';
 
 class CompanyAndProductMainView extends PolymerElement {
 
@@ -17,10 +17,10 @@ class CompanyAndProductMainView extends PolymerElement {
             </style>
 <vaadin-board id="board">
  <vaadin-board-row>
-  <company-view id="companyView"></company-view>
+  <product-view id="productView"></product-view>
  </vaadin-board-row>
  <vaadin-board-row>
-  <product-view id="productView"></product-view>
+  <company-view id="companyView"></company-view>
   <product-type-view id="productTypeView"></product-type-view>
  </vaadin-board-row>
 </vaadin-board>
