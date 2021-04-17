@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
-@Document("ContractDocument")
+@Document("ContractDocument_current_version")
 public abstract class ContractDocument
 {
     private ObjectId contractDocumentId;
