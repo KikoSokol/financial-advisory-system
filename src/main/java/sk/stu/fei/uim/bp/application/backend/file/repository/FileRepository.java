@@ -1,4 +1,4 @@
-package sk.stu.fei.uim.bp.application.backend.file;
+package sk.stu.fei.uim.bp.application.backend.file.repository;
 
 import com.mongodb.DBObject;
 import com.mongodb.client.gridfs.model.GridFSFile;

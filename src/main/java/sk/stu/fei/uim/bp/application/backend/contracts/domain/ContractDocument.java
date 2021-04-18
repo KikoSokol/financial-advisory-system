@@ -3,6 +3,7 @@ package sk.stu.fei.uim.bp.application.backend.contracts.domain;
 import lombok.Data;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 @Document("ContractDocument_current_version")
 public abstract class ContractDocument
 {
+    @MongoId
     private ObjectId contractDocumentId;
 
     @NotBlank(message = "Číslo zmluvy je povinný údaj")

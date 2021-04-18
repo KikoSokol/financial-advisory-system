@@ -1,4 +1,4 @@
-package sk.stu.fei.uim.bp.application.backend.file;
+package sk.stu.fei.uim.bp.application.backend.file.repository.implementation;
 
 import com.mongodb.DBObject;
 import com.mongodb.client.gridfs.model.GridFSFile;
@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsOperations;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Repository;
+import sk.stu.fei.uim.bp.application.backend.file.repository.FileRepository;
 
 import java.io.IOException;
 import java.io.InputStream;

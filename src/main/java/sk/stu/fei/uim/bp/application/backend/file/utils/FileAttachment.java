@@ -1,4 +1,4 @@
-package sk.stu.fei.uim.bp.application.utils;
+package sk.stu.fei.uim.bp.application.backend.file.utils;
 
 import com.mongodb.client.gridfs.model.GridFSFile;
 import lombok.Data;

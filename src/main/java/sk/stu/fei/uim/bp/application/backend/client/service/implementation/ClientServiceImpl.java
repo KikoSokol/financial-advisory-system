@@ -15,8 +15,8 @@ import sk.stu.fei.uim.bp.application.backend.client.service.ClientCompanyService
 import sk.stu.fei.uim.bp.application.backend.client.service.ClientService;
 import sk.stu.fei.uim.bp.application.backend.client.service.PhysicalPersonService;
 import sk.stu.fei.uim.bp.application.backend.client.service.SelfEmployedPersonService;
-import sk.stu.fei.uim.bp.application.backend.file.FileRepository;
-import sk.stu.fei.uim.bp.application.backend.file.FileRepositoryImpl;
+import sk.stu.fei.uim.bp.application.backend.file.repository.FileRepository;
+import sk.stu.fei.uim.bp.application.backend.file.repository.implementation.FileRepositoryImpl;
 import sk.stu.fei.uim.bp.application.backend.file.FileWrapper;
 
 import java.io.IOException;
