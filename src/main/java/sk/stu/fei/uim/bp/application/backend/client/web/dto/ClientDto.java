@@ -2,6 +2,7 @@ package sk.stu.fei.uim.bp.application.backend.client.web.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bson.types.ObjectId;
 import sk.stu.fei.uim.bp.application.backend.address.Address;
 import sk.stu.fei.uim.bp.application.backend.client.domain.Client;
 import javax.validation.constraints.NotBlank;
@@ -11,6 +12,8 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 public abstract class ClientDto
 {
+    private ObjectId clientId;
+
     @NotBlank(message = "Ulica je povinné pole")
     private String street;
 
@@ -36,6 +39,7 @@ public abstract class ClientDto
 
     protected ClientDto(Client client)
     {
+        setClientId(client.getClientId());
         initializeThisAdressField(client.getAddress());
         setNote(client.getNote());
     }
