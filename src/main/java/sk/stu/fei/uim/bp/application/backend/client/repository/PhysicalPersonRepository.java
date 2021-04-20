@@ -13,4 +13,6 @@ public interface PhysicalPersonRepository
     PhysicalPerson removeClientCompanyFromPhysicalPerson(PhysicalPerson physicalPerson, ObjectId clientCompanyToRemove);
 
     List<PhysicalPerson> getPhysicalPersonByNameOrBySurnameOrByEmailOrByPersonalNumber(String search);
+
+    List<PhysicalPerson> getAllPhysicalPersonsByListOfIds(List<ObjectId> idsOfClients);
 }

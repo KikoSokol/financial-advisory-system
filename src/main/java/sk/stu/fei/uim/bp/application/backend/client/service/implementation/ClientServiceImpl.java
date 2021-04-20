@@ -66,6 +66,14 @@ public class ClientServiceImpl implements ClientService, ClientCompanyService, P
     }
 
     @Override
+    public List<PhysicalPerson> getAllPhysicalPersonsByListOfIds(List<ObjectId> idsOfClients)
+    {
+        return this.physicalPersonRepository.getAllPhysicalPersonsByListOfIds(idsOfClients);
+    }
+
+
+
+    @Override
     public ClientCompany addNewClientCompany(@NotNull ClientCompany newClientCompany)
     {
         ClientCompany added = (ClientCompany) this.clientRepository.addClient(newClientCompany);

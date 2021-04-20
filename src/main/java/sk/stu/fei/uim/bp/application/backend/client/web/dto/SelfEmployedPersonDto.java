@@ -1,12 +1,14 @@
 package sk.stu.fei.uim.bp.application.backend.client.web.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import sk.stu.fei.uim.bp.application.backend.client.domain.SelfEmployedPerson;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 public class SelfEmployedPersonDto extends PersonDto

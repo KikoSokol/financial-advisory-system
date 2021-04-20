@@ -1,5 +1,6 @@
 package sk.stu.fei.uim.bp.application.backend.client.service;
 
+import org.bson.types.ObjectId;
 import org.jetbrains.annotations.NotNull;
 import sk.stu.fei.uim.bp.application.backend.client.domain.PhysicalPerson;
 import sk.stu.fei.uim.bp.application.backend.file.FileWrapper;
@@ -19,4 +20,6 @@ public interface PhysicalPersonService {
     PhysicalPerson updatePhysicalPerson(@NotNull PhysicalPerson updatePhysicalPerson,
                                         @NotNull FileWrapper frontSideOfIdentityCard,
                                         @NotNull FileWrapper backSideOfIdentityCard );
+
+    List<PhysicalPerson> getAllPhysicalPersonsByListOfIds(List<ObjectId> idsOfClients);
 }

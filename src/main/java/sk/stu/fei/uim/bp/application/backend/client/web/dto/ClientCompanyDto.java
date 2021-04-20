@@ -1,6 +1,7 @@
 package sk.stu.fei.uim.bp.application.backend.client.web.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import sk.stu.fei.uim.bp.application.backend.client.domain.ClientCompany;
@@ -11,6 +12,7 @@ import javax.validation.constraints.Size;
 import java.util.LinkedList;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 public class ClientCompanyDto extends ClientDto
@@ -35,10 +37,10 @@ public class ClientCompanyDto extends ClientDto
     private String businessObject;
 
     @NotEmpty(message = "Spoločnosť musí mať minimálne 1 konateľa")
-    private List<ObjectId> managers = new LinkedList<>();
+    private List<PhysicalPersonDto> managers = new LinkedList<>();
 
 
-    public ClientCompanyDto(ClientCompany company)
+    public ClientCompanyDto(ClientCompany company, List<PhysicalPersonDto> managers)
     {
         super(company);
         setIco(company.getIco());
@@ -46,7 +48,7 @@ public class ClientCompanyDto extends ClientDto
         setDicDph(company.getDicDph());
         setBusinessName(company.getBusinessName());
         setBusinessObject(company.getBussinesObject());
-        setManagers(company.getManagers());
+        setManagers(managers);
     }
 
 
@@ -58,9 +60,21 @@ public class ClientCompanyDto extends ClientDto
         company.setDicDph(getDicDph());
         company.setBusinessName(getBusinessName());
         company.setBussinesObject(getBusinessObject());
-        company.setManagers(getManagers());
+        company.setManagers(getManagerIds());
 
         return company;
+    }
+
+
+    private List<ObjectId> getManagerIds()
+    {
+        List<ObjectId> ids = new LinkedList<>();
+
+        for(PhysicalPersonDto physicalPersonDto : this.managers)
+        {
+            ids.add(physicalPersonDto.getClientId());
+        }
+        return ids;
     }
 
 

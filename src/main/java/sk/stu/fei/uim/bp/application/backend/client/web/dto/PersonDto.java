@@ -1,6 +1,7 @@
 package sk.stu.fei.uim.bp.application.backend.client.web.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import sk.stu.fei.uim.bp.application.backend.client.domain.IdentifyCardCopyReference;
 import sk.stu.fei.uim.bp.application.backend.client.domain.Person;
@@ -9,6 +10,7 @@ import sk.stu.fei.uim.bp.application.validarors.anotations.PersonalNumber;
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 public abstract class PersonDto extends ClientDto

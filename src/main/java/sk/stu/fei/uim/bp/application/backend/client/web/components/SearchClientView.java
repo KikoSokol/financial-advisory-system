@@ -18,6 +18,7 @@ import sk.stu.fei.uim.bp.application.backend.client.domain.Client;
 import sk.stu.fei.uim.bp.application.backend.client.domain.PhysicalPerson;
 import sk.stu.fei.uim.bp.application.backend.client.service.ClientService;
 import sk.stu.fei.uim.bp.application.backend.client.service.implementation.ClientServiceImpl;
+import sk.stu.fei.uim.bp.application.backend.client.web.dto.PhysicalPersonDto;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.searchClientEvent.SearchGetChoosedClientEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.table.TableClientItem;
 
@@ -115,7 +116,7 @@ public class SearchClientView extends PolymerTemplate<SearchClientView.SearchCli
     {
         List<TableClientItem> list = new LinkedList<>();
         for (PhysicalPerson physicalPerson : physicalPersons) {
-            list.add(new TableClientItem(physicalPerson));
+            list.add(new TableClientItem(new PhysicalPersonDto(physicalPerson)));
         }
         this.tableClient.setItems(list);
     }

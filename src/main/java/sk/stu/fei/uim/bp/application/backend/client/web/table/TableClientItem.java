@@ -3,6 +3,7 @@ package sk.stu.fei.uim.bp.application.backend.client.web.table;
 import lombok.Data;
 import org.bson.types.ObjectId;
 import sk.stu.fei.uim.bp.application.backend.client.domain.*;
+import sk.stu.fei.uim.bp.application.backend.client.web.dto.*;
 
 @Data
 public class TableClientItem
@@ -15,12 +16,12 @@ public class TableClientItem
     private String personalNumber;
     private String ico;
 
-    public TableClientItem(Client client)
+    public TableClientItem(ClientDto client)
     {
-        if(client instanceof ClientCompany)
-            initCompany((ClientCompany) client);
-        if(client instanceof PhysicalPerson || client instanceof SelfEmployedPerson)
-            initPerson((Person) client);
+        if(client instanceof ClientCompanyDto)
+            initCompany((ClientCompanyDto) client);
+        if(client instanceof PhysicalPersonDto || client instanceof SelfEmployedPersonDto)
+            initPerson((PersonDto) client);
 
     }
 
@@ -35,18 +36,18 @@ public class TableClientItem
         setIco("");
     }
 
-    private void initCompany(ClientCompany clientCompany)
+    private void initCompany(ClientCompanyDto clientCompany)
     {
         setId(clientCompany.getClientId());
         setName(clientCompany.getBusinessName());
         setSurname("");
-        setEmail("");
-        setPhone("");
+        setEmail(clientCompany.getManagers().get(0).getEmail());
+        setPhone(clientCompany.getManagers().get(0).getPhone());
         setPersonalNumber("");
         setIco(clientCompany.getIco());
     }
 
-    private void initPerson(Person person)
+    private void initPerson(PersonDto person)
     {
         setId(person.getClientId());
         setName(person.getFirstName());

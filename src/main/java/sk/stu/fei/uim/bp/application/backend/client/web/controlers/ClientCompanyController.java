@@ -3,18 +3,25 @@ package sk.stu.fei.uim.bp.application.backend.client.web.controlers;
 import org.bson.types.ObjectId;
 import sk.stu.fei.uim.bp.application.backend.address.Address;
 import sk.stu.fei.uim.bp.application.backend.client.domain.ClientCompany;
+import sk.stu.fei.uim.bp.application.backend.client.domain.PhysicalPerson;
 import sk.stu.fei.uim.bp.application.backend.client.service.ClientCompanyService;
+import sk.stu.fei.uim.bp.application.backend.client.service.PhysicalPersonService;
 import sk.stu.fei.uim.bp.application.backend.client.service.implementation.ClientServiceImpl;
 import sk.stu.fei.uim.bp.application.backend.client.web.ClientMainView;
 import sk.stu.fei.uim.bp.application.backend.client.web.dto.ClientCompanyDto;
+import sk.stu.fei.uim.bp.application.backend.client.web.dto.PhysicalPersonDto;
 import sk.stu.fei.uim.bp.application.backend.client.web.editors.ClientCompanyEditor;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanyCancelEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanySaveEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanyUpdateEvent;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class ClientCompanyController extends MainClientController
 {
     private final ClientCompanyService clientCompanyService;
+    private final PhysicalPersonService physicalPersonService;
 
     private boolean isNew;
     private ClientCompany clientCompany;
@@ -24,6 +31,7 @@ public class ClientCompanyController extends MainClientController
     {
         super(clientMainView,currentAgentId);
         this.clientCompanyService = clientService;
+        this.physicalPersonService = clientService;
         initActionOfEditor();
         this.clear();
     }
@@ -62,7 +70,7 @@ public class ClientCompanyController extends MainClientController
     {
         this.isNew = false;
         this.clientCompany = clientCompany;
-        this.clientCompanyDto = new ClientCompanyDto(this.clientCompany);
+        this.clientCompanyDto = new ClientCompanyDto(this.clientCompany,getManagersDto(this.clientCompany.getManagers()));
 
         openEditor(this.clientCompanyDto,this.isNew);
     }
@@ -116,5 +124,20 @@ public class ClientCompanyController extends MainClientController
         this.clear();
         super.clientMainView.refreshTable();
         super.clientMainView.showSuccessOperationClientNotification(successText);
+    }
+
+
+    private List<PhysicalPersonDto> getManagersDto(List<ObjectId> managers)
+    {
+        List<PhysicalPerson> physicalPeople = this.physicalPersonService.getAllPhysicalPersonsByListOfIds(managers);
+
+        List<PhysicalPersonDto> dtos = new LinkedList<>();
+
+        for(PhysicalPerson physicalPerson : physicalPeople)
+        {
+            dtos.add(new PhysicalPersonDto(physicalPerson));
+        }
+
+        return dtos;
     }
 }

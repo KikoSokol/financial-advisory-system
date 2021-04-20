@@ -224,6 +224,23 @@ public class ClientRepositoryImpl implements ClientRepository, ClientCompanyRepo
                 .withOptions(FindAndModifyOptions.options().returnNew(true))
                 .findAndModifyValue();
     }
+
+
+    private List<Client> getAllClientsByListOfIds(List<ObjectId> idsOfClients)
+    {
+        Criteria criteria = new Criteria("clientId");
+        criteria.in(idsOfClients);
+
+        Query query = new Query(criteria);
+
+        return this.mongoOperations.find(query,Client.class);
+    }
+
+    @Override
+    public List<PhysicalPerson> getAllPhysicalPersonsByListOfIds(List<ObjectId> idsOfClients)
+    {
+        return this.getListOfPhysicalPersonBySearch(this.getAllClientsByListOfIds(idsOfClients));
+    }
     
     
 

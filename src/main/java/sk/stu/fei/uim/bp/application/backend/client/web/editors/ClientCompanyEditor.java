@@ -24,6 +24,7 @@ import sk.stu.fei.uim.bp.application.backend.client.service.implementation.Clien
 import sk.stu.fei.uim.bp.application.backend.client.web.components.PhysicalPersonCard;
 import sk.stu.fei.uim.bp.application.backend.client.web.components.SearchClientView;
 import sk.stu.fei.uim.bp.application.backend.client.web.dto.ClientCompanyDto;
+import sk.stu.fei.uim.bp.application.backend.client.web.dto.PhysicalPersonDto;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanyCancelEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanySaveEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanyUpdateEvent;
@@ -99,7 +100,7 @@ public class ClientCompanyEditor extends PolymerTemplate<ClientCompanyEditor.Com
 
     private final ClientService clientService;
 
-    private List<Client> managers = new LinkedList<>();
+    private List<PhysicalPersonDto> managers = new LinkedList<>();
 
 
 
@@ -191,12 +192,9 @@ public class ClientCompanyEditor extends PolymerTemplate<ClientCompanyEditor.Com
         this.setManagers(clientCompanyDto.getManagers());
     }
 
-    private void setManagers(List<ObjectId> managersReferences)
+    private void setManagers(List<PhysicalPersonDto> managersReferences)
     {
-        for (ObjectId managersReference : managersReferences) {
-            Optional<Client> client = this.clientService.getClientById(managersReference);
-            this.managers.add(client.get());
-        }
+        this.managers.addAll(managersReferences);
         updateManagerTable();
     }
 
@@ -218,9 +216,9 @@ public class ClientCompanyEditor extends PolymerTemplate<ClientCompanyEditor.Com
         {
             Client client = event.getClient();
             PhysicalPerson person = (PhysicalPerson) client;
-            if(!this.managers.contains(person))
+            if(!this.managers.contains(new PhysicalPersonDto(person)))
             {
-                this.managers.add(person);
+                this.managers.add(new PhysicalPersonDto(person));
                 updateManagerTable();
             }
             else
@@ -236,8 +234,8 @@ public class ClientCompanyEditor extends PolymerTemplate<ClientCompanyEditor.Com
     private void updateManagerTable()
     {
         List<TableClientItem> list = new LinkedList<>();
-        for (Client client : this.managers) {
-            list.add(new TableClientItem(client));
+        for (PhysicalPersonDto physicalPersonDto : this.managers) {
+            list.add(new TableClientItem(physicalPersonDto));
         }
 
         this.managerTable.setItems(list);
@@ -280,11 +278,8 @@ public class ClientCompanyEditor extends PolymerTemplate<ClientCompanyEditor.Com
 
     private void setManagersToClientCompanyDto()
     {
-        List<ObjectId> listOfManagers = new LinkedList<>();
 
-        for (Client manager : this.managers) {
-            listOfManagers.add(manager.getClientId());
-        }
+        List<PhysicalPersonDto> listOfManagers = new LinkedList<>(this.managers);
         this.clientCompanyDto.setManagers(listOfManagers);
     }
 

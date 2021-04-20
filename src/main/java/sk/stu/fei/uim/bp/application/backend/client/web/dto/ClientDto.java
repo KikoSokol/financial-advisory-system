@@ -7,6 +7,7 @@ import sk.stu.fei.uim.bp.application.backend.address.Address;
 import sk.stu.fei.uim.bp.application.backend.client.domain.Client;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -75,6 +76,7 @@ public abstract class ClientDto
     @Override
     public String toString() {
         return "ClientDto{" +
+                "clientId='" + clientId + '\'' +
                 "street='" + street + '\'' +
                 ", numberOfHouse='" + numberOfHouse + '\'' +
                 ", postalCode='" + postalCode + '\'' +
@@ -82,5 +84,19 @@ public abstract class ClientDto
                 ", state='" + state + '\'' +
                 ", note='" + note + '\'' +
                 '}';
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ClientDto)) return false;
+        ClientDto clientDto = (ClientDto) o;
+        return getClientId().equals(clientDto.getClientId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getClientId());
     }
 }

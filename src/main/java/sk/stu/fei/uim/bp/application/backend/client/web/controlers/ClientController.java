@@ -7,8 +7,12 @@ import sk.stu.fei.uim.bp.application.backend.client.domain.ClientCompany;
 import sk.stu.fei.uim.bp.application.backend.client.domain.PhysicalPerson;
 import sk.stu.fei.uim.bp.application.backend.client.domain.SelfEmployedPerson;
 import sk.stu.fei.uim.bp.application.backend.client.service.ClientService;
+import sk.stu.fei.uim.bp.application.backend.client.service.PhysicalPersonService;
 import sk.stu.fei.uim.bp.application.backend.client.service.implementation.ClientServiceImpl;
 import sk.stu.fei.uim.bp.application.backend.client.web.ClientMainView;
+import sk.stu.fei.uim.bp.application.backend.client.web.dto.ClientCompanyDto;
+import sk.stu.fei.uim.bp.application.backend.client.web.dto.PhysicalPersonDto;
+import sk.stu.fei.uim.bp.application.backend.client.web.dto.SelfEmployedPersonDto;
 import sk.stu.fei.uim.bp.application.backend.client.web.table.TableClientFilter;
 import sk.stu.fei.uim.bp.application.backend.client.web.table.TableClientItem;
 
@@ -19,6 +23,7 @@ import java.util.Optional;
 public class ClientController extends MainClientController
 {
     private final ClientService clientService;
+    private final PhysicalPersonService physicalPersonService;
 
     List<TableClientItem> allClients;
     private final ListDataProvider<TableClientItem> clientDataProvider;
@@ -29,6 +34,7 @@ public class ClientController extends MainClientController
     {
         super(clientMainView,currentAgentId);
         this.clientService = clientService;
+        this.physicalPersonService = clientService;
 
         this.allClients = loadDataToTable();
 
@@ -106,44 +112,41 @@ public class ClientController extends MainClientController
 
     private TableClientItem createTableClientCompanyItem(ClientCompany clientCompany)
     {
-        TableClientItem tableItem = new TableClientItem(clientCompany.getClientId());
-        tableItem.setName(clientCompany.getBusinessName());
-        tableItem.setIco(clientCompany.getIco());
+        List<PhysicalPersonDto> managersOfCompany = getManagersDto(clientCompany.getManagers());
 
-        Optional<Client> managerOptional = this.clientService.getClientById(clientCompany.getManagers().get(0));
-        PhysicalPerson manager = (PhysicalPerson) managerOptional.get();
+        ClientCompanyDto clientCompanyDto = new ClientCompanyDto(clientCompany,managersOfCompany);
 
-        tableItem.setPhone(manager.getPhone());
-        tableItem.setEmail(manager.getEmail());
-
-        return tableItem;
+        return new TableClientItem(clientCompanyDto);
+    }
 
 
+    private List<PhysicalPersonDto> getManagersDto(List<ObjectId> managers)
+    {
+        List<PhysicalPerson> physicalPeople = this.physicalPersonService.getAllPhysicalPersonsByListOfIds(managers);
+
+        List<PhysicalPersonDto> dtos = new LinkedList<>();
+
+        for(PhysicalPerson physicalPerson : physicalPeople)
+        {
+            dtos.add(new PhysicalPersonDto(physicalPerson));
+        }
+
+        return dtos;
     }
 
     private TableClientItem createTablePhysicalPersonItem(PhysicalPerson physicalPerson)
     {
-        TableClientItem tableItem = new TableClientItem(physicalPerson.getClientId());
-        tableItem.setName(physicalPerson.getFirstName());
-        tableItem.setSurname(physicalPerson.getSurname());
-        tableItem.setEmail(physicalPerson.getEmail());
-        tableItem.setPhone(physicalPerson.getPhone());
-        tableItem.setPersonalNumber(physicalPerson.getPersonalNumber());
 
-        return tableItem;
+        PhysicalPersonDto physicalPersonDto = new PhysicalPersonDto(physicalPerson);
+
+        return new TableClientItem(physicalPersonDto);
     }
 
     private TableClientItem createTableSelfEmployedPersonItem(SelfEmployedPerson selfEmployedPerson)
     {
-        TableClientItem tableItem = new TableClientItem(selfEmployedPerson.getClientId());
-        tableItem.setName(selfEmployedPerson.getFirstName());
-        tableItem.setSurname(selfEmployedPerson.getSurname());
-        tableItem.setEmail(selfEmployedPerson.getEmail());
-        tableItem.setPhone(selfEmployedPerson.getPhone());
-        tableItem.setPersonalNumber(selfEmployedPerson.getPersonalNumber());
-        tableItem.setIco(selfEmployedPerson.getIco());
+        SelfEmployedPersonDto selfEmployedPersonDto = new SelfEmployedPersonDto(selfEmployedPerson);
 
-        return tableItem;
+        return new TableClientItem(selfEmployedPersonDto);
 
     }
 
