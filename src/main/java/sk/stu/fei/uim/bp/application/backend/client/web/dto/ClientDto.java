@@ -99,4 +99,6 @@ public abstract class ClientDto
     public int hashCode() {
         return Objects.hash(getClientId());
     }
+
+    public abstract String getFullName();
 }

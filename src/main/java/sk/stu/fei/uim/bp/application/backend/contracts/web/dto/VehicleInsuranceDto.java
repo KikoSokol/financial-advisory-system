@@ -7,6 +7,7 @@ import sk.stu.fei.uim.bp.application.backend.client.web.dto.ClientDto;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.dto.ProductDto;
 import sk.stu.fei.uim.bp.application.backend.contracts.domain.VehicleInsurance;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 
@@ -15,7 +16,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class VehicleInsuranceDto extends NonLifeInsuranceDto
 {
-    @NotNull(message = "ŠPZ auta je povinný údaj")
+    @NotBlank(message = "ŠPZ auta je povinný údaj")
     private String numberOfVehicle;
 
     public VehicleInsuranceDto(VehicleInsurance vehicleInsurance, ClientDto owner, ClientDto insured, ProductDto productDto) {

@@ -19,6 +19,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 import sk.stu.fei.uim.bp.application.backend.client.web.ClientMainView;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.CompanyAndProductMainView;
+import sk.stu.fei.uim.bp.application.backend.contracts.web.ContractMainView;
 
 import java.util.Optional;
 @Viewport("width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes, viewport-fit=cover")
@@ -88,7 +89,7 @@ public class MainView extends AppLayout
     {
         Tab home = getTab("Domov",MainView.class);
         Tab clients = getTab("Klienti", ClientMainView.class);
-        Tab contracts = getTab("Zmluvy",MainView.class);
+        Tab contracts = getTab("Zmluvy", ContractMainView.class);
         Tab companyAndProducts = getTab("Spoločnosti a produkty", CompanyAndProductMainView.class);
 
         Component[] components = {home,clients,contracts,companyAndProducts};

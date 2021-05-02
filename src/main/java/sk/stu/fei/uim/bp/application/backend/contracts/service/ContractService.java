@@ -35,6 +35,8 @@ public interface ContractService
 
     Optional<ContractDocument> getOldVersionContractDocumentById(@NotNull ObjectId oldVersionContractDocumentById);
 
+    Optional<Contract> getContractByContractNumber(@NotNull String contractNumber);
+
     List<ContractFileAttachment> getFileAttachmentsOfContract(@NotNull Contract contract);
 
     Optional<InputStream> getFileAttachements(@NotNull ContractFileAttachment contractFileAttachment);

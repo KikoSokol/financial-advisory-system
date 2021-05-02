@@ -107,6 +107,8 @@ public abstract class PersonDto extends ClientDto
         return person;
     }
 
+
+
     @Override
     public String toString() {
         return super.toString() + "PersonDto{" +

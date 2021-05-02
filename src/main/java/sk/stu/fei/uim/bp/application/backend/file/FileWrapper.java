@@ -20,6 +20,16 @@ public class FileWrapper
         this.setFileData(fileData);
     }
 
+    public String getFileName()
+    {
+        if(isSetCustomFileName())
+        {
+            return this.customFileName;
+        }
+        return fileData.getFileName();
+    }
+
+
     public boolean isSetCustomFileName()
     {
         return this.customFileName != null && !this.customFileName.equals("");

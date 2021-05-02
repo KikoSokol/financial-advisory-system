@@ -1,7 +1,6 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 import '@vaadin/vaadin-form-layout/src/vaadin-form-layout.js';
 import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
-import '@vaadin/vaadin-combo-box/src/vaadin-combo-box.js';
 import '@vaadin/vaadin-date-picker/src/vaadin-date-picker.js';
 import '@vaadin/flow-frontend/vaadin-big-decimal-field.js';
 import '@vaadin/vaadin-select/src/vaadin-select.js';
@@ -26,11 +25,11 @@ class NonLifeInsuranceEditor extends PolymerElement {
 <vaadin-form-layout>
  <vaadin-form-layout>
   <vaadin-text-field label="Ćíslo zmluvy" placeholder="Ćíslo zmluvy" id="contractNumber" required></vaadin-text-field>
-  <vaadin-combo-box id="product" required page-size="" item-label-path="" label="Produkt" item-value-path=""></vaadin-combo-box>
+  <vaadin-select id="product" label="Produkt" required placeholder="Produkt"></vaadin-select>
   <vaadin-date-picker label="Dátum začiatku platnosti" placeholder="Dátum začiatku platnosti" id="dateOfStart" required></vaadin-date-picker>
-  <vaadin-big-decimal-field id="payment" required placeholder="Platba" label="Platba"></vaadin-big-decimal-field>
+  <vaadin-big-decimal-field id="payment" required placeholder="Platba" label="Platba" invalid></vaadin-big-decimal-field>
   <vaadin-date-picker label="Dátum výročia" placeholder="Dátum výročia" id="anniversaryDate" required></vaadin-date-picker>
-  <vaadin-select id="paymentFrequency" label="Frekvencia platby" required></vaadin-select>
+  <vaadin-select id="paymentFrequency" label="Frekvencia platby" required invalid placeholder="Frekvencia platby"></vaadin-select>
   <vaadin-date-picker label="Dátum konca platnosti" placeholder="Dátum konca platnosti" id="dateOfEnd"></vaadin-date-picker>
   <vaadin-text-area label="Poznámka" placeholder="Poznámka" id="note"></vaadin-text-area>
  </vaadin-form-layout>
@@ -60,10 +59,10 @@ class NonLifeInsuranceEditor extends PolymerElement {
 </vaadin-form-layout>
 <vaadin-horizontal-layout style="justify-content: flex-end;">
  <vaadin-button theme="primary" id="cancel">
-   Primary 
+  ZRUŠIŤ
  </vaadin-button>
  <vaadin-button theme="primary success" id="save" style="margin-right: var(--lumo-space-m); margin-left: var(--lumo-space-m);">
-  <iron-icon icon="lumo:checkmark"></iron-icon> Primary Success 
+  <iron-icon icon="lumo:checkmark"></iron-icon>ULOŽIŤ
  </vaadin-button>
 </vaadin-horizontal-layout>
 `;

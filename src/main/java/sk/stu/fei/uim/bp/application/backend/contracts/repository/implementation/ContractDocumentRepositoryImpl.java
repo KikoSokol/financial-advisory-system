@@ -35,6 +35,12 @@ public class ContractDocumentRepositoryImpl implements ContractDocumentRepositor
     }
 
     @Override
+    public ContractDocument updateCurrentVersionOfContractDocument(@NotNull ContractDocument contractDocumentToUpdate)
+    {
+        return this.mongoOperations.save(contractDocumentToUpdate);
+    }
+
+    @Override
     public ContractDocument addOldVersionOfContractDocument(@NotNull ContractDocument oldVersionContractDocument)
     {
         return this.mongoOperations.insert(oldVersionContractDocument,OLD_VERSION);

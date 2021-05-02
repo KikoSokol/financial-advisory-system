@@ -26,10 +26,19 @@ public class PhysicalPersonCard extends PolymerTemplate<PhysicalPersonCard.Physi
     @Id("phone")
     private Label phone;
 
-    private final TableClientItem tableClientItem;
+    private TableClientItem tableClientItem;
 
+    public PhysicalPersonCard()
+    {
+
+    }
 
     public PhysicalPersonCard(TableClientItem tableClientItem)
+    {
+        init(tableClientItem);
+    }
+
+    public void init(TableClientItem tableClientItem)
     {
         this.tableClientItem = tableClientItem;
         setPhysicalPerson();

@@ -20,4 +20,6 @@ public interface ContractRepository
     List<Contract> getAllContractsOfCurrentAgent(@NotNull ObjectId currentAgentId);
 
     List<Contract> getAllContractsByListOfId(@NotNull List<ObjectId> contractsId);
+
+    Optional<Contract> getContractByContractNumber(@NotNull String contractNumber);
 }

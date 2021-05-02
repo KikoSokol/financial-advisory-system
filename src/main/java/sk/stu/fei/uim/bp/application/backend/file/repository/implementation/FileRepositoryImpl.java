@@ -74,9 +74,23 @@ public class FileRepositoryImpl implements FileRepository
 
     private String createCustomFileName(String oldFileName, String newFileName)
     {
-        int dotPossition = oldFileName.lastIndexOf('.');
+//        int dotPossition = oldFileName.lastIndexOf('.');
+//
+//        return newFileName.concat(oldFileName.substring(dotPossition));
 
-        return newFileName.concat(oldFileName.substring(dotPossition));
+        String[] partOldFileName = oldFileName.split("\\.");
+
+        String[] partNewFileName = newFileName.split("\\.");
+
+        String suffixPartOld = partOldFileName[partOldFileName.length - 1];
+        String suffixPartNew = partNewFileName[partNewFileName.length - 1];
+
+        if(suffixPartOld.equals(suffixPartNew))
+        {
+            return newFileName;
+        }
+
+        return newFileName.concat(".").concat(suffixPartOld);
     }
 
     @Override

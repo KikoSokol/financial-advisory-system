@@ -77,6 +77,10 @@ public class ClientCompanyDto extends ClientDto
         return ids;
     }
 
+    @Override
+    public String getFullName() {
+        return this.businessName;
+    }
 
     @Override
     public String toString() {

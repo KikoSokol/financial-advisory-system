@@ -24,8 +24,8 @@ public abstract class InsuranceDto extends ContractDocumentDto
     @Future(message = "Výročie poistenia môže byť iba v budúcnosti")
     private LocalDate anniversaryDate;
 
-    @NotNull(message = "Platba je povinný údaj")
-    @PositiveOrZero(message = "Platba môže byť len kladné číslo alebo 0")
+
+//    @PositiveOrZero(message = "Platba môže byť len kladné číslo alebo 0")
     private double payment;
 
     @NotNull(message = "Frekvencia platby je povinné pole")

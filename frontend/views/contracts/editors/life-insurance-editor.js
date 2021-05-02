@@ -1,7 +1,6 @@
 import {html, PolymerElement} from '@polymer/polymer/polymer-element.js';
 import '@vaadin/vaadin-form-layout/src/vaadin-form-layout.js';
 import '@vaadin/vaadin-text-field/src/vaadin-text-field.js';
-import '@vaadin/vaadin-combo-box/src/vaadin-combo-box.js';
 import '@vaadin/flow-frontend/vaadin-big-decimal-field.js';
 import '@vaadin/vaadin-select/src/vaadin-select.js';
 import '@vaadin/vaadin-text-field/src/vaadin-text-area.js';
@@ -26,7 +25,7 @@ class LifeInsuranceEditor extends PolymerElement {
 <vaadin-form-layout>
  <vaadin-form-layout>
   <vaadin-text-field label="Ćíslo zmluvy" placeholder="Ćíslo zmluvy" id="contractNumber" required></vaadin-text-field>
-  <vaadin-combo-box id="product" required page-size="" label="Produkt" item-label-path="" item-value-path=""></vaadin-combo-box>
+  <vaadin-select id="product" label="Produkt" placeholder="Produkt"></vaadin-select>
   <vaadin-date-picker label="Dátum začiatku platnosti" placeholder="Dátum začiatku platnosti" id="dateOfStart" required></vaadin-date-picker>
   <vaadin-big-decimal-field id="payment" required placeholder="Platba" label="Platba"></vaadin-big-decimal-field>
   <vaadin-date-picker label="Dátum výročia" placeholder="Dátum výročia" id="anniversaryDate" required></vaadin-date-picker>

@@ -16,7 +16,7 @@ class SearchClientView extends PolymerElement {
                     height: 100%;
                 }
             </style>
-<vaadin-form-layout>
+<vaadin-form-layout colspan="2">
  <vaadin-text-field placeholder="Search" id="search" colspan="2">
   <iron-icon icon="lumo:search" slot="prefix"></iron-icon>
  </vaadin-text-field>
@@ -24,10 +24,10 @@ class SearchClientView extends PolymerElement {
 </vaadin-form-layout>
 <vaadin-horizontal-layout style="width: 100%; height: 100%;">
  <vaadin-button theme="primary error" id="cancel" style="flex-grow: 1;">
-  Zruš
+   Zruš 
  </vaadin-button>
  <vaadin-button theme="primary success" id="add" style="flex-grow: 1; flex-shrink: 0;">
-  Pridaj
+   Pridaj 
  </vaadin-button>
 </vaadin-horizontal-layout>
 `;

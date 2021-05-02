@@ -51,4 +51,9 @@ public class SelfEmployedPersonDto extends PersonDto
                 ", businessObject='" + businessObject + '\'' +
                 '}';
     }
+
+    @Override
+    public String getFullName() {
+        return super.getSurname() + " " + super.getFirstName();
+    }
 }

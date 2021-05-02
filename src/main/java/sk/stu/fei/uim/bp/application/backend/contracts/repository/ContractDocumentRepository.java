@@ -10,6 +10,8 @@ public interface ContractDocumentRepository
 {
     ContractDocument addNewVersionOfContractDocument(@NotNull ContractDocument newContractDocument);
 
+    ContractDocument updateCurrentVersionOfContractDocument(@NotNull ContractDocument contractDocumentToUpdate);
+
     ContractDocument addOldVersionOfContractDocument(@NotNull ContractDocument oldVersionContractDocument);
 
     Optional<ContractDocument> getCurrentVersionOfContractDocumentById(@NotNull ObjectId contractDocumentId);

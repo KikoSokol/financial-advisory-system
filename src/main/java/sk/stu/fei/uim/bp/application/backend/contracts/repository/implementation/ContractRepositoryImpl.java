@@ -73,4 +73,17 @@ public class ContractRepositoryImpl implements ContractRepository
         return this.mongoOperations.find(query, Contract.class);
     }
 
+    @Override
+    public Optional<Contract> getContractByContractNumber(@NotNull String contractNumber)
+    {
+        Criteria criteria = new Criteria("contractNumber");
+        criteria.is(contractNumber);
+
+        Query query = new Query(criteria);
+
+        Contract contract = this.mongoOperations.findOne(query,Contract.class);
+
+        return Optional.ofNullable(contract);
+    }
+
 }

@@ -139,9 +139,11 @@ public class ContractServiceImpl implements ContractService
         int newVersion = contractDocument.getVersion() + 1;
         contractDocumentToUpdate.setVersion(newVersion);
 
+        contractDocument.setContractDocumentId(null);
+
         ContractDocument oldVersionContractDocument = this.contractDocumentRepository.addOldVersionOfContractDocument(contractDocument);
 
-        ContractDocument newVersionContractDocument = this.contractDocumentRepository.addNewVersionOfContractDocument(contractDocumentToUpdate);
+        ContractDocument newVersionContractDocument = this.contractDocumentRepository.updateCurrentVersionOfContractDocument(contractDocumentToUpdate);
 
         contract.getOldVersions().add(oldVersionContractDocument.getContractDocumentId());
         contract.setCurrentVersion(newVersionContractDocument.getContractDocumentId());
@@ -198,6 +200,12 @@ public class ContractServiceImpl implements ContractService
     public Optional<ContractDocument> getOldVersionContractDocumentById(@NotNull ObjectId oldVersionContractDocumentById)
     {
         return this.contractDocumentRepository.getOldVersionOfContractDocumentById(oldVersionContractDocumentById);
+    }
+
+    @Override
+    public Optional<Contract> getContractByContractNumber(@NotNull String contractNumber)
+    {
+        return this.contractRepository.getContractByContractNumber(contractNumber);
     }
 
     @Override

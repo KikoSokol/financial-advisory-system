@@ -23,8 +23,15 @@ public class PhysicalPersonDto extends PersonDto
     }
 
 
+
+
     @Override
     public String toString() {
         return super.toString() + "PhysicalPersonDto{}";
+    }
+
+    @Override
+    public String getFullName() {
+        return super.getSurname() + " " + super.getFirstName();
     }
 }
