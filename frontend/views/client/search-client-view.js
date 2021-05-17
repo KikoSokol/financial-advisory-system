@@ -17,7 +17,7 @@ class SearchClientView extends PolymerElement {
                 }
             </style>
 <vaadin-form-layout colspan="2">
- <vaadin-text-field placeholder="Search" id="search" colspan="2">
+ <vaadin-text-field placeholder="Hľadaj" id="search" colspan="2">
   <iron-icon icon="lumo:search" slot="prefix"></iron-icon>
  </vaadin-text-field>
  <vaadin-grid id="tableClient" colspan="2"></vaadin-grid>

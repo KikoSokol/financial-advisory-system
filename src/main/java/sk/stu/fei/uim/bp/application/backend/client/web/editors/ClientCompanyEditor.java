@@ -203,7 +203,7 @@ public class ClientCompanyEditor extends PolymerTemplate<ClientCompanyEditor.Com
     {
         Grid.Column<TableClientItem> nameColumn = managerTable.addColumn(new ComponentRenderer<>(client ->
                 new PhysicalPersonCard(client)));
-        nameColumn.setHeader("Manažéry");
+        nameColumn.setHeader("Konatelia");
         nameColumn.setKey("managerColumn");
         nameColumn.setId("managerColumn");
 

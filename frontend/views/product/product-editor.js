@@ -19,14 +19,14 @@ class ProductEditor extends PolymerElement {
 <vaadin-form-layout>
  <vaadin-text-field label="Názov produktu" placeholder="Názov produktu" id="name" required></vaadin-text-field>
  <vaadin-select value="Item one" id="productType" label="Typ produktu" required placeholder="Typ produktu"></vaadin-select>
- <vaadin-select value="Item one" id="company" label="Spločnosť" required placeholder="Spločnosť"></vaadin-select>
+ <vaadin-select value="Item one" id="company" label="Spoločnosť" required placeholder="Spoločnosť"></vaadin-select>
 </vaadin-form-layout>
 <vaadin-horizontal-layout style="justify-content: flex-end;">
  <vaadin-button theme="primary" id="cancel">
-  ZRUŠIŤ
+   ZRUŠIŤ 
  </vaadin-button>
  <vaadin-button theme="primary success" id="save" style="margin-right: var(--lumo-space-m); margin-left: var(--lumo-space-m);">
-  <iron-icon icon="lumo:checkmark"></iron-icon>ULOŽIŤ
+  <iron-icon icon="lumo:checkmark"></iron-icon>ULOŽIŤ 
  </vaadin-button>
 </vaadin-horizontal-layout>
 `;

@@ -50,7 +50,7 @@ class PhysicalPersonEditor extends PolymerElement {
  </vaadin-form-layout>
  <vaadin-form-layout>
   <vaadin-text-field error-message="Please enter a value" required invalid="" label="Iban" id="iban" colspan="2"></vaadin-text-field>
-  <vaadin-text-area label="Poznámka" placeholder="Add detailed explanation" id="note" colspan="2"></vaadin-text-area>
+  <vaadin-text-area label="Poznámka" id="note" colspan="2"></vaadin-text-area>
  </vaadin-form-layout>
 </vaadin-form-layout>
 <vaadin-horizontal-layout style="justify-content: flex-end; flex-wrap: wrap;">

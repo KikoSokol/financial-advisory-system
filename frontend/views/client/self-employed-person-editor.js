@@ -34,7 +34,7 @@ class SelfEmployedPersonEditor extends PolymerElement {
   <vaadin-text-field error-message="Please enter a value" required invalid="" label="Číslo OP" id="identityCardNumber"></vaadin-text-field>
   <vaadin-text-field error-message="Please enter a value" required invalid="" label="Štátne občiansto" id="citizenship"></vaadin-text-field>
   <vaadin-date-picker label="Dátum platnosti OP" placeholder="Výber dátum" id="dateOfValidityOfIdentityCard"></vaadin-date-picker>
-  <vaadin-date-picker label="Dátum vydania OP" placeholder="Vyber dátum" id="releaseDateOfIdentityCard"></vaadin-date-picker>
+  <vaadin-date-picker label="Dátum vydania OP" placeholder="Výber dátum" id="releaseDateOfIdentityCard"></vaadin-date-picker>
  </vaadin-form-layout>
  <vaadin-form-layout>
   <span colspan="2">Adresa</span>
