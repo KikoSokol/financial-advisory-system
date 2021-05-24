@@ -18,10 +18,10 @@ import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.dto.CompanyDt
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.dto.ProductDto;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.dto.ProductTypeDto;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.productEvents.ProductCancelEvent;
+import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.productEvents.ProductDeleteEvent;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.productEvents.ProductSaveEvent;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.productEvents.ProductUpdateEvent;
 import sk.stu.fei.uim.bp.application.ui.NotificationProvider;
-import sk.stu.fei.uim.bp.application.validarors.messages.ProductTypeValidatorsMessages;
 import sk.stu.fei.uim.bp.application.validarors.messages.ProductValidatorsMessages;
 
 import java.util.List;
@@ -43,10 +43,13 @@ public class ProductEditor extends PolymerTemplate<ProductEditor.ProductEditorMo
     private Button save;
 
     private final ConfirmDialog confirmDialog;
+    private final ConfirmDialog deleteConfirmDialog;
 
     private boolean isNew;
     private ProductDto productDto;
     private final BeanValidationBinder<ProductDto> binder = new BeanValidationBinder<>(ProductDto.class);
+    @Id("delete")
+    private Button delete;
 
 
     public ProductEditor()
@@ -58,8 +61,12 @@ public class ProductEditor extends PolymerTemplate<ProductEditor.ProductEditorMo
         this.confirmDialog = new ConfirmDialog("Naozaj si prajete zavrieť editor?","Všetky zmeny nebudú uložené !!!","Naozaj chcem odísť",confirmEvent -> exit(),"Chcem ostať",cancelEvent -> closeConfirmDialog());
         this.confirmDialog.setConfirmButtonTheme("error primary");
 
+        this.deleteConfirmDialog = new ConfirmDialog("Naozaj si prajete vymazať tento produkt?","Údaje produktu budú natrvalo odstránené !!!","Vymazať",confirmEvent -> delete(),"Zrušiť",cancelEvent -> closeDeleteConfirmDialog());
+        this.deleteConfirmDialog.setConfirmButtonTheme("error primary");
+
         this.save.addClickListener(event -> validateAndSave());
         this.cancel.addClickListener(event-> this.confirmDialog.open());
+        this.delete.addClickListener(event -> this.deleteConfirmDialog.open());
 
         binder.forField(name)
                 .withValidator(n -> n.length() > 0, ProductValidatorsMessages.PRODUCT_NAME_NOT_BLANK_MESSAGE)
@@ -96,6 +103,8 @@ public class ProductEditor extends PolymerTemplate<ProductEditor.ProductEditorMo
         this.isNew = isNew;
         this.productDto = productDto;
         this.binder.readBean(this.productDto);
+
+        this.delete.setEnabled(!this.isNew);
     }
 
     private void validateAndSave()
@@ -135,9 +144,23 @@ public class ProductEditor extends PolymerTemplate<ProductEditor.ProductEditorMo
         fireEvent(new ProductCancelEvent(this,null));
     }
 
+    private void delete()
+    {
+        if(!this.isNew)
+            fireEvent(new ProductDeleteEvent(this,this.productDto));
+    }
+
     private void closeConfirmDialog()
     {
         if(this.confirmDialog.isOpened())
+        {
+            this.confirmDialog.close();
+        }
+    }
+
+    private void closeDeleteConfirmDialog()
+    {
+        if(this.deleteConfirmDialog.isOpened())
         {
             this.confirmDialog.close();
         }

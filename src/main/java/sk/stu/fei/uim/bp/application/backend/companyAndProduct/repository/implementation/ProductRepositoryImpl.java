@@ -1,5 +1,6 @@
 package sk.stu.fei.uim.bp.application.backend.companyAndProduct.repository.implementation;
 
+import com.mongodb.client.result.DeleteResult;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -32,9 +33,11 @@ public class ProductRepositoryImpl implements ProductRepository
     }
 
     @Override
-    public void deleteProduct(@NotNull Product productToDelete)
+    public boolean deleteProduct(@NotNull Product productToDelete)
     {
-        this.mongoOperations.remove(productToDelete);
+        DeleteResult deleteResult = this.mongoOperations.remove(productToDelete);
+
+        return deleteResult.wasAcknowledged();
     }
 
     @Override
@@ -106,6 +109,17 @@ public class ProductRepositoryImpl implements ProductRepository
     {
         Criteria criteria = new Criteria("productId");
         criteria.in(idOfProducts);
+
+        Query query = new Query(criteria);
+
+        return this.mongoOperations.find(query,Product.class);
+    }
+
+    @Override
+    public List<Product> getAllProductByProductType(@NotNull ObjectId productId)
+    {
+        Criteria criteria = new Criteria("productType");
+        criteria.is(productId);
 
         Query query = new Query(criteria);
 

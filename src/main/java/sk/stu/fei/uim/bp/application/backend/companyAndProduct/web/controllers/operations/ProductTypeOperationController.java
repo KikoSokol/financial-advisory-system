@@ -6,6 +6,7 @@ import sk.stu.fei.uim.bp.application.backend.companyAndProduct.service.ProductTy
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.dto.ProductTypeDto;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.editors.ProductTypeEditor;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.productTypeEvents.ProductTypeCancelEvent;
+import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.productTypeEvents.ProductTypeDeleteEvent;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.productTypeEvents.ProductTypeSaveEvent;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.productTypeEvents.ProductTypeUpdateEvent;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.views.ProductTypeView;
@@ -40,6 +41,7 @@ public class ProductTypeOperationController
         productTypeEditor.addListener(ProductTypeSaveEvent.class,this::doSaveNewProductType);
         productTypeEditor.addListener(ProductTypeUpdateEvent.class,this::doUpdateProductType);
         productTypeEditor.addListener(ProductTypeCancelEvent.class,this::cancelEdit);
+        productTypeEditor.addListener(ProductTypeDeleteEvent.class,this::doDeleteProductType);
     }
 
     private void openEditor(ProductTypeDto productTypeDto, boolean isNew)
@@ -100,6 +102,18 @@ public class ProductTypeOperationController
         {
             this.productTypeView.showErrorMessage("Nepodarilo sa zneniť údaje. Skontrolujte prosím správnosť a úplnosť zadaných údajov.");
         }
+    }
+
+    private void doDeleteProductType(ProductTypeDeleteEvent event)
+    {
+        boolean correctDeleted = this.productTypeService.deleteProductType(this.productType);
+
+        if(correctDeleted)
+        {
+            successOperation("Údaje boli vymazané");
+        }
+        else
+            this.productTypeView.showErrorMessage("Údaje nebolo možné vymazať");
     }
 
     private void cancelEdit(ProductTypeCancelEvent cancelEvent)

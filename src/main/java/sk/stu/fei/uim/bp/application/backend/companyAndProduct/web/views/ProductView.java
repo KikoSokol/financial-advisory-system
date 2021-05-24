@@ -245,6 +245,10 @@ public class ProductView extends PolymerTemplate<ProductView.ProductViewModel> {
             Product product = selectedProduct.get();
             this.productOperationController.updateProduct(product);
         }
+        else
+        {
+            showErrorMessage("Produkt sa nepodarilo načítať");
+        }
     }
 
     public void showSuccessOperationNotification(String successMessage)

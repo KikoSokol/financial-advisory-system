@@ -6,8 +6,10 @@ import sk.stu.fei.uim.bp.application.backend.companyAndProduct.service.CompanySe
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.dto.CompanyDto;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.editors.CompanyEditor;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.companyEvents.CompanyCancelEvent;
+import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.companyEvents.CompanyDeleteEvent;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.companyEvents.CompanySaveEvent;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.companyEvents.CompanyUpdateEvent;
+import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.companyViewEvents.CompanyViewEvent;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.views.CompanyView;
 
 
@@ -40,6 +42,7 @@ public class CompanyOperationController {
         companyEditor.addListener(CompanySaveEvent.class,this::doSaveNewCompany);
         companyEditor.addListener(CompanyUpdateEvent.class,this::doUpdateCompany);
         companyEditor.addListener(CompanyCancelEvent.class,this::cancelEdit);
+        companyEditor.addListener(CompanyDeleteEvent.class,this::doDeleteCompany);
     }
 
     private void openEditor(CompanyDto companyDto, boolean isNew)
@@ -102,6 +105,20 @@ public class CompanyOperationController {
         {
             this.companyView.showErrorMessage("Nepodarilo sa zneniť údaje spoločnosti. Skontrolujte prosím správnosť a úplnosť zadaných údajov.");
         }
+    }
+
+    private void doDeleteCompany(CompanyDeleteEvent event)
+    {
+        boolean correctDeleted = this.companyService.deleteCompany(this.company);
+
+
+        if(correctDeleted)
+        {
+            successOperation("Údaje boli vymazané");
+            this.companyView.fireEventOnThisView();
+        }
+        else
+            this.companyView.showErrorMessage("Údaje nebolo možné vymazať");
     }
 
     private void cancelEdit(CompanyCancelEvent event)

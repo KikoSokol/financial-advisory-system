@@ -10,7 +10,7 @@ public interface ProductRepository
 {
     Product addNewProduct(@NotNull Product newProduct);
 
-    void deleteProduct(@NotNull Product productToDelete);
+    boolean deleteProduct(@NotNull Product productToDelete);
 
     Product updateProduct(@NotNull Product productToUpdate);
 
@@ -25,4 +25,6 @@ public interface ProductRepository
     List<Product> getAllProductByTypes(@NotNull List<ObjectId> idOfProductTypes);
 
     List<Product> getAllProductById(@NotNull List<ObjectId> idOfProducts);
+
+    List<Product> getAllProductByProductType(@NotNull ObjectId productId);
 }

@@ -12,6 +12,7 @@ import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.dto.ProductDt
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.dto.ProductTypeDto;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.editors.ProductEditor;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.productEvents.ProductCancelEvent;
+import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.productEvents.ProductDeleteEvent;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.productEvents.ProductSaveEvent;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.productEvents.ProductUpdateEvent;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.productTypeEvents.ProductTypeCancelEvent;
@@ -53,6 +54,7 @@ public class ProductOperationController
         productEditor.addListener(ProductSaveEvent.class,this::doSaveNewProduct);
         productEditor.addListener(ProductUpdateEvent.class,this::doUpdateProduct);
         productEditor.addListener(ProductCancelEvent.class,this::cancelEdit);
+        productEditor.addListener(ProductDeleteEvent.class,this::doDeleteProduct);
     }
 
     private void openEditor(ProductDto productDto, boolean isNew)
@@ -118,6 +120,18 @@ public class ProductOperationController
         {
             this.productView.showErrorMessage("Nepodarilo sa zmeniť údaje. Skontrolujte prosím správnosť a úplnosť zadaných údajov.");
         }
+    }
+
+    private void doDeleteProduct(ProductDeleteEvent event)
+    {
+        boolean correctDeleted = this.productService.deleteProduct(this.product);
+
+        if(correctDeleted)
+        {
+            successOperation("Údaje boli vymazané");
+        }
+        else
+            this.productView.showErrorMessage("Údaje nebolo možné vymazať");
     }
 
 

@@ -14,6 +14,9 @@ import sk.stu.fei.uim.bp.application.backend.companyAndProduct.repository.implem
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.repository.implementation.ProductRepositoryImpl;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.repository.implementation.ProductTypeRepositoryImpl;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.service.ProductService;
+import sk.stu.fei.uim.bp.application.backend.contracts.domain.ContractDocument;
+import sk.stu.fei.uim.bp.application.backend.contracts.repository.ContractDocumentRepository;
+import sk.stu.fei.uim.bp.application.backend.contracts.repository.implementation.ContractDocumentRepositoryImpl;
 
 import javax.validation.constraints.NotNull;
 import java.util.LinkedList;
@@ -26,13 +29,18 @@ public class ProductServiceImpl implements ProductService
     private final ProductRepository productRepository;
     private final ProductTypeRepository productTypeRepository;
     private final CompanyRepository companyRepository;
+    private final ContractDocumentRepository contractDocumentRepository;
 
     @Autowired
-    public ProductServiceImpl(ProductRepositoryImpl productRepository, ProductTypeRepositoryImpl productTypeRepository, CompanyRepositoryIml companyRepository)
+    public ProductServiceImpl(ProductRepositoryImpl productRepository,
+                              ProductTypeRepositoryImpl productTypeRepository,
+                              CompanyRepositoryIml companyRepository,
+                              ContractDocumentRepositoryImpl contractDocumentRepository)
     {
         this.productRepository = productRepository;
         this.productTypeRepository = productTypeRepository;
         this.companyRepository = companyRepository;
+        this.contractDocumentRepository = contractDocumentRepository;
     }
 
     @Override
@@ -51,6 +59,27 @@ public class ProductServiceImpl implements ProductService
     public Product updateProduct(@NotNull Product productToUpdate)
     {
         return this.productRepository.updateProduct(productToUpdate);
+    }
+
+    @Override
+    public boolean deleteProduct(@NotNull Product productToDelete)
+    {
+        if(isAbleToDelete(productToDelete))
+            return this.productRepository.deleteProduct(productToDelete);
+
+        return false;
+    }
+
+    private boolean isAbleToDelete(Product productToDelete)
+    {
+        return !existsContractWithThisProduct(productToDelete);
+    }
+
+    private boolean existsContractWithThisProduct(Product product)
+    {
+        List<ContractDocument> contract = this.contractDocumentRepository.getAllCurrentVersionOfContractDocumentByProductId(product.getProductId());
+
+        return !contract.isEmpty();
     }
 
     @Override

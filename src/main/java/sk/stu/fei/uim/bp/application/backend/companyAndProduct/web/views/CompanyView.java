@@ -1,6 +1,8 @@
 package sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.views;
 
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
@@ -8,6 +10,7 @@ import com.vaadin.flow.component.grid.HeaderRow;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
+import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
@@ -20,6 +23,7 @@ import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.controllers.C
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.controllers.operations.CompanyOperationController;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.dto.CompanyDto;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.editors.CompanyEditor;
+import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.companyViewEvents.CompanyViewEvent;
 import sk.stu.fei.uim.bp.application.ui.NotificationProvider;
 
 import java.util.Optional;
@@ -218,6 +222,17 @@ public class CompanyView extends PolymerTemplate<CompanyView.CompanyViewModel> {
     public CompanyEditor getCompanyEditor() {
         return this.companyEditor;
     }
+
+    public void fireEventOnThisView()
+    {
+        fireEvent(new CompanyViewEvent(this));
+    }
+
+    public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType, ComponentEventListener<T> listener)
+    {
+        return getEventBus().addListener(eventType,listener);
+    }
+
 
     public interface CompanyViewModel extends TemplateModel {
         // Add setters and getters for template properties here.

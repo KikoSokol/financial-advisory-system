@@ -1,5 +1,6 @@
 package sk.stu.fei.uim.bp.application.backend.companyAndProduct.repository.implementation;
 
+import com.mongodb.client.result.DeleteResult;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
@@ -34,9 +35,11 @@ public class CompanyRepositoryIml implements CompanyRepository
     }
 
     @Override
-    public void deleteCompany(@NotNull Company companyToDelete)
+    public boolean deleteCompany(@NotNull Company companyToDelete)
     {
-        this.mongoOperations.remove(companyToDelete);
+        DeleteResult deleteResult = this.mongoOperations.remove(companyToDelete);
+
+        return deleteResult.wasAcknowledged();
     }
 
     @Override

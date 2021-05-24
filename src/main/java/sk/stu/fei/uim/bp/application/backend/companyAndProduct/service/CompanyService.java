@@ -13,6 +13,8 @@ public interface CompanyService
 
     Company updateCompany(@NotNull Company companyToUpdate);
 
+    boolean deleteCompany(@NotNull Company companyToDelete);
+
     Optional<Company> getCompanyById(@NotNull ObjectId companyId);
 
     List<Company> getAllCompanyByCurrentAgent(@NotNull ObjectId agentId);

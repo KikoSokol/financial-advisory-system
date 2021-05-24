@@ -10,7 +10,7 @@ public interface CompanyRepository
 {
     Company addCompany(@NotNull Company newCompany);
 
-    void deleteCompany(@NotNull Company companyToDelete);
+    boolean deleteCompany(@NotNull Company companyToDelete);
 
     Company updateCompany(@NotNull Company companyToUpdate);
 

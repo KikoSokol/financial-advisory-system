@@ -13,9 +13,9 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
-
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.dto.CompanyDto;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.companyEvents.CompanyCancelEvent;
+import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.companyEvents.CompanyDeleteEvent;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.companyEvents.CompanySaveEvent;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.companyEvents.CompanyUpdateEvent;
 import sk.stu.fei.uim.bp.application.ui.NotificationProvider;
@@ -47,11 +47,13 @@ public class CompanyEditor extends PolymerTemplate<CompanyEditor.CompanyEditorMo
     private Button save;
 
     private final ConfirmDialog confirmDialog;
+    private final ConfirmDialog deleteConfirmDialog;
 
     private boolean isNew;
     private CompanyDto companyDto;
     private final BeanValidationBinder<CompanyDto> binder = new BeanValidationBinder<>(CompanyDto.class);
-
+    @Id("delete")
+    private Button delete;
 
 
     public CompanyEditor() {
@@ -60,9 +62,12 @@ public class CompanyEditor extends PolymerTemplate<CompanyEditor.CompanyEditorMo
         this.confirmDialog = new ConfirmDialog("Naozaj si prajete zavrieť editor?","Všetky zmeny nebudú uložené !!!","Naozaj chcem odísť",confirmEvent -> exit(),"Chcem ostať",cancelEvent -> closeConfirmDialog());
         this.confirmDialog.setConfirmButtonTheme("error primary");
 
+        this.deleteConfirmDialog = new ConfirmDialog("Naozaj si prajete vymazať túto spoločnosť?","Údaje spoločnosti aj všetky produkty tejto spoločnosti budú natrvalo odstránené !!!","Vymazať",confirmEvent -> delete(),"Zrušiť",cancelEvent -> closeDeleteConfirmDialog());
+        this.deleteConfirmDialog.setConfirmButtonTheme("error primary");
+
         this.save.addClickListener(click -> validateAndSave());
         this.cancel.addClickListener(buttonClickEvent -> this.confirmDialog.open());
-
+        this.delete.addClickListener(event -> this.deleteConfirmDialog.open());
 
         binder.forField(name)
                 .withValidator(n -> n.length() > 0, CompanyValidatorsMessages.COMPANY_NAME_NOT_BLANK_MESSAGE)
@@ -104,6 +109,8 @@ public class CompanyEditor extends PolymerTemplate<CompanyEditor.CompanyEditorMo
         this.isNew = isNew;
         this.companyDto = companyDto;
         this.binder.readBean(this.companyDto);
+
+        this.delete.setEnabled(!this.isNew);
     }
 
     private void validateAndSave()
@@ -141,13 +148,27 @@ public class CompanyEditor extends PolymerTemplate<CompanyEditor.CompanyEditorMo
 
     private void exit()
     {
-        fireEvent(new CompanyCancelEvent(this,this.companyDto));
+        fireEvent(new CompanyCancelEvent(this,null));
+    }
+
+    private void delete()
+    {
+        if(!this.isNew)
+            fireEvent(new CompanyDeleteEvent(this,this.companyDto));
     }
 
     private void closeConfirmDialog()
     {
         if(this.confirmDialog.isOpened())
             this.confirmDialog.close();
+    }
+
+    private void closeDeleteConfirmDialog()
+    {
+        if(this.deleteConfirmDialog.isOpened())
+        {
+            this.confirmDialog.close();
+        }
     }
 
     public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType, ComponentEventListener<T> listener)

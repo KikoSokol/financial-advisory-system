@@ -15,9 +15,11 @@ import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 
+import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEvents.PhysicalPersonDeleteEvent;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.domain.ProductTypeCategory;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.dto.ProductTypeDto;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.productTypeEvents.ProductTypeCancelEvent;
+import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.productTypeEvents.ProductTypeDeleteEvent;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.productTypeEvents.ProductTypeSaveEvent;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.productTypeEvents.ProductTypeUpdateEvent;
 import sk.stu.fei.uim.bp.application.ui.NotificationProvider;
@@ -38,11 +40,13 @@ public class ProductTypeEditor extends PolymerTemplate<ProductTypeEditor.Product
     private Button save;
 
     private final ConfirmDialog confirmDialog;
+    private final ConfirmDialog deleteConfirmDialog;
 
     private boolean isNew;
     private ProductTypeDto productTypeDto;
     private final BeanValidationBinder<ProductTypeDto> binder = new BeanValidationBinder<>(ProductTypeDto.class);
-
+    @Id("delete")
+    private Button delete;
 
 
     public ProductTypeEditor()
@@ -52,9 +56,12 @@ public class ProductTypeEditor extends PolymerTemplate<ProductTypeEditor.Product
         this.confirmDialog = new ConfirmDialog("Naozaj si prajete zavrieť editor?","Všetky zmeny nebudú uložené !!!","Naozaj chcem odísť",confirmEvent -> exit(),"Chcem ostať",cancelEvent -> closeConfirmDialog());
         this.confirmDialog.setConfirmButtonTheme("error primary");
 
-        save.addClickListener(click -> validateAndSave());
-        cancel.addClickListener(click -> this.confirmDialog.open());
+        this.deleteConfirmDialog = new ConfirmDialog("Naozaj si prajete tento typ produktu?","Údaje typu produktu budú natrvalo odstránené !!!","Vymazať",confirmEvent -> delete(),"Zrušiť",cancelEvent -> closeDeleteConfirmDialog());
+        this.deleteConfirmDialog.setConfirmButtonTheme("error primary");
 
+        this.save.addClickListener(click -> validateAndSave());
+        this.cancel.addClickListener(click -> this.confirmDialog.open());
+        this.delete.addClickListener(event -> this.deleteConfirmDialog.open());
 
         initCategory();
 
@@ -83,6 +90,8 @@ public class ProductTypeEditor extends PolymerTemplate<ProductTypeEditor.Product
         this.isNew = isNew;
         this.productTypeDto = productTypeDto;
         this.binder.readBean(productTypeDto);
+
+        this.delete.setEnabled(!this.isNew);
     }
 
     private void validateAndSave()
@@ -124,6 +133,12 @@ public class ProductTypeEditor extends PolymerTemplate<ProductTypeEditor.Product
         fireEvent(new ProductTypeCancelEvent(this,null));
     }
 
+    private void delete()
+    {
+        if(!this.isNew)
+            fireEvent(new ProductTypeDeleteEvent(this,this.productTypeDto));
+    }
+
     private void closeConfirmDialog()
     {
         if(this.confirmDialog.isOpened())
@@ -132,6 +147,13 @@ public class ProductTypeEditor extends PolymerTemplate<ProductTypeEditor.Product
         }
     }
 
+    private void closeDeleteConfirmDialog()
+    {
+        if(this.deleteConfirmDialog.isOpened())
+        {
+            this.confirmDialog.close();
+        }
+    }
 
     public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType, ComponentEventListener<T> listener)
     {

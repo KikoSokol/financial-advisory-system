@@ -16,6 +16,7 @@ import sk.stu.fei.uim.bp.application.backend.companyAndProduct.service.ProductTy
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.service.implementation.CompanyServiceIml;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.service.implementation.ProductServiceImpl;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.service.implementation.ProductTypeServiceImpl;
+import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.events.companyViewEvents.CompanyViewEvent;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.views.CompanyView;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.views.ProductTypeView;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.views.ProductView;
@@ -56,6 +57,13 @@ public class CompanyAndProductMainView extends PolymerTemplate<CompanyAndProduct
 
         this.productService = productService;
         this.productView.initService(productService,productTypeService,companyService);
+
+        this.companyView.addListener(CompanyViewEvent.class,this::updateProductsView);
+    }
+
+    private void updateProductsView(CompanyViewEvent event)
+    {
+       this.productView.refreshTable();
     }
 
 

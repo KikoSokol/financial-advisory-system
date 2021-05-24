@@ -1,5 +1,6 @@
 package sk.stu.fei.uim.bp.application.backend.companyAndProduct.repository.implementation;
 
+import com.mongodb.client.result.DeleteResult;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -32,9 +33,11 @@ public class ProductTypeRepositoryImpl implements ProductTypeRepository
     }
 
     @Override
-    public void deleteProductType(@NotNull ProductType productTypeToDelete)
+    public boolean deleteProductType(@NotNull ProductType productTypeToDelete)
     {
-        this.mongoOperations.remove(productTypeToDelete);
+        DeleteResult deleteResult = this.mongoOperations.remove(productTypeToDelete);
+
+        return deleteResult.wasAcknowledged();
     }
 
     @Override

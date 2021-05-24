@@ -13,6 +13,8 @@ public interface ProductService
 
     Product updateProduct(@NotNull Product productToUpdate);
 
+    boolean deleteProduct(@NotNull Product productToDelete);
+
     Optional<Product> getProductById(@NotNull ObjectId productId);
 
     List<Product> getAllProductOfCurrentAgent(@NotNull ObjectId currentAgent);

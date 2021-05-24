@@ -12,7 +12,7 @@ public interface ProductTypeRepository
 {
     ProductType addNewProductType(@NotNull ProductType newProductType);
 
-    void deleteProductType(@NotNull ProductType productTypeToDelete);
+    boolean deleteProductType(@NotNull ProductType productTypeToDelete);
 
     ProductType updateProductType(@NotNull ProductType productTypeToUpdate);
 
