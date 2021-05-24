@@ -256,6 +256,56 @@ public class ContractServiceImpl implements ContractService
     }
 
 
+    @Override
+    public boolean deleteContract(@NotNull Contract contractToDelete)
+    {
+        boolean correctDelete = this.contractRepository.deleteContract(contractToDelete);
+
+        if(!correctDelete)
+            return false;
+
+        removeContractFromOwnerList(contractToDelete);
+        deleteCurrentVersionContractDocument(contractToDelete.getCurrentVersion());
+        deleteAllOldVersionContractDocument(contractToDelete.getOldVersions());
+        deleteAllFileAttachmentsOfContract(contractToDelete);
+
+
+        return true;
+
+    }
+
+
+    private void removeContractFromOwnerList(Contract contractToRemove)
+    {
+        ContractDocument contractDocument = this.contractDocumentRepository.getCurrentVersionOfContractDocumentById(contractToRemove.getCurrentVersion()).get();
+
+        Client client = this.clientRepository.getClientById(contractDocument.getOwner()).get();
+
+        this.clientRepository.removeContractFromClient(client, contractToRemove.getContractId());
+    }
+
+    private boolean deleteCurrentVersionContractDocument(ObjectId contractDocumentId)
+    {
+        Optional<ContractDocument> contractDocumentOptional = this.contractDocumentRepository.getCurrentVersionOfContractDocumentById(contractDocumentId);
+        ContractDocument contractDocument = contractDocumentOptional.get();
+
+        return this.contractDocumentRepository.deleteCurrentVersionOfContractDocument(contractDocument);
+    }
+
+    private boolean deleteAllOldVersionContractDocument(List<ObjectId> contractDocumentIds)
+    {
+        return this.contractDocumentRepository.deleteAllOldVersionByListOfIdOfContractDocument(contractDocumentIds);
+    }
+
+    private boolean deleteAllFileAttachmentsOfContract(Contract contract)
+    {
+        List<ContractFileAttachment> fileAttachments = getFileAttachmentsOfContract(contract);
+
+        return this.fileAttachmentRepository.deleteAllFileAttachmentsByList(new LinkedList<>(fileAttachments));
+    }
+
+
+
 
 
 

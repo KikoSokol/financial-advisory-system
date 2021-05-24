@@ -9,6 +9,7 @@ import sk.stu.fei.uim.bp.application.backend.contracts.web.ContractMainView;
 import sk.stu.fei.uim.bp.application.backend.contracts.web.dto.LifeInsuranceDto;
 import sk.stu.fei.uim.bp.application.backend.contracts.web.editors.LifeInsuranceEditor;
 import sk.stu.fei.uim.bp.application.backend.contracts.web.events.lifeInsuranceEvents.LifeInsuranceCancelEvent;
+import sk.stu.fei.uim.bp.application.backend.contracts.web.events.lifeInsuranceEvents.LifeInsuranceDeleteEvent;
 import sk.stu.fei.uim.bp.application.backend.contracts.web.events.lifeInsuranceEvents.LifeInsuranceSaveEvent;
 import sk.stu.fei.uim.bp.application.backend.contracts.web.events.lifeInsuranceEvents.LifeInsuranceUpdateEvent;
 import sk.stu.fei.uim.bp.application.backend.file.utils.FileAttachment;
@@ -42,6 +43,7 @@ public class LifeInsuranceController extends MainContractController
         lifeInsuranceEditor.addListener(LifeInsuranceSaveEvent.class,this::doSaveNewLifeInsurance);
         lifeInsuranceEditor.addListener(LifeInsuranceUpdateEvent.class,this::doUpdateLifeInsurance);
         lifeInsuranceEditor.addListener(LifeInsuranceCancelEvent.class,this::cancelEdit);
+        lifeInsuranceEditor.addListener(LifeInsuranceDeleteEvent.class,this::doDeleteLifeInsurance);
     }
 
     private void openEditor(LifeInsuranceDto lifeInsuranceDto, boolean isNew, List<FileAttachment> attachmentList)
@@ -129,6 +131,18 @@ public class LifeInsuranceController extends MainContractController
             super.getContractMainView().showErrorMessage("Nepodarilo sa zmeniť údaje. Skontrolujte prosím správnosť a úplnosť zadaných údajov.");
         }
 
+    }
+
+    private void doDeleteLifeInsurance(LifeInsuranceDeleteEvent event)
+    {
+        boolean correctDeleted = super.getContractService().deleteContract(this.contract);
+
+        if(correctDeleted)
+        {
+            successOperation("Údaje boli vymazané");
+        }
+        else
+            super.getContractMainView().showErrorMessage("Údaje nebolo možné vymazať");
     }
 
 

@@ -41,4 +41,6 @@ public interface ContractService
 
     Optional<InputStream> getFileAttachements(@NotNull ContractFileAttachment contractFileAttachment);
 
+    boolean deleteContract(@NotNull Contract contractToDelete);
+
 }

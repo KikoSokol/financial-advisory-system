@@ -3,11 +3,9 @@ package sk.stu.fei.uim.bp.application.backend.contracts.web.editors;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.BigDecimalField;
@@ -15,14 +13,12 @@ import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.ValidationException;
-import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.data.validator.BeanValidator;
 import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
-import org.apache.commons.lang3.StringUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -47,6 +43,7 @@ import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.dto.ProductDt
 import sk.stu.fei.uim.bp.application.backend.contracts.domain.PaymentFrequency;
 import sk.stu.fei.uim.bp.application.backend.contracts.web.dto.LifeInsuranceDto;
 import sk.stu.fei.uim.bp.application.backend.contracts.web.events.lifeInsuranceEvents.LifeInsuranceCancelEvent;
+import sk.stu.fei.uim.bp.application.backend.contracts.web.events.lifeInsuranceEvents.LifeInsuranceDeleteEvent;
 import sk.stu.fei.uim.bp.application.backend.contracts.web.events.lifeInsuranceEvents.LifeInsuranceSaveEvent;
 import sk.stu.fei.uim.bp.application.backend.contracts.web.events.lifeInsuranceEvents.LifeInsuranceUpdateEvent;
 import sk.stu.fei.uim.bp.application.backend.file.components.FileAttachmentsAddView;
@@ -126,6 +123,7 @@ public class LifeInsuranceEditor extends PolymerTemplate<LifeInsuranceEditor.Lif
 
 
     private final ConfirmDialog confirmDialog;
+    private final ConfirmDialog deleteConfirmDialog;
     private Dialog searchWindow;
 
     private boolean isNew;
@@ -165,6 +163,8 @@ public class LifeInsuranceEditor extends PolymerTemplate<LifeInsuranceEditor.Lif
         this.confirmDialog = new ConfirmDialog("Naozaj si prajete zavrieť editor?","Všetky zmeny nebudú uložené !!!","Naozaj chcem odísť",confirmEvent -> exit(),"Chcem ostať",cancelEvent -> closeConfirmDialog());
         this.confirmDialog.setConfirmButtonTheme("error primary");
 
+        this.deleteConfirmDialog = new ConfirmDialog("Naozaj si prajete vymazať toto poistenie?","Údaje tohto poistenia budú natrvalo odstránené !!!","Vymazať",confirmEvent -> delete(),"Zrušiť",cancelEvent -> closeDeleteConfirmDialog());
+        this.deleteConfirmDialog.setConfirmButtonTheme("error primary");
 
         this.addOwner.addClickListener(event -> showSearchWindow(this.searchOwnerView));
         this.addInsured.addClickListener(event -> showSearchWindow(this.searchInsuredView));
@@ -172,6 +172,7 @@ public class LifeInsuranceEditor extends PolymerTemplate<LifeInsuranceEditor.Lif
 
         this.save.addClickListener(event -> validateAndSave());
         this.cancel.addClickListener(event -> this.confirmDialog.open());
+        this.delete.addClickListener(event -> this.deleteConfirmDialog.open());
 
     }
 
@@ -270,7 +271,7 @@ public class LifeInsuranceEditor extends PolymerTemplate<LifeInsuranceEditor.Lif
         this.lifeInsuranceDto = lifeInsuranceDto;
         this.binder.readBean(lifeInsuranceDto);
 
-
+        this.delete.setEnabled(!this.isNew);
 
         if(isNew)
         {
@@ -443,9 +444,23 @@ public class LifeInsuranceEditor extends PolymerTemplate<LifeInsuranceEditor.Lif
         fireEvent(new LifeInsuranceCancelEvent(this,null,null));
     }
 
+    private void delete()
+    {
+        if(!this.isNew)
+            fireEvent(new LifeInsuranceDeleteEvent(this,this.lifeInsuranceDto,null));
+    }
+
     private void closeConfirmDialog()
     {
         if(this.confirmDialog.isOpened())
+        {
+            this.confirmDialog.close();
+        }
+    }
+
+    private void closeDeleteConfirmDialog()
+    {
+        if(this.deleteConfirmDialog.isOpened())
         {
             this.confirmDialog.close();
         }

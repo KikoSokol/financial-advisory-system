@@ -3,7 +3,6 @@ package sk.stu.fei.uim.bp.application.backend.contracts.web.editors;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dialog.Dialog;
@@ -42,12 +41,9 @@ import sk.stu.fei.uim.bp.application.backend.companyAndProduct.service.implement
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.ProductConverter;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.web.dto.ProductDto;
 import sk.stu.fei.uim.bp.application.backend.contracts.domain.PaymentFrequency;
-import sk.stu.fei.uim.bp.application.backend.contracts.web.dto.LifeInsuranceDto;
 import sk.stu.fei.uim.bp.application.backend.contracts.web.dto.NonLifeInsuranceDto;
-import sk.stu.fei.uim.bp.application.backend.contracts.web.events.lifeInsuranceEvents.LifeInsuranceCancelEvent;
-import sk.stu.fei.uim.bp.application.backend.contracts.web.events.lifeInsuranceEvents.LifeInsuranceSaveEvent;
-import sk.stu.fei.uim.bp.application.backend.contracts.web.events.lifeInsuranceEvents.LifeInsuranceUpdateEvent;
 import sk.stu.fei.uim.bp.application.backend.contracts.web.events.nonLifeInsuracneEvents.NonLifeInsuranceCancelEvent;
+import sk.stu.fei.uim.bp.application.backend.contracts.web.events.nonLifeInsuracneEvents.NonLifeInsuranceDeleteEvent;
 import sk.stu.fei.uim.bp.application.backend.contracts.web.events.nonLifeInsuracneEvents.NonLifeInsuranceSaveEvent;
 import sk.stu.fei.uim.bp.application.backend.contracts.web.events.nonLifeInsuracneEvents.NonLifeInsuranceUpdateEvent;
 import sk.stu.fei.uim.bp.application.backend.file.components.FileAttachmentsAddView;
@@ -130,6 +126,7 @@ public class NonLifeInsuranceEditor extends PolymerTemplate<NonLifeInsuranceEdit
     private final ProductConverter productConverter;
 
     private final ConfirmDialog confirmDialog;
+    private final ConfirmDialog deleteConfirmDialog;
     private Dialog searchWindow;
 
     private boolean isNew;
@@ -166,6 +163,8 @@ public class NonLifeInsuranceEditor extends PolymerTemplate<NonLifeInsuranceEdit
         this.confirmDialog = new ConfirmDialog("Naozaj si prajete zavrieť editor?","Všetky zmeny nebudú uložené !!!","Naozaj chcem odísť",confirmEvent -> exit(),"Chcem ostať",cancelEvent -> closeConfirmDialog());
         this.confirmDialog.setConfirmButtonTheme("error primary");
 
+        this.deleteConfirmDialog = new ConfirmDialog("Naozaj si prajete vymazať toto poistenie?","Údaje tohto poistenia budú natrvalo odstránené !!!","Vymazať",confirmEvent -> delete(),"Zrušiť",cancelEvent -> closeDeleteConfirmDialog());
+        this.deleteConfirmDialog.setConfirmButtonTheme("error primary");
 
         this.addOwner.addClickListener(event -> showSearchWindow(this.searchOwnerView));
         this.addInsured.addClickListener(event -> showSearchWindow(this.searchInsuredView));
@@ -173,6 +172,7 @@ public class NonLifeInsuranceEditor extends PolymerTemplate<NonLifeInsuranceEdit
 
         this.save.addClickListener(event -> validateAndSave());
         this.cancel.addClickListener(event -> this.confirmDialog.open());
+        this.delete.addClickListener(event -> this.deleteConfirmDialog.open());
     }
 
 
@@ -266,6 +266,8 @@ public class NonLifeInsuranceEditor extends PolymerTemplate<NonLifeInsuranceEdit
         this.isNew = isNew;
         this.nonLifeInsuranceDto = nonLifeInsuranceDto;
         this.binder.readBean(nonLifeInsuranceDto);
+
+        this.delete.setEnabled(!this.isNew);
 
         if(isNew)
         {
@@ -430,6 +432,12 @@ public class NonLifeInsuranceEditor extends PolymerTemplate<NonLifeInsuranceEdit
         fireEvent(new NonLifeInsuranceCancelEvent(this,null,null));
     }
 
+    private void delete()
+    {
+        if(!this.isNew)
+            fireEvent(new NonLifeInsuranceDeleteEvent(this,this.nonLifeInsuranceDto,null));
+    }
+
     private void closeConfirmDialog()
     {
         if(this.confirmDialog.isOpened())
@@ -438,6 +446,13 @@ public class NonLifeInsuranceEditor extends PolymerTemplate<NonLifeInsuranceEdit
         }
     }
 
+    private void closeDeleteConfirmDialog()
+    {
+        if(this.deleteConfirmDialog.isOpened())
+        {
+            this.confirmDialog.close();
+        }
+    }
 
     public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType, ComponentEventListener<T> listener)
     {

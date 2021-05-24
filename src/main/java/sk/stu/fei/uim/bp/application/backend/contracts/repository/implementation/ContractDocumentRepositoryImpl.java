@@ -1,5 +1,6 @@
 package sk.stu.fei.uim.bp.application.backend.contracts.repository.implementation;
 
+import com.mongodb.client.result.DeleteResult;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -44,6 +45,35 @@ public class ContractDocumentRepositoryImpl implements ContractDocumentRepositor
     public ContractDocument addOldVersionOfContractDocument(@NotNull ContractDocument oldVersionContractDocument)
     {
         return this.mongoOperations.insert(oldVersionContractDocument,OLD_VERSION);
+    }
+
+    @Override
+    public boolean deleteCurrentVersionOfContractDocument(@NotNull ContractDocument currentVersionOfContractDocumentToDelete)
+    {
+        DeleteResult deleteResult = this.mongoOperations.remove(currentVersionOfContractDocumentToDelete);
+
+        return deleteResult.wasAcknowledged();
+    }
+
+    @Override
+    public boolean deleteOldVersionOfContractDocument(@NotNull ContractDocument oldVersionOfContractDocumentToDelete)
+    {
+        DeleteResult deleteResult = this.mongoOperations.remove(oldVersionOfContractDocumentToDelete,OLD_VERSION);
+
+        return deleteResult.wasAcknowledged();
+    }
+
+    @Override
+    public boolean deleteAllOldVersionByListOfIdOfContractDocument(@NotNull List<ObjectId> oldVersionOfContractDocumentIds)
+    {
+        Criteria criteria = new Criteria("_id");
+        criteria.in(oldVersionOfContractDocumentIds);
+
+        Query query = new Query(criteria);
+
+        DeleteResult deleteResult = this.mongoOperations.remove(query,OLD_VERSION);
+
+        return deleteResult.wasAcknowledged();
     }
 
     @Override

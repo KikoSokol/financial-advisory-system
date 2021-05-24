@@ -1,5 +1,6 @@
 package sk.stu.fei.uim.bp.application.backend.contracts.repository.implementation;
 
+import com.mongodb.client.result.DeleteResult;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -32,9 +33,11 @@ public class ContractRepositoryImpl implements ContractRepository
     }
 
     @Override
-    public void deleteContract(@NotNull Contract contractToDelete)
+    public boolean deleteContract(@NotNull Contract contractToDelete)
     {
-        this.mongoOperations.remove(contractToDelete);
+        DeleteResult deleteResult = this.mongoOperations.remove(contractToDelete);
+
+        return deleteResult.wasAcknowledged();
     }
 
     @Override

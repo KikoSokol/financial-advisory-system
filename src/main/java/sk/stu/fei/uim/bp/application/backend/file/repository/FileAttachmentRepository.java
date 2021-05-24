@@ -13,4 +13,6 @@ public interface FileAttachmentRepository
     FileAttachment getFileAttachmentById(@NotNull ObjectId fileAttachmentId);
 
     List<FileAttachment> getFileAttachmentByListOfId(@NotNull List<ObjectId> fileAttachmentIds);
+
+    boolean deleteAllFileAttachmentsByList(List<FileAttachment> fileAttachmentsToDelete);
 }

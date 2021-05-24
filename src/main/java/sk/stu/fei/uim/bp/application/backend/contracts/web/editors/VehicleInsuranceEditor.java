@@ -32,6 +32,7 @@ import sk.stu.fei.uim.bp.application.backend.client.web.ClientConverter;
 import sk.stu.fei.uim.bp.application.backend.client.web.components.PhysicalPersonCard;
 import sk.stu.fei.uim.bp.application.backend.client.web.components.SearchClientView;
 import sk.stu.fei.uim.bp.application.backend.client.web.dto.ClientDto;
+import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEvents.PhysicalPersonDeleteEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.searchClientEvent.SearchClientCancelEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.searchClientEvent.SearchGetChoosedClientEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.table.TableClientItem;
@@ -50,6 +51,7 @@ import sk.stu.fei.uim.bp.application.backend.contracts.web.events.lifeInsuranceE
 import sk.stu.fei.uim.bp.application.backend.contracts.web.events.lifeInsuranceEvents.LifeInsuranceSaveEvent;
 import sk.stu.fei.uim.bp.application.backend.contracts.web.events.lifeInsuranceEvents.LifeInsuranceUpdateEvent;
 import sk.stu.fei.uim.bp.application.backend.contracts.web.events.vehicleInsuranceEvents.VehicleInsuranceCancelEvent;
+import sk.stu.fei.uim.bp.application.backend.contracts.web.events.vehicleInsuranceEvents.VehicleInsuranceDeleteEvent;
 import sk.stu.fei.uim.bp.application.backend.contracts.web.events.vehicleInsuranceEvents.VehicleInsuranceSaveEvent;
 import sk.stu.fei.uim.bp.application.backend.contracts.web.events.vehicleInsuranceEvents.VehicleInsuranceUpdateEvent;
 import sk.stu.fei.uim.bp.application.backend.file.components.FileAttachmentsAddView;
@@ -135,6 +137,8 @@ public class VehicleInsuranceEditor extends PolymerTemplate<VehicleInsuranceEdit
     private final ProductConverter productConverter;
 
     private final ConfirmDialog confirmDialog;
+    private final ConfirmDialog deleteConfirmDialog;
+
     private Dialog searchWindow;
 
     private boolean isNew;
@@ -171,6 +175,8 @@ public class VehicleInsuranceEditor extends PolymerTemplate<VehicleInsuranceEdit
         this.confirmDialog = new ConfirmDialog("Naozaj si prajete zavrieť editor?","Všetky zmeny nebudú uložené !!!","Naozaj chcem odísť",confirmEvent -> exit(),"Chcem ostať",cancelEvent -> closeConfirmDialog());
         this.confirmDialog.setConfirmButtonTheme("error primary");
 
+        this.deleteConfirmDialog = new ConfirmDialog("Naozaj si prajete vymazať toto poistenie?","Údaje tohto poistenia budú natrvalo odstránené !!!","Vymazať",confirmEvent -> delete(),"Zrušiť",cancelEvent -> closeDeleteConfirmDialog());
+        this.deleteConfirmDialog.setConfirmButtonTheme("error primary");
 
         this.addOwner.addClickListener(event -> showSearchWindow(this.searchOwnerView));
         this.addInsured.addClickListener(event -> showSearchWindow(this.searchInsuredView));
@@ -178,6 +184,7 @@ public class VehicleInsuranceEditor extends PolymerTemplate<VehicleInsuranceEdit
 
         this.save.addClickListener(event -> validateAndSave());
         this.cancel.addClickListener(event -> this.confirmDialog.open());
+        this.delete.addClickListener(event -> this.deleteConfirmDialog.open());
 
     }
 
@@ -275,7 +282,7 @@ public class VehicleInsuranceEditor extends PolymerTemplate<VehicleInsuranceEdit
         this.vehicleInsuranceDto = vehicleInsuranceDto;
         this.binder.readBean(vehicleInsuranceDto);
 
-
+        this.delete.setEnabled(!this.isNew);
 
         if(isNew)
         {
@@ -440,9 +447,23 @@ public class VehicleInsuranceEditor extends PolymerTemplate<VehicleInsuranceEdit
         fireEvent(new VehicleInsuranceCancelEvent(this,null,null));
     }
 
+    private void delete()
+    {
+        if(!this.isNew)
+            fireEvent(new VehicleInsuranceDeleteEvent(this,this.vehicleInsuranceDto,null));
+    }
+
     private void closeConfirmDialog()
     {
         if(this.confirmDialog.isOpened())
+        {
+            this.confirmDialog.close();
+        }
+    }
+
+    private void closeDeleteConfirmDialog()
+    {
+        if(this.deleteConfirmDialog.isOpened())
         {
             this.confirmDialog.close();
         }

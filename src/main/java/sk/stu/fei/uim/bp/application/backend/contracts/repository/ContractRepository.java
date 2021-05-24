@@ -11,7 +11,7 @@ public interface ContractRepository
 
     Contract addNewContract(@NotNull Contract newContract);
 
-    void deleteContract(@NotNull Contract contractToDelete);
+    boolean deleteContract(@NotNull Contract contractToDelete);
 
     Contract updateContract(@NotNull Contract contractToUpdate);
 

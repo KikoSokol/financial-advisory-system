@@ -9,6 +9,7 @@ import sk.stu.fei.uim.bp.application.backend.contracts.web.ContractMainView;
 import sk.stu.fei.uim.bp.application.backend.contracts.web.dto.NonLifeInsuranceDto;
 import sk.stu.fei.uim.bp.application.backend.contracts.web.editors.NonLifeInsuranceEditor;
 import sk.stu.fei.uim.bp.application.backend.contracts.web.events.nonLifeInsuracneEvents.NonLifeInsuranceCancelEvent;
+import sk.stu.fei.uim.bp.application.backend.contracts.web.events.nonLifeInsuracneEvents.NonLifeInsuranceDeleteEvent;
 import sk.stu.fei.uim.bp.application.backend.contracts.web.events.nonLifeInsuracneEvents.NonLifeInsuranceSaveEvent;
 import sk.stu.fei.uim.bp.application.backend.contracts.web.events.nonLifeInsuracneEvents.NonLifeInsuranceUpdateEvent;
 import sk.stu.fei.uim.bp.application.backend.file.utils.FileAttachment;
@@ -41,6 +42,7 @@ public class NonLifeInsuranceController extends MainContractController
         nonLifeInsuranceEditor.addListener(NonLifeInsuranceSaveEvent.class,this::doSaveNewNonLifeInsurance);
         nonLifeInsuranceEditor.addListener(NonLifeInsuranceUpdateEvent.class,this::doUpdateNonLifeInsurance);
         nonLifeInsuranceEditor.addListener(NonLifeInsuranceCancelEvent.class,this::cancelEdit);
+        nonLifeInsuranceEditor.addListener(NonLifeInsuranceDeleteEvent.class,this::doDeleteNonLifeInsurance);
     }
 
     private void openEditor(NonLifeInsuranceDto nonLifeInsuranceDto, boolean isNew, List<FileAttachment> attachmentList)
@@ -128,6 +130,18 @@ public class NonLifeInsuranceController extends MainContractController
             super.getContractMainView().showErrorMessage("Nepodarilo sa zmeniť údaje. Skontrolujte prosím správnosť a úplnosť zadaných údajov.");
         }
 
+    }
+
+    private void doDeleteNonLifeInsurance(NonLifeInsuranceDeleteEvent event)
+    {
+        boolean correctDeleted = super.getContractService().deleteContract(this.contract);
+
+        if(correctDeleted)
+        {
+            successOperation("Údaje boli vymazané");
+        }
+        else
+            super.getContractMainView().showErrorMessage("Údaje nebolo možné vymazať");
     }
 
     private void cancelEdit(NonLifeInsuranceCancelEvent event)
