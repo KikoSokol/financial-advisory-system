@@ -133,6 +133,8 @@ public class LifeInsuranceEditor extends PolymerTemplate<LifeInsuranceEditor.Lif
     private final BeanValidationBinder<LifeInsuranceDto> binder = new BeanValidationBinder<>(LifeInsuranceDto.class);
     @Id("product")
     private Select<ProductDto> product;
+    @Id("delete")
+    private Button delete;
 
 
     @Autowired

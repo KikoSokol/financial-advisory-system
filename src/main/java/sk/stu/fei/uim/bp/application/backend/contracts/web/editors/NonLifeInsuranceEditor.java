@@ -135,6 +135,8 @@ public class NonLifeInsuranceEditor extends PolymerTemplate<NonLifeInsuranceEdit
     private boolean isNew;
     private NonLifeInsuranceDto nonLifeInsuranceDto;
     private final BeanValidationBinder<NonLifeInsuranceDto> binder = new BeanValidationBinder<>(NonLifeInsuranceDto.class);
+    @Id("delete")
+    private Button delete;
 
     @Autowired
     public NonLifeInsuranceEditor(SearchClientView searchOwnerView,

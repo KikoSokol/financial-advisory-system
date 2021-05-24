@@ -6,6 +6,10 @@ import com.mongodb.lang.Nullable;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sk.stu.fei.uim.bp.application.backend.client.domain.Client;
+import sk.stu.fei.uim.bp.application.backend.client.repository.ClientRepository;
+import sk.stu.fei.uim.bp.application.backend.client.repository.implementation.ClientRepositoryImpl;
+import sk.stu.fei.uim.bp.application.backend.client.service.ClientService;
 import sk.stu.fei.uim.bp.application.backend.contracts.domain.Contract;
 import sk.stu.fei.uim.bp.application.backend.contracts.domain.ContractDocument;
 import sk.stu.fei.uim.bp.application.backend.contracts.repository.ContractDocumentRepository;
@@ -34,17 +38,20 @@ public class ContractServiceImpl implements ContractService
     private final ContractDocumentRepository contractDocumentRepository;
     private final FileRepository fileRepository;
     private final FileAttachmentRepository fileAttachmentRepository;
+    private final ClientRepository clientRepository;
 
     @Autowired
     public ContractServiceImpl(ContractRepositoryImpl contractRepository,
                                ContractDocumentRepositoryImpl contractDocumentRepository,
                                FileRepositoryImpl fileRepository,
-                               FileAttachmentRepositoryImpl fileAttachmentRepository)
+                               FileAttachmentRepositoryImpl fileAttachmentRepository,
+                               ClientRepositoryImpl clientRepository)
     {
         this.contractRepository = contractRepository;
         this.contractDocumentRepository = contractDocumentRepository;
         this.fileRepository = fileRepository;
         this.fileAttachmentRepository = fileAttachmentRepository;
+        this.clientRepository = clientRepository;
     }
 
     @Override
@@ -80,7 +87,20 @@ public class ContractServiceImpl implements ContractService
             List<ObjectId> attachments = uploadNewContractFileAttachments(documentAttachments,versionOfDocument);
             contract.setFileAttachments(attachments);
         }
-        return this.contractRepository.addNewContract(contract);
+
+        Contract uploadedContract =  this.contractRepository.addNewContract(contract);
+
+        if(uploadedContract != null)
+            addContractToClient(contractDocument.getOwner(),uploadedContract);
+
+        return uploadedContract;
+
+    }
+
+    private void addContractToClient(ObjectId clientId,Contract contract)
+    {
+        Client client = this.clientRepository.getClientById(clientId).get();
+        this.clientRepository.addContractForClient(client,contract.getContractId());
     }
 
 

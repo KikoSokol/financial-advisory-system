@@ -140,7 +140,8 @@ public class VehicleInsuranceEditor extends PolymerTemplate<VehicleInsuranceEdit
     private boolean isNew;
     private VehicleInsuranceDto vehicleInsuranceDto;
     private final BeanValidationBinder<VehicleInsuranceDto> binder = new BeanValidationBinder<>(VehicleInsuranceDto.class);
-
+    @Id("delete")
+    private Button delete;
 
 
     @Autowired

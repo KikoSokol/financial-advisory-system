@@ -58,11 +58,14 @@ class NonLifeInsuranceEditor extends PolymerElement {
  </vaadin-form-layout>
 </vaadin-form-layout>
 <vaadin-horizontal-layout style="justify-content: flex-end;">
+ <vaadin-button theme="primary error" id="delete" style="margin-right: var(--lumo-space-m);">
+  VYMAZAŤ
+ </vaadin-button>
  <vaadin-button theme="primary" id="cancel">
-  ZRUŠIŤ
+   ZRUŠIŤ 
  </vaadin-button>
  <vaadin-button theme="primary success" id="save" style="margin-right: var(--lumo-space-m); margin-left: var(--lumo-space-m);">
-  <iron-icon icon="lumo:checkmark"></iron-icon>ULOŽIŤ
+  <iron-icon icon="lumo:checkmark"></iron-icon>ULOŽIŤ 
  </vaadin-button>
 </vaadin-horizontal-layout>
 `;
