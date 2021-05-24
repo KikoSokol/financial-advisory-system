@@ -65,7 +65,25 @@ public class ProductServiceImpl implements ProductService
     public boolean deleteProduct(@NotNull Product productToDelete)
     {
         if(isAbleToDelete(productToDelete))
-            return this.productRepository.deleteProduct(productToDelete);
+            return deleteProductAndRemoveProductFromCompany(productToDelete);
+
+        return false;
+    }
+
+    private boolean deleteProductAndRemoveProductFromCompany(Product productToDelete)
+    {
+        ObjectId companyId = productToDelete.getCompany();
+
+        boolean correctDeleted = this.productRepository.deleteProduct(productToDelete);
+
+        if(correctDeleted)
+        {
+            Optional<Company> companyOptional = this.companyRepository.getCompanyById(companyId);
+            Company company = companyOptional.get();
+            company.getProducts().remove(productToDelete.getProductId());
+            this.companyRepository.updateCompany(company);
+            return true;
+        }
 
         return false;
     }
