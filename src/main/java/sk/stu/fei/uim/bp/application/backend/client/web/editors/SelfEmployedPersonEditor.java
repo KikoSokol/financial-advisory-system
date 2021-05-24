@@ -5,7 +5,6 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextArea;
@@ -20,25 +19,18 @@ import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import sk.stu.fei.uim.bp.application.backend.client.web.components.PersonalCardComponent;
 import sk.stu.fei.uim.bp.application.backend.client.web.dto.SelfEmployedPersonDto;
-import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanyCancelEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.selfEmployedPersonEvents.SelfEmployedPersonCancelEvent;
+import sk.stu.fei.uim.bp.application.backend.client.web.events.selfEmployedPersonEvents.SelfEmployedPersonDeleteEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.selfEmployedPersonEvents.SelfEmployedPersonSaveEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.selfEmployedPersonEvents.SelfEmployedPersonUpdateEvent;
 import sk.stu.fei.uim.bp.application.backend.file.FileWrapper;
-import sk.stu.fei.uim.bp.application.ui.NotificationMessage;
-import sk.stu.fei.uim.bp.application.ui.NotificationMessageType;
 import sk.stu.fei.uim.bp.application.ui.NotificationProvider;
 import sk.stu.fei.uim.bp.application.validarors.PersonalNumberValidator;
 import sk.stu.fei.uim.bp.application.validarors.messages.ClientValidatorsMessages;
 import java.time.LocalDate;
 import java.util.Optional;
 
-/**
- * A Designer generated component for the self-employed-person-editor template.
- *
- * Designer will add and remove fields with @Id mappings but
- * does not overwrite or otherwise change this file.
- */
+
 @Tag("self-employed-person-editor")
 @JsModule("./views/client/self-employed-person-editor.js")
 public class SelfEmployedPersonEditor extends PolymerTemplate<SelfEmployedPersonEditor.SelfEmployedPersonEditorModel> {
@@ -113,22 +105,29 @@ public class SelfEmployedPersonEditor extends PolymerTemplate<SelfEmployedPerson
     private Button save;
 
     private final ConfirmDialog confirmDialog;
+    private final ConfirmDialog deleteConfirmDialog;
 
     private SelfEmployedPersonDto selfEmployedPersonDto;
     private final BeanValidationBinder<SelfEmployedPersonDto> binder = new BeanValidationBinder<>(SelfEmployedPersonDto.class);
 
     private boolean isNew;
+    @Id("delete")
+    private Button delete;
 
     public SelfEmployedPersonEditor()
     {
         this.confirmDialog = new ConfirmDialog("Naozaj si prajete zavrieť editor?","Všetky zmeny nebudú uložené !!!","Naozaj chcem odísť", confirmEvent -> exit(),"Chcem ostať", cancelEvent -> closeConfirmDialog());
         this.confirmDialog.setConfirmButtonTheme("error primary");
 
+        this.deleteConfirmDialog = new ConfirmDialog("Naozaj si prajete vymazať klienta?","Údaje klienta budú natrvalo odstránené !!!","Vymazať",confirmEvent -> delete(),"Zrušiť",cancelEvent -> closeDeleteConfirmDialog());
+        this.deleteConfirmDialog.setConfirmButtonTheme("error primary");
+
         LocalDate now = LocalDate.now();
         this.isNew = true;
 
-        save.addClickListener(event -> validateAndSave());
-        cancel.addClickListener(event -> this.confirmDialog.open());
+        this.save.addClickListener(event -> validateAndSave());
+        this.cancel.addClickListener(event -> this.confirmDialog.open());
+        this.delete.addClickListener(event -> this.deleteConfirmDialog.open());
 
         binder.forField(firstName)
                 .withValidator(name -> name.length() > 0, ClientValidatorsMessages.FIRST_NAME_MESSAGE_NOT_BLANK)
@@ -232,6 +231,8 @@ public class SelfEmployedPersonEditor extends PolymerTemplate<SelfEmployedPerson
         this.selfEmployedPersonDto = selfEmployedPersonDto;
         this.identityCardCopy.setFiles(selfEmployedPersonDto.getIdentifyCardCopyReference());
         this.binder.readBean(selfEmployedPersonDto);
+
+        this.delete.setEnabled(!this.isNew);
     }
 
     private void validateAndSave()
@@ -313,12 +314,25 @@ public class SelfEmployedPersonEditor extends PolymerTemplate<SelfEmployedPerson
         fireEvent(new SelfEmployedPersonCancelEvent(this,null));
     }
 
+    private void delete()
+    {
+        if(!this.isNew)
+            fireEvent(new SelfEmployedPersonDeleteEvent(this,this.selfEmployedPersonDto));
+    }
+
     private void closeConfirmDialog()
     {
         if(this.confirmDialog.isOpened())
             this.confirmDialog.close();
     }
 
+    private void closeDeleteConfirmDialog()
+    {
+        if(this.deleteConfirmDialog.isOpened())
+        {
+            this.confirmDialog.close();
+        }
+    }
 
 
     public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType, ComponentEventListener<T> listener)
@@ -334,9 +348,7 @@ public class SelfEmployedPersonEditor extends PolymerTemplate<SelfEmployedPerson
 
 
 
-    /**
-     * This model binds properties between SelfEmployedPersonEditor and self-employed-person-editor
-     */
+
     public interface SelfEmployedPersonEditorModel extends TemplateModel {
         // Add setters and getters for template properties here.
     }

@@ -21,4 +21,6 @@ public interface ContractDocumentRepository
     List<ContractDocument> getAllCurrentVersionOfContractDocumentByListOfId(@NotNull List<ObjectId> contractDocumentIds);
 
     List<ContractDocument> getAllOldVersionOfContractDocumentByListOfId(@NotNull List<ObjectId> contractDocumentIds);
+
+    List<ContractDocument> getAllCurrentVersionOfContractDocumentByInsuredId(@NotNull ObjectId insuredId);
 }

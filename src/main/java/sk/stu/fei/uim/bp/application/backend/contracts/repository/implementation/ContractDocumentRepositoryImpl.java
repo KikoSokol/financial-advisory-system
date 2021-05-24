@@ -84,6 +84,17 @@ public class ContractDocumentRepositoryImpl implements ContractDocumentRepositor
         return this.mongoOperations.find(query, ContractDocument.class,OLD_VERSION);
     }
 
+    @Override
+    public List<ContractDocument> getAllCurrentVersionOfContractDocumentByInsuredId(@NotNull ObjectId insuredId)
+    {
+        Criteria criteria = new Criteria("insured");
+        criteria.is(insuredId);
+
+        Query query = new Query(criteria);
+
+        return this.mongoOperations.find(query,ContractDocument.class);
+    }
+
 
 
 

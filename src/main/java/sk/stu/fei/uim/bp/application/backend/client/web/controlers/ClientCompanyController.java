@@ -5,6 +5,7 @@ import sk.stu.fei.uim.bp.application.backend.address.Address;
 import sk.stu.fei.uim.bp.application.backend.client.domain.ClientCompany;
 import sk.stu.fei.uim.bp.application.backend.client.domain.PhysicalPerson;
 import sk.stu.fei.uim.bp.application.backend.client.service.ClientCompanyService;
+import sk.stu.fei.uim.bp.application.backend.client.service.ClientService;
 import sk.stu.fei.uim.bp.application.backend.client.service.PhysicalPersonService;
 import sk.stu.fei.uim.bp.application.backend.client.service.implementation.ClientServiceImpl;
 import sk.stu.fei.uim.bp.application.backend.client.web.ClientMainView;
@@ -12,6 +13,7 @@ import sk.stu.fei.uim.bp.application.backend.client.web.dto.ClientCompanyDto;
 import sk.stu.fei.uim.bp.application.backend.client.web.dto.PhysicalPersonDto;
 import sk.stu.fei.uim.bp.application.backend.client.web.editors.ClientCompanyEditor;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanyCancelEvent;
+import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanyDeleteEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanySaveEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanyUpdateEvent;
 
@@ -22,6 +24,7 @@ public class ClientCompanyController extends MainClientController
 {
     private final ClientCompanyService clientCompanyService;
     private final PhysicalPersonService physicalPersonService;
+    private final ClientService clientService;
 
     private boolean isNew;
     private ClientCompany clientCompany;
@@ -32,6 +35,7 @@ public class ClientCompanyController extends MainClientController
         super(clientMainView,currentAgentId);
         this.clientCompanyService = clientService;
         this.physicalPersonService = clientService;
+        this.clientService = clientService;
         initActionOfEditor();
         this.clear();
     }
@@ -42,6 +46,7 @@ public class ClientCompanyController extends MainClientController
         clientCompanyEditor.addListener(ClientCompanySaveEvent.class,this::doSaveNewClientCompany);
         clientCompanyEditor.addListener(ClientCompanyUpdateEvent.class,this::doUpdateClientCompany);
         clientCompanyEditor.addListener(ClientCompanyCancelEvent.class,this::cancelEdit);
+        clientCompanyEditor.addListener(ClientCompanyDeleteEvent.class,this::doDeleteClientCompany);
 
     }
 
@@ -104,6 +109,19 @@ public class ClientCompanyController extends MainClientController
             super.clientMainView.showErrorMessage("Klientovi sa nepodarilo zmeniť údaje. Skontrolujte prosím správnosť a úplnosť zadaných údajov.");
         }
     }
+
+    private void doDeleteClientCompany(ClientCompanyDeleteEvent event)
+    {
+        boolean correctDeleted = this.clientService.deleteClient(this.clientCompany);
+
+        if(correctDeleted)
+        {
+            successOperation("Údaje boli vymazané");
+        }
+        else
+            super.clientMainView.showErrorMessage("Údaje nebolo možné vymazať");
+    }
+
 
     private void cancelEdit(ClientCompanyCancelEvent event)
     {

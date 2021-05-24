@@ -1,6 +1,7 @@
 package sk.stu.fei.uim.bp.application.backend.client.service;
 
 import org.bson.types.ObjectId;
+import org.jetbrains.annotations.NotNull;
 import sk.stu.fei.uim.bp.application.backend.client.domain.Client;
 import sk.stu.fei.uim.bp.application.backend.client.domain.IdentifyCardCopyFiles;
 import sk.stu.fei.uim.bp.application.backend.client.domain.IdentifyCardCopyReference;
@@ -24,4 +25,6 @@ public interface ClientService
     IdentifyCardCopyFiles getIdentifyCardOfPerson(IdentifyCardCopyReference identifyCardCopyReference);
 
     Optional<InputStream> getCardSideFile(ObjectId cardSide);
+
+    boolean deleteClient(@NotNull Client clientToDelete);
 }

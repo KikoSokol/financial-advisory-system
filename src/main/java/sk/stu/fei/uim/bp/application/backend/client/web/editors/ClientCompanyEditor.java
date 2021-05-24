@@ -16,7 +16,6 @@ import com.vaadin.flow.templatemodel.TemplateModel;
 import com.vaadin.flow.component.Tag;
 import com.vaadin.flow.component.dependency.JsModule;
 import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
-import org.bson.types.ObjectId;
 import sk.stu.fei.uim.bp.application.backend.client.domain.Client;
 import sk.stu.fei.uim.bp.application.backend.client.domain.PhysicalPerson;
 import sk.stu.fei.uim.bp.application.backend.client.service.ClientService;
@@ -26,23 +25,17 @@ import sk.stu.fei.uim.bp.application.backend.client.web.components.SearchClientV
 import sk.stu.fei.uim.bp.application.backend.client.web.dto.ClientCompanyDto;
 import sk.stu.fei.uim.bp.application.backend.client.web.dto.PhysicalPersonDto;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanyCancelEvent;
+import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanyDeleteEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanySaveEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.clientCompanyEvents.ClientCompanyUpdateEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.searchClientEvent.SearchGetChoosedClientEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.table.TableClientItem;
 import sk.stu.fei.uim.bp.application.ui.NotificationProvider;
 import sk.stu.fei.uim.bp.application.validarors.messages.ClientValidatorsMessages;
-
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
-/**
- * A Designer generated component for the company-editor template.
- *
- * Designer will add and remove fields with @Id mappings but
- * does not overwrite or otherwise change this file.
- */
+
 @Tag("client-company-editor")
 @JsModule("./views/client/client-company-editor.js")
 public class ClientCompanyEditor extends PolymerTemplate<ClientCompanyEditor.CompanyEditorModel> {
@@ -99,6 +92,7 @@ public class ClientCompanyEditor extends PolymerTemplate<ClientCompanyEditor.Com
     private final ConfirmDialog confirmDialog;
 
     private final ClientService clientService;
+    private final ConfirmDialog deleteConfirmDialog;
 
     private List<PhysicalPersonDto> managers = new LinkedList<>();
 
@@ -108,6 +102,8 @@ public class ClientCompanyEditor extends PolymerTemplate<ClientCompanyEditor.Com
     private final BeanValidationBinder<ClientCompanyDto> binder = new BeanValidationBinder<>(ClientCompanyDto.class);
 
     private boolean isNew;
+    @Id("delete")
+    private Button delete;
 
 
     public ClientCompanyEditor(ClientServiceImpl clientService) {
@@ -116,6 +112,8 @@ public class ClientCompanyEditor extends PolymerTemplate<ClientCompanyEditor.Com
         this.confirmDialog = new ConfirmDialog("Naozaj si prajete zavrieť editor?","Všetky zmeny nebudú uložené !!!","Naozaj chcem odísť", confirmEvent -> exit(),"Chcem ostať", cancelEvent -> closeConfirmDialog());
         this.confirmDialog.setConfirmButtonTheme("error primary");
 
+        this.deleteConfirmDialog = new ConfirmDialog("Naozaj si prajete vymazať klienta?","Údaje klienta budú natrvalo odstránené !!!","Vymazať",confirmEvent -> delete(),"Zrušiť",cancelEvent -> closeDeleteConfirmDialog());
+        this.deleteConfirmDialog.setConfirmButtonTheme("error primary");
 
         binder.forField(businessName)
                 .withValidator(name -> name.length() > 0, ClientValidatorsMessages.BUSINESS_NAME_MESSAGE_NOT_BLANK)
@@ -179,7 +177,7 @@ public class ClientCompanyEditor extends PolymerTemplate<ClientCompanyEditor.Com
 
         this.save.addClickListener(event -> validateAndSave());
         this.cancel.addClickListener(event -> this.confirmDialog.open());
-
+        this.delete.addClickListener(event -> this.deleteConfirmDialog.open());
 
 
     }
@@ -190,6 +188,8 @@ public class ClientCompanyEditor extends PolymerTemplate<ClientCompanyEditor.Com
         this.clientCompanyDto = clientCompanyDto;
         this.binder.readBean(clientCompanyDto);
         this.setManagers(clientCompanyDto.getManagers());
+
+        this.delete.setEnabled(!this.isNew);
     }
 
     private void setManagers(List<PhysicalPersonDto> managersReferences)
@@ -308,13 +308,25 @@ public class ClientCompanyEditor extends PolymerTemplate<ClientCompanyEditor.Com
         fireEvent(new ClientCompanyCancelEvent(this,null));
     }
 
+    private void delete()
+    {
+        if(!this.isNew)
+            fireEvent(new ClientCompanyDeleteEvent(this,this.clientCompanyDto));
+    }
+
     private void closeConfirmDialog()
     {
         if(this.confirmDialog.isOpened())
             this.confirmDialog.close();
     }
 
-
+    private void closeDeleteConfirmDialog()
+    {
+        if(this.deleteConfirmDialog.isOpened())
+        {
+            this.confirmDialog.close();
+        }
+    }
 
     public <T extends ComponentEvent<?>>Registration addListener(Class<T> eventType, ComponentEventListener<T> listener)
     {
@@ -327,9 +339,7 @@ public class ClientCompanyEditor extends PolymerTemplate<ClientCompanyEditor.Com
 
 
 
-    /**
-     * This model binds properties between CompanyEditor and company-editor
-     */
+
     public interface CompanyEditorModel extends TemplateModel {
         // Add setters and getters for template properties here.
     }

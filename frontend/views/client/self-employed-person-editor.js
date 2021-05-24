@@ -59,6 +59,9 @@ class SelfEmployedPersonEditor extends PolymerElement {
  </vaadin-form-layout>
 </vaadin-form-layout>
 <vaadin-horizontal-layout style="justify-content: flex-end;">
+ <vaadin-button theme="primary error" id="delete" style="margin-right: var(--lumo-space-m);">
+  VYMAZAŤ
+ </vaadin-button>
  <vaadin-button theme="primary" id="cancel">
    ZRUŠIŤ 
  </vaadin-button>

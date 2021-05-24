@@ -5,7 +5,6 @@ import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.datepicker.DatePicker;
-import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.polymertemplate.Id;
 import com.vaadin.flow.component.textfield.EmailField;
 import com.vaadin.flow.component.textfield.TextArea;
@@ -20,23 +19,17 @@ import com.vaadin.flow.component.polymertemplate.PolymerTemplate;
 import sk.stu.fei.uim.bp.application.backend.client.web.components.PersonalCardComponent;
 import sk.stu.fei.uim.bp.application.backend.client.web.dto.PhysicalPersonDto;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEvents.PhysicalPersonCancelEvent;
+import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEvents.PhysicalPersonDeleteEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEvents.PhysicalPersonSaveEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEvents.PhysicalPersonUpdateEvent;
 import sk.stu.fei.uim.bp.application.backend.file.FileWrapper;
-import sk.stu.fei.uim.bp.application.ui.NotificationMessage;
-import sk.stu.fei.uim.bp.application.ui.NotificationMessageType;
 import sk.stu.fei.uim.bp.application.ui.NotificationProvider;
 import sk.stu.fei.uim.bp.application.validarors.PersonalNumberValidator;
 import sk.stu.fei.uim.bp.application.validarors.messages.ClientValidatorsMessages;
 import java.time.LocalDate;
 import java.util.Optional;
 
-/**
- * A Designer generated component for the physical-person-editor template.
- *
- * Designer will add and remove fields with @Id mappings but
- * does not overwrite or otherwise change this file.
- */
+
 @Tag("physical-person-editor")
 @JsModule("./views/client/physical-person-editor.js")
 public class PhysicalPersonEditor extends PolymerTemplate<PhysicalPersonEditor.PhysicalPersonEditorModel> {
@@ -102,11 +95,14 @@ public class PhysicalPersonEditor extends PolymerTemplate<PhysicalPersonEditor.P
     private Button save;
 
     private final ConfirmDialog confirmDialog;
+    private final ConfirmDialog deleteConfirmDialog;
 
     private PhysicalPersonDto physicalPersonDto;
     private final BeanValidationBinder<PhysicalPersonDto> binder = new BeanValidationBinder<>(PhysicalPersonDto.class);
 
     private boolean isNew;
+    @Id("delete")
+    private Button delete;
 
 
     public PhysicalPersonEditor()
@@ -114,12 +110,15 @@ public class PhysicalPersonEditor extends PolymerTemplate<PhysicalPersonEditor.P
         this.confirmDialog = new ConfirmDialog("Naozaj si prajete zavrieť editor?","Všetky zmeny nebudú uložené !!!","Naozaj chcem odísť",confirmEvent -> exit(),"Chcem ostať",cancelEvent -> closeConfirmDialog());
         this.confirmDialog.setConfirmButtonTheme("error primary");
 
+        this.deleteConfirmDialog = new ConfirmDialog("Naozaj si prajete vymazať klienta?","Údaje klienta budú natrvalo odstránené !!!","Vymazať",confirmEvent -> delete(),"Zrušiť",cancelEvent -> closeDeleteConfirmDialog());
+        this.deleteConfirmDialog.setConfirmButtonTheme("error primary");
 
         LocalDate now = LocalDate.now();
         this.isNew = true;
 
-        save.addClickListener(click -> validateAndSave());
-        cancel.addClickListener(event -> this.confirmDialog.open());
+        this.save.addClickListener(click -> validateAndSave());
+        this.cancel.addClickListener(event -> this.confirmDialog.open());
+        this.delete.addClickListener(event -> this.deleteConfirmDialog.open());
 
 
         binder.forField(firstName)
@@ -212,6 +211,8 @@ public class PhysicalPersonEditor extends PolymerTemplate<PhysicalPersonEditor.P
         this.physicalPersonDto = physicalPersonDto;
         this.identityCardCopy.setFiles(physicalPersonDto.getIdentifyCardCopyReference());
         this.binder.readBean(physicalPersonDto);
+
+        this.delete.setEnabled(!this.isNew);
     }
 
 
@@ -310,19 +311,33 @@ public class PhysicalPersonEditor extends PolymerTemplate<PhysicalPersonEditor.P
         fireEvent(new PhysicalPersonCancelEvent(this,null));
     }
 
+    private void delete()
+    {
+        if(!this.isNew)
+            fireEvent(new PhysicalPersonDeleteEvent(this,this.physicalPersonDto));
+    }
+
+
+
     private void closeConfirmDialog()
     {
         if(this.confirmDialog.isOpened())
             this.confirmDialog.close();
     }
 
+    private void closeDeleteConfirmDialog()
+    {
+        if(this.deleteConfirmDialog.isOpened())
+        {
+            this.confirmDialog.close();
+        }
+    }
 
 
 
 
-    /**
-     * This model binds properties between PhysicalPersonEditor and physical-person-editor
-     */
+
+
     public interface PhysicalPersonEditorModel extends TemplateModel {
         // Add setters and getters for template properties here.
     }

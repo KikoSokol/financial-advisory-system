@@ -4,12 +4,14 @@ package sk.stu.fei.uim.bp.application.backend.client.web.controlers;
 import org.bson.types.ObjectId;
 import sk.stu.fei.uim.bp.application.backend.address.Address;
 import sk.stu.fei.uim.bp.application.backend.client.domain.SelfEmployedPerson;
+import sk.stu.fei.uim.bp.application.backend.client.service.ClientService;
 import sk.stu.fei.uim.bp.application.backend.client.service.SelfEmployedPersonService;
 import sk.stu.fei.uim.bp.application.backend.client.service.implementation.ClientServiceImpl;
 import sk.stu.fei.uim.bp.application.backend.client.web.ClientMainView;
 import sk.stu.fei.uim.bp.application.backend.client.web.dto.SelfEmployedPersonDto;
 import sk.stu.fei.uim.bp.application.backend.client.web.editors.SelfEmployedPersonEditor;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.selfEmployedPersonEvents.SelfEmployedPersonCancelEvent;
+import sk.stu.fei.uim.bp.application.backend.client.web.events.selfEmployedPersonEvents.SelfEmployedPersonDeleteEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.selfEmployedPersonEvents.SelfEmployedPersonSaveEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.selfEmployedPersonEvents.SelfEmployedPersonUpdateEvent;
 import sk.stu.fei.uim.bp.application.backend.file.FileWrapper;
@@ -17,6 +19,7 @@ import sk.stu.fei.uim.bp.application.backend.file.FileWrapper;
 public class SelfEmployedPersonController extends MainClientController
 {
     private final SelfEmployedPersonService service;
+    private final ClientService clientService;
 
     private boolean isNew;
     private SelfEmployedPerson selfEmployedPerson;
@@ -26,6 +29,7 @@ public class SelfEmployedPersonController extends MainClientController
     {
         super(clientMainView,currentAgentId);
         this.service = clientService;
+        this.clientService = clientService;
         initActionOfEditor();
         this.clear();
 
@@ -37,6 +41,7 @@ public class SelfEmployedPersonController extends MainClientController
         selfEmployedPersonEditor.addListener(SelfEmployedPersonSaveEvent.class,this::doSaveNewSelfEmployedPerson);
         selfEmployedPersonEditor.addListener(SelfEmployedPersonUpdateEvent.class,this::doUpdateSelfEmployedPerson);
         selfEmployedPersonEditor.addListener(SelfEmployedPersonCancelEvent.class,this::cancelEdit);
+        selfEmployedPersonEditor.addListener(SelfEmployedPersonDeleteEvent.class,this::doDeleteSelfEmployedPerson);
     }
 
     private void openEditor(SelfEmployedPersonDto selfEmployedPersonDto, boolean isNew)
@@ -129,6 +134,18 @@ public class SelfEmployedPersonController extends MainClientController
         {
             super.clientMainView.showErrorMessage("Klientovi sa nepodarilo zmeniť údaje. Skontrolujte prosím správnosť a úplnosť zadaných údajov.");
         }
+    }
+
+    private void doDeleteSelfEmployedPerson(SelfEmployedPersonDeleteEvent event)
+    {
+        boolean correctDeleted = this.clientService.deleteClient(this.selfEmployedPerson);
+
+        if(correctDeleted)
+        {
+            successOperation("Údaje boli vymazané");
+        }
+        else
+            super.clientMainView.showErrorMessage("Údaje nebolo možné vymazať");
     }
 
     private void cancelEdit(SelfEmployedPersonCancelEvent event)

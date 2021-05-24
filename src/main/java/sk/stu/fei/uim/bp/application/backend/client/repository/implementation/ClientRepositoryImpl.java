@@ -1,5 +1,6 @@
 package sk.stu.fei.uim.bp.application.backend.client.repository.implementation;
 
+import com.mongodb.client.result.DeleteResult;
 import org.bson.types.ObjectId;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +41,10 @@ public class ClientRepositoryImpl implements ClientRepository, ClientCompanyRepo
     }
 
     @Override
-    public void deleteClient(@NotNull Client deleteClient)
+    public boolean deleteClient(@NotNull Client deleteClient)
     {
-        mongoOperations.remove(deleteClient);
+        DeleteResult deleteResult = mongoOperations.remove(deleteClient);
+        return deleteResult.wasAcknowledged();
     }
 
     @Override

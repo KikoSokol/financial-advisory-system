@@ -15,10 +15,11 @@ import sk.stu.fei.uim.bp.application.backend.client.service.ClientCompanyService
 import sk.stu.fei.uim.bp.application.backend.client.service.ClientService;
 import sk.stu.fei.uim.bp.application.backend.client.service.PhysicalPersonService;
 import sk.stu.fei.uim.bp.application.backend.client.service.SelfEmployedPersonService;
+import sk.stu.fei.uim.bp.application.backend.contracts.repository.ContractDocumentRepository;
+import sk.stu.fei.uim.bp.application.backend.contracts.repository.implementation.ContractDocumentRepositoryImpl;
 import sk.stu.fei.uim.bp.application.backend.file.repository.FileRepository;
 import sk.stu.fei.uim.bp.application.backend.file.repository.implementation.FileRepositoryImpl;
 import sk.stu.fei.uim.bp.application.backend.file.FileWrapper;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -31,13 +32,15 @@ public class ClientServiceImpl implements ClientService, ClientCompanyService, P
     private final ClientCompanyRepository clientCompanyRepository;
     private final PhysicalPersonRepository physicalPersonRepository;
     private final FileRepository fileRepository;
+    private final ContractDocumentRepository contractDocumentRepository;
 
     @Autowired
-    public ClientServiceImpl(ClientRepositoryImpl clientRepositoryImpl, FileRepositoryImpl fileRepositoryImpl) {
+    public ClientServiceImpl(ClientRepositoryImpl clientRepositoryImpl, FileRepositoryImpl fileRepositoryImpl, ContractDocumentRepositoryImpl contractDocumentRepository) {
         this.clientRepository = clientRepositoryImpl;
         this.clientCompanyRepository = clientRepositoryImpl;
         this.physicalPersonRepository = clientRepositoryImpl;
         this.fileRepository = fileRepositoryImpl;
+        this.contractDocumentRepository = contractDocumentRepository;
     }
 
 
@@ -296,7 +299,98 @@ public class ClientServiceImpl implements ClientService, ClientCompanyService, P
         return file;
     }
 
+    @Override
+    public boolean deleteClient(@NotNull Client clientToDelete)
+    {
+        if(!isAbleToDelete(clientToDelete))
+            return false;
 
+        if(clientToDelete instanceof PhysicalPerson)
+            return deletePhysicalPerson((PhysicalPerson) clientToDelete);
+        else if(clientToDelete instanceof SelfEmployedPerson)
+            return deleteSelfEmployedPerson((SelfEmployedPerson) clientToDelete);
+
+        return deleteClientCompany((ClientCompany) clientToDelete);
+    }
+
+    private boolean deletePhysicalPerson(PhysicalPerson physicalPerson)
+    {
+        IdentifyCardCopyReference cardCopy = physicalPerson.getIdentifyCardCopy();
+
+        if(cardCopy != null)
+        {
+            this.fileRepository.deleteFile(cardCopy.getFrontSide());
+            this.fileRepository.deleteFile(cardCopy.getBackSide());
+        }
+
+        return this.clientRepository.deleteClient(physicalPerson);
+    }
+
+    private boolean deleteSelfEmployedPerson(SelfEmployedPerson selfEmployedPerson)
+    {
+        IdentifyCardCopyReference cardCopy = selfEmployedPerson.getIdentifyCardCopy();
+
+        if(cardCopy != null)
+        {
+            this.fileRepository.deleteFile(cardCopy.getFrontSide());
+            this.fileRepository.deleteFile(cardCopy.getBackSide());
+        }
+
+        return this.clientRepository.deleteClient(selfEmployedPerson);
+    }
+
+    private boolean deleteClientCompany(ClientCompany clientCompany)
+    {
+        List<ObjectId> managersIds = clientCompany.getManagers();
+
+        boolean correctDeleted = this.clientRepository.deleteClient(clientCompany);
+
+        if(!correctDeleted)
+            return false;
+
+        List<PhysicalPerson> managers = this.physicalPersonRepository.getAllPhysicalPersonsByListOfIds(managersIds);
+        for(PhysicalPerson manager : managers)
+        {
+            manager.getClientCompanies().remove(clientCompany.getClientId());
+            this.updatePhysicalPerson(manager);
+        }
+
+        return true;
+    }
+
+    private boolean isAbleToDelete(Client clientToDelete)
+    {
+        if(haveClientSomeContracts(clientToDelete))
+            return false;
+        else if(isClientInsuredOnSomeContract(clientToDelete))
+            return false;
+        else if(isClientManagerInSomeClientCompany(clientToDelete))
+            return false;
+
+        return true;
+    }
+
+    private boolean haveClientSomeContracts(Client client)
+    {
+        return !client.getContracts().isEmpty();
+    }
+
+    private boolean isClientInsuredOnSomeContract(Client client)
+    {
+        return !this.contractDocumentRepository.getAllCurrentVersionOfContractDocumentByInsuredId(client.getClientId()).isEmpty();
+    }
+
+    private boolean isClientManagerInSomeClientCompany(Client client)
+    {
+        if(!(client instanceof PhysicalPerson))
+        {
+            return false;
+        }
+
+        PhysicalPerson physicalPerson = (PhysicalPerson) client;
+
+        return !physicalPerson.getClientCompanies().isEmpty();
+    }
 
 
 

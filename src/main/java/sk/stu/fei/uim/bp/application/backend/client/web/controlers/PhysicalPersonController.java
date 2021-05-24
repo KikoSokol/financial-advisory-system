@@ -4,12 +4,14 @@ import org.bson.types.ObjectId;
 
 import sk.stu.fei.uim.bp.application.backend.address.Address;
 import sk.stu.fei.uim.bp.application.backend.client.domain.PhysicalPerson;
+import sk.stu.fei.uim.bp.application.backend.client.service.ClientService;
 import sk.stu.fei.uim.bp.application.backend.client.service.PhysicalPersonService;
 import sk.stu.fei.uim.bp.application.backend.client.service.implementation.ClientServiceImpl;
 import sk.stu.fei.uim.bp.application.backend.client.web.ClientMainView;
 import sk.stu.fei.uim.bp.application.backend.client.web.dto.PhysicalPersonDto;
 import sk.stu.fei.uim.bp.application.backend.client.web.editors.PhysicalPersonEditor;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEvents.PhysicalPersonCancelEvent;
+import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEvents.PhysicalPersonDeleteEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEvents.PhysicalPersonSaveEvent;
 import sk.stu.fei.uim.bp.application.backend.client.web.events.phycicalPersonEvents.PhysicalPersonUpdateEvent;
 import sk.stu.fei.uim.bp.application.backend.file.FileWrapper;
@@ -18,6 +20,7 @@ import sk.stu.fei.uim.bp.application.backend.file.FileWrapper;
 public class PhysicalPersonController extends MainClientController
 {
     private final PhysicalPersonService service;
+    private final ClientService clientService;
 
     private boolean isNew;
     private PhysicalPerson physicalPerson;
@@ -27,6 +30,7 @@ public class PhysicalPersonController extends MainClientController
     {
         super(clientMainView,currentAgentId);
         this.service = clientService;
+        this.clientService = clientService;
         initActionOfEditor();
         this.clear();
     }
@@ -37,6 +41,7 @@ public class PhysicalPersonController extends MainClientController
         physicalPersonEditor.addListener(PhysicalPersonSaveEvent.class,this::doSaveNewPhysicalPerson);
         physicalPersonEditor.addListener(PhysicalPersonUpdateEvent.class,this::doUpdatePhysicalPerson);
         physicalPersonEditor.addListener(PhysicalPersonCancelEvent.class,this::cancelEdit);
+        physicalPersonEditor.addListener(PhysicalPersonDeleteEvent.class,this::doDeletePhysicalPerson);
     }
 
     private void openEditor(PhysicalPersonDto physicalPersonDto, boolean isNew)
@@ -130,6 +135,19 @@ public class PhysicalPersonController extends MainClientController
         {
             super.clientMainView.showErrorMessage("Klientovi sa nepodarilo zmeniť údaje. Skontrolujte prosím správnosť a úplnosť zadaných údajov.");
         }
+
+    }
+
+    private void doDeletePhysicalPerson(PhysicalPersonDeleteEvent event)
+    {
+        boolean correctDeleted = this.clientService.deleteClient(this.physicalPerson);
+
+        if(correctDeleted)
+        {
+            successOperation("Údaje boli vymazané");
+        }
+        else
+            super.clientMainView.showErrorMessage("Údaje nebolo možné vymazať");
 
     }
 
