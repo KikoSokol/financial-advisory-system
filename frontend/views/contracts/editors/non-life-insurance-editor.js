@@ -24,7 +24,7 @@ class NonLifeInsuranceEditor extends PolymerElement {
             </style>
 <vaadin-form-layout>
  <vaadin-form-layout>
-  <vaadin-text-field label="Ćíslo zmluvy" placeholder="Ćíslo zmluvy" id="contractNumber" required></vaadin-text-field>
+  <vaadin-text-field label="Číslo zmluvy" placeholder="Číslo zmluvy" id="contractNumber" required invalid></vaadin-text-field>
   <vaadin-select id="product" label="Produkt" required placeholder="Produkt"></vaadin-select>
   <vaadin-date-picker label="Dátum začiatku platnosti" placeholder="Dátum začiatku platnosti" id="dateOfStart" required></vaadin-date-picker>
   <vaadin-big-decimal-field id="payment" required placeholder="Platba" label="Platba" invalid></vaadin-big-decimal-field>
@@ -59,7 +59,7 @@ class NonLifeInsuranceEditor extends PolymerElement {
 </vaadin-form-layout>
 <vaadin-horizontal-layout style="justify-content: flex-end;">
  <vaadin-button theme="primary error" id="delete" style="margin-right: var(--lumo-space-m);">
-  VYMAZAŤ
+   VYMAZAŤ 
  </vaadin-button>
  <vaadin-button theme="primary" id="cancel">
    ZRUŠIŤ 

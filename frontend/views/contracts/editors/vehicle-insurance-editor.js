@@ -24,7 +24,7 @@ class VehicleInsuranceEditor extends PolymerElement {
             </style>
 <vaadin-form-layout>
  <vaadin-form-layout>
-  <vaadin-text-field label="Ćíslo zmluvy" placeholder="Ćíslo zmluvy" id="contractNumber" required></vaadin-text-field>
+  <vaadin-text-field label="Číslo zmluvy" placeholder="Číslo zmluvy" id="contractNumber" required></vaadin-text-field>
   <vaadin-select id="product" label="Produkt" required></vaadin-select>
   <vaadin-date-picker label="Dátum začiatku platnosti" placeholder="Dátum začiatku platnosti" id="dateOfStart" required></vaadin-date-picker>
   <vaadin-big-decimal-field id="payment" required label="Platba"></vaadin-big-decimal-field>
@@ -60,7 +60,7 @@ class VehicleInsuranceEditor extends PolymerElement {
 </vaadin-form-layout>
 <vaadin-horizontal-layout style="justify-content: flex-end;">
  <vaadin-button theme="primary error" id="delete" style="margin-right: var(--lumo-space-m);">
-  VYMAZAŤ
+   VYMAZAŤ 
  </vaadin-button>
  <vaadin-button theme="primary" id="cancel">
    ZRUŠIŤ 
