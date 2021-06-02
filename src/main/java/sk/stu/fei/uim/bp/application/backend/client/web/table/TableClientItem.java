@@ -55,7 +55,14 @@ public class TableClientItem
         setEmail(person.getEmail());
         setPhone(person.getPhone());
         setPersonalNumber(person.getPersonalNumber());
-        setIco("");
+
+        if(person instanceof SelfEmployedPersonDto)
+        {
+            SelfEmployedPersonDto selfEmployedPersonDto = (SelfEmployedPersonDto) person;
+            setIco(selfEmployedPersonDto.getIco());
+        }
+        else
+            setIco("");
     }
 
     public ObjectId getId() {

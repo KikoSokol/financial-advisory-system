@@ -78,7 +78,7 @@ public class MainView extends AppLayout
         HorizontalLayout logoLayout = new HorizontalLayout();
         logoLayout.setId("logo");
         logoLayout.setAlignItems(FlexComponent.Alignment.CENTER);
-        logoLayout.add(new H1("APP"));
+        logoLayout.add(new H1(""));
         layout.add(logoLayout,menu);
         return layout;
 
@@ -87,7 +87,7 @@ public class MainView extends AppLayout
 
     private Component[] getMenuItems()
     {
-        Tab home = getTab("Domov",MainView.class);
+        Tab home = getTab("Kalendár",MainView.class);
         Tab clients = getTab("Klienti", ClientMainView.class);
         Tab contracts = getTab("Zmluvy", ContractMainView.class);
         Tab companyAndProducts = getTab("Spoločnosti a produkty", CompanyAndProductMainView.class);
