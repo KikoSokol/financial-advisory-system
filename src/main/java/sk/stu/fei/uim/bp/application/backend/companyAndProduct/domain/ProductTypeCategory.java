@@ -4,7 +4,7 @@ public enum ProductTypeCategory
 {
     LIFE_INSURANCE("Životné poistenie"),
     NON_LIFE_INSURANCE("Neživotné poistenie"),
-    NON_LIFE_CAR_INSURANCE("Neživotné poistenie vozidla");
+    NON_LIFE_CAR_INSURANCE("Neživotné poistenie - vozidla");
 
     private final String name;
 
