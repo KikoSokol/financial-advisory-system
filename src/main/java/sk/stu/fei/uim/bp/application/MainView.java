@@ -17,6 +17,7 @@ import com.vaadin.flow.component.tabs.TabsVariant;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
+import sk.stu.fei.uim.bp.application.backend.calendar.web.CalendarMainView;
 import sk.stu.fei.uim.bp.application.backend.client.web.ClientMainView;
 import sk.stu.fei.uim.bp.application.backend.companyAndProduct.CompanyAndProductMainView;
 import sk.stu.fei.uim.bp.application.backend.contracts.web.ContractMainView;
@@ -87,7 +88,7 @@ public class MainView extends AppLayout
 
     private Component[] getMenuItems()
     {
-        Tab home = getTab("Kalendár",MainView.class);
+        Tab home = getTab("Kalendár", CalendarMainView.class);
         Tab clients = getTab("Klienti", ClientMainView.class);
         Tab contracts = getTab("Zmluvy", ContractMainView.class);
         Tab companyAndProducts = getTab("Spoločnosti a produkty", CompanyAndProductMainView.class);
